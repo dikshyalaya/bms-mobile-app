@@ -67,7 +67,7 @@ class GridCard extends StatelessWidget {
             cardModel.title,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
+                color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
           ),
         )
       ],

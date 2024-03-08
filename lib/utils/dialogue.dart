@@ -15,7 +15,7 @@ class DialogueUtils {
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: Container(
-                height: 52,
+                height: 80,
                 width: 288,
                 padding: const EdgeInsets.only(left: 22, right: 17),
                 decoration: BoxDecoration(
@@ -28,12 +28,12 @@ class DialogueUtils {
                       message,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: const Color(0xffD40000),
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: FontWeight.w400),
                     ),
                     SizedBox(
-                      height: 30,
-                      width: 40,
+                      height: 40,
+                      width: 77,
                       child: ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
@@ -47,7 +47,7 @@ class DialogueUtils {
                               shape: MaterialStateProperty.all(
                                   const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(5))))),
+                                          Radius.circular(20))))),
                           child: Text(
                             "Ok",
                             style: Theme.of(context)
@@ -84,7 +84,7 @@ class DialogueUtils {
                     color: const Color(0xff033992),
                     borderRadius: BorderRadius.circular(5)),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -98,6 +98,8 @@ class DialogueUtils {
                       height: 4,
                     ),
                     BeaconTextFormField(
+                        textStyleSize:15,
+
                         iconData: Icons.email_outlined,
                         hintText: "Enter your email",
                         onChangedInput: (emailAddress) {}),
@@ -107,8 +109,8 @@ class DialogueUtils {
                     Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox(
-                        height: 30,
-                        width: 216,
+                        height: 40,
+                        width: 163,
                         child: ElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -122,7 +124,7 @@ class DialogueUtils {
                                 shape: MaterialStateProperty.all(
                                     const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(5))))),
+                                            Radius.circular(20))))),
                             child: Text(
                               "Reset Password",
                               style: Theme.of(context)

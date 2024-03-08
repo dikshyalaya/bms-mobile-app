@@ -90,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: SizedBox(
-                                height: 30,
-                                width: 91,
+                                height: 40,
+                                width: 104.84,
                                 child: ElevatedButton(
                                     onPressed: () {
                                       if (userName.isEmpty ||
@@ -124,16 +124,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                         shape: MaterialStateProperty.all(
                                             const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
-                                                    Radius.circular(5))))),
+                                                    Radius.circular(20))))),
                                     child: Text(
                                       "Login...",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
                                           .copyWith(
-                                              fontSize: 14,
+                                              fontSize: 13,
                                               color: Colors.white,
-                                              fontWeight: FontWeight.w400),
+                                              fontWeight: FontWeight.bold),
                                     )),
                               ),
                             ),
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .bodyLarge!
                                         .copyWith(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w400,
                                           decoration: TextDecoration.underline,
                                           fontSize: 15,
                                         ),

@@ -7,10 +7,12 @@ class BeaconTextFormField extends StatefulWidget {
   final Function(String) onChangedInput;
   bool? obscureText;
   final double? height;
+  final double? textStyleSize;
   BeaconTextFormField(
       {Key? key,
       required this.iconData,
       required this.hintText,
+        this.textStyleSize,
       this.obscureText = false,
       this.height,
       required this.onChangedInput})
@@ -24,22 +26,23 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
   @override
   Widget build(BuildContext context) {
     const iconColor = Color(0xffA5A5A5);
+    const textColor = Color(0xffC1C1C1);
     return SizedBox(
-      height: widget.height ?? 34,
+      height: widget.height ?? 40,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(25),
         child: TextFormField(
           obscureText: widget.obscureText ?? false,
           style: Theme.of(context)
               .textTheme
               .bodyLarge!
-              .copyWith(fontSize: 12, letterSpacing: 1.2),
+              .copyWith(fontSize: 13, letterSpacing: 1.2),
           onChanged: (String val) {
             widget.onChangedInput.call(val);
           },
           decoration: InputDecoration(
-            // contentPadding:
-            // const EdgeInsets.only(left: 10.0, right: 10, top: 15),
+            contentPadding:
+            const EdgeInsets.only(top: 5),
             disabledBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -52,7 +55,7 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
             hintStyle: Theme.of(context)
                 .textTheme
                 .bodyLarge!
-                .copyWith(fontSize: 12, color: iconColor),
+                .copyWith(fontSize:widget.textStyleSize?? 13, color: textColor),
             prefixIcon: Icon(
               widget.iconData,
               size: 20,
