@@ -1,14 +1,14 @@
+import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
+import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
+import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:flutter/material.dart';
 
 class DialogueUtils {
   DialogueUtils._();
   static Future<bool> showErrorDialogue(
       {required BuildContext context,
-      required String message,
-      String? onYesText,
-      String? onNoText,
-      double? height}) async {
+      required String message,}) async {
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -66,11 +66,7 @@ class DialogueUtils {
   }
 
   static Future<bool> resetLinkDialogue(
-      {required BuildContext context,
-      Widget? cachedImageNetworkProgress,
-      String? onYesText,
-      String? onNoText,
-      double? height}) async {
+      {required BuildContext context}) async {
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -142,4 +138,227 @@ class DialogueUtils {
               ),
             ));
   }
+
+
+  static Future<bool> onProfileIconClickDialogue(
+      {required BuildContext context,Function? onChangePassword}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: Container(
+                height: 403,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(vertical: 23),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children:
+                      [Image.asset(
+                        "profile".pngImage(),
+                        height: 86,
+                        width: 86,
+                      ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text("Beacon App",style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,color: Color(0xff565656)
+                        ),),]
+                    ),
+                   Column(
+                     children: [
+                       SizedBox(
+                         height: 40,
+                           width: 270,
+                           child: ElevatedButton(
+                               style: ButtonStyle(
+                                   backgroundColor: MaterialStateProperty.all(
+                                       const Color(0xff3B85FF)),
+                                   shape: MaterialStateProperty.all(
+                                       const RoundedRectangleBorder(
+                                           borderRadius: BorderRadius.all(
+                                               Radius.circular(20))))
+                               ),
+                               onPressed: (){
+                                 onChangePassword?.call();
+                               }, child: const Text("Change Password",style: TextStyle(
+                             color: Colors.white,
+                             fontSize: 15,fontWeight: FontWeight.bold
+                           ),))),
+                       const SizedBox(height: 16,),
+                       GestureDetector(
+                         onTap: (){
+                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
+
+                         },
+                         child: const Text("Log Out",style: TextStyle(
+                           color: Color(0xff6F6F6F),
+                           fontWeight: FontWeight.bold,
+                           fontSize: 15
+                         ),),
+                       ),
+                       const SizedBox(height: 37,), GestureDetector(
+                         onTap: (){
+                           Navigator.pop(context);
+                         },
+                         child: const Text("Close",style: TextStyle(
+                             color: Colors.black,
+                             fontWeight: FontWeight.w500,
+                             fontSize: 13
+                         ),),
+                       ),
+                     ],
+                   )
+
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  static Future<bool> changePasswordDialogue(
+      {required BuildContext context,}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: Container(
+                height: 403,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(vertical: 23),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children:
+                      [Image.asset(
+                        "profile".pngImage(),
+                        height: 86,
+                        width: 86,
+                      ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text("Beacon App",style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,color: Color(0xff565656)
+                        ),),]
+                    ),
+                   Column(
+                     children: [
+                       SizedBox(
+                         height: 40,
+                           width: 270,
+                           child: ElevatedButton(
+                               style: ButtonStyle(
+                                   backgroundColor: MaterialStateProperty.all(
+                                       const Color(0xff3B85FF)),
+                                   shape: MaterialStateProperty.all(
+                                       const RoundedRectangleBorder(
+                                           borderRadius: BorderRadius.all(
+                                               Radius.circular(20))))
+                               ),
+                               onPressed: (){}, child: const Text("Change Password",style: TextStyle(
+                             color: Colors.white,
+                             fontSize: 15,fontWeight: FontWeight.bold
+                           ),))),
+                       const SizedBox(height: 16,),
+                       GestureDetector(
+                         onTap: (){
+                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
+
+                         },
+                         child: const Text("Log Out",style: TextStyle(
+                           color: Color(0xff6F6F6F),
+                           fontWeight: FontWeight.bold,
+                           fontSize: 15
+                         ),),
+                       ),
+                       const SizedBox(height: 37,), GestureDetector(
+                         onTap: (){
+                           Navigator.pop(context);
+                         },
+                         child: const Text("Close",style: TextStyle(
+                             color: Colors.black,
+                             fontWeight: FontWeight.w500,
+                             fontSize: 13
+                         ),),
+                       ),
+                     ],
+                   )
+
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  static Future<bool> selectSchedulePeriodDialogue(
+      {required BuildContext context,}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: Container(
+                height: 160,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: Colors.white,
+                ),
+                width: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    Container(height: 40,width: double.infinity,decoration: const BoxDecoration(
+                        color: Color(0xffD9D9D9),
+
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        )
+                    ),
+                      alignment: Alignment.center,
+                      child: const Text("Select Schedule Period",style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,fontWeight: FontWeight.bold
+                      ),),
+                    ),
+                    const SizedBox(height: 18,),
+                    BMSDropDownForm(onChooseOptions: (String val){},options: const ["3/2/2024 - 3/8/2024","4/2/2024 - 3/8/2024","5/2/2024 - 3/8/2024"],width: 217,)
+                   , const SizedBox(height: 8,),
+                    SizedBox(
+                        height: 40,
+                        width: 163,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xff3B85FF)),
+                                shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))))
+                            ),
+                            onPressed: (){}, child: const Text("Search",style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,fontWeight: FontWeight.bold
+                        ),))),
+                  ],
+                ),
+              )
+            ));
+  }
+
 }

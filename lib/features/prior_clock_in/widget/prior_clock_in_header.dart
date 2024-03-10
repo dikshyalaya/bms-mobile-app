@@ -7,7 +7,7 @@ class PriorClockInHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 69,
+      height: 75,
       padding: const EdgeInsets.symmetric(vertical: 7.55),
       decoration: const BoxDecoration(
           color: Color(0xffD7ECFF),
@@ -15,8 +15,8 @@ class PriorClockInHeader extends StatelessWidget {
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,
       child: index.isEven
-          ? Column(
-        children: const [
+          ? const Column(
+        children: [
           Text(
             "2/10/2024 - 2/16/2024",
             style: TextStyle(
@@ -31,9 +31,9 @@ class PriorClockInHeader extends StatelessWidget {
                 fontSize: 15,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(
-            height: 3,
-          ),
+          // SizedBox(
+          //   height: 3,
+          // ),
           Text(
             "175 Willoughby St,Brooklyn,NY 11201",
             style: TextStyle(

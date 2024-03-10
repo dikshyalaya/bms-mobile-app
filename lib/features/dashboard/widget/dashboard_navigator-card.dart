@@ -1,4 +1,5 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
+import 'package:beacon_flutter/features/dashboard/widget/bottom_card.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardNavigatorCard extends StatelessWidget {
@@ -7,57 +8,28 @@ class DashBoardNavigatorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardProvider = CardProvider();
-    return ListView.separated(
-      padding: const EdgeInsetsDirectional.only(top: 54),
-      itemBuilder: (context, index) => Card(
-        elevation: 4,
-        shadowColor: Colors.green,
-        color: cardProvider.navigatorCards[index].bgColor,
-        margin: const EdgeInsetsDirectional.symmetric(horizontal: 24),
-        child: SizedBox(
-          height: 124,
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    cardProvider.navigatorCards[index].title,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: const Color(0xff1E1D1D),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(
-                  width: 24,
-                ),
-                Container(
-                  height: 80,
-                  width: 80,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.navigate_next,
-                      color: Color(0xff325CA1),
-                      size: 54,
-                    ),
-                    onPressed: () {},
-                  ),
-                )
-              ],
-            ),
-          ),
+    return Container(
+      height: 285,
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsetsDirectional.symmetric(vertical: 30),
+      decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomLeft: Radius.zero,
+              bottomRight: Radius.zero),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.grey, offset: Offset(-3, -3), blurRadius: 4),
+          ]),
+      child: ListView.separated(
+        itemBuilder: (context, index) => BottomCard(cardProvider: cardProvider,index: index,),
+        separatorBuilder: (context, index) => const SizedBox(
+          height: 22,
         ),
+        itemCount: cardProvider.navigatorCards.length,
       ),
-      separatorBuilder: (context, index) => const SizedBox(
-        height: 22,
-      ),
-      itemCount: cardProvider.navigatorCards.length,
     );
   }
 }

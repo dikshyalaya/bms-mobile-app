@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_in_header.dart';
 import 'package:flutter/material.dart';
 class PriorClockInCard extends StatelessWidget {
   final int index;
@@ -6,7 +7,7 @@ class PriorClockInCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      // height: 200,
       width: double.infinity,
       child: Card(
         color: const Color(0xffFBFBFB),

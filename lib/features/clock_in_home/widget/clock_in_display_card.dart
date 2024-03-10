@@ -1,3 +1,5 @@
+import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form.dart';
+import 'package:beacon_flutter/utils/bottom_modal_sheet.dart';
 import 'package:flutter/material.dart';
 class ClockInDisplayCard extends StatelessWidget {
   const ClockInDisplayCard({
@@ -7,7 +9,7 @@ class ClockInDisplayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 78,
+      // height: 78,
       width: double.infinity,
       child: Card(
         color: const Color(0xffFBFBFB),
@@ -22,21 +24,21 @@ class ClockInDisplayCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Little Flower - Laurelton IRA ",
                     style: TextStyle(
                         color: Color(0xff5B5B5B),
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 7,
                   ),
                   Row(
-                    children: const [
+                    children: [
                       Text(
                         "04/24/2024",
                         style: TextStyle(
@@ -68,7 +70,9 @@ class ClockInDisplayCard extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(34)),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async{
+                      BottomModalSheetUtils.onOpenBottomModalSheet(context, const ClockInForm());
+                    },
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     icon: const Icon(
