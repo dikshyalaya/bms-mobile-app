@@ -18,15 +18,25 @@ class PriorClockInHomeScreen extends StatelessWidget {
           title: "Prior Clock-In",
         ),
         backgroundColor: Colors.transparent,
-        body: ListView.separated(
-            itemBuilder: (context, index) => PriorClockInCard(
-              index: index,
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 29,
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 29),
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 9,
+            Expanded(
+              child: ListView.separated(
+                shrinkWrap: true,
+                  itemBuilder: (context, index) => PriorClockInCard(
+                    index: index,
+                  ),
+                  padding: const EdgeInsets.only(left: 12,right: 12, bottom: 29),
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 9,
+                  ),
+                  itemCount: 8),
             ),
-            itemCount: 8),
+          ],
+        ),
       ),
     );
   }

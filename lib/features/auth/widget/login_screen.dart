@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20))))),
                                     child: Text(
-                                      "Login...",
+                                      "Login",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
@@ -154,7 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 15,
                             ),
                             Text.rich(
+
+
                               TextSpan(
+
                                 children: [
                                   TextSpan(
                                     text: 'No worries, click, ',
@@ -178,8 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .bodyLarge!
                                         .copyWith(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                          decoration: TextDecoration.underline,
+                                          fontWeight: FontWeight.w500,
                                           fontSize: 15,
                                         ),
                                   ),
@@ -196,6 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ],
                               ),
+                              textAlign: TextAlign.center,
                             )
                           ],
                         ),

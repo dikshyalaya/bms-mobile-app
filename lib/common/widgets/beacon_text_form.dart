@@ -29,66 +29,76 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
     const textColor = Color(0xffC1C1C1);
     return SizedBox(
       height: widget.height ?? 40,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: TextFormField(
-          obscureText: widget.obscureText ?? false,
-          style: Theme.of(context)
+      child: TextFormField(
+        textAlign: TextAlign.start,
+        textAlignVertical: TextAlignVertical.center,
+
+        obscureText: widget.obscureText ?? false,
+
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(fontSize: 13, letterSpacing: 1.2),
+        onChanged: (String val) {
+          widget.onChangedInput.call(val);
+        },
+        decoration: InputDecoration(
+          contentPadding:
+           EdgeInsets.zero,
+          disabledBorder: outlineImputBorder(),
+          enabledBorder: outlineImputBorder(),
+          focusedBorder:outlineImputBorder(),
+          border:  outlineImputBorder(),
+          fillColor: Colors.white,
+          labelStyle:
+              Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12),
+          filled: true,
+          hintText: widget.hintText,
+          hintStyle: Theme.of(context)
               .textTheme
               .bodyLarge!
-              .copyWith(fontSize: 13, letterSpacing: 1.2),
-          onChanged: (String val) {
-            widget.onChangedInput.call(val);
-          },
-          decoration: InputDecoration(
-            contentPadding:
-            const EdgeInsets.only(top: 5),
-            disabledBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-
-            fillColor: Colors.white,
-            labelStyle:
-                Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12),
-            filled: true,
-            hintText: widget.hintText,
-            hintStyle: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(fontSize:widget.textStyleSize?? 13, color: textColor),
-            prefixIcon: Icon(
-              widget.iconData,
-              size: 20,
-              color: iconColor,
-            ),
-            suffixIcon: IfBuilder(
-              condition: widget.hintText.toLowerCase() == "password",
-              builder: (context) => IconButton(
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  setState(() {
-                    widget.obscureText!
-                        ? widget.obscureText = false
-                        : widget.obscureText = true;
-                  });
-                },
-                icon: Icon(
-                  (widget.obscureText ?? false)
-                      ? Icons.remove_red_eye
-                      : Icons.disabled_by_default_rounded,
-                  color: iconColor,
-                  size: 20,
-                ),
+              .copyWith(fontSize:widget.textStyleSize??13, color: textColor,fontWeight: FontWeight.w500),
+          prefixIcon: Icon(
+            widget.iconData,
+            size: 20,
+            color: iconColor,
+          ),
+          suffixIcon: IfBuilder(
+            condition: widget.hintText.toLowerCase() == "password",
+            builder: (context) => IconButton(
+              constraints: const BoxConstraints(),
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                setState(() {
+                  widget.obscureText!
+                      ? widget.obscureText = false
+                      : widget.obscureText = true;
+                });
+              },
+              icon: Icon(
+                (widget.obscureText ?? false)
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: iconColor,
+                size: 20,
               ),
             ),
-
-            // border: OutlineInputBorder(
-            //   borderRadius: BorderRadius.circular(5.0),
-            // ),
           ),
+
+          // border: OutlineInputBorder(
+          //   borderRadius: BorderRadius.circular(5.0),
+          // ),
         ),
       ),
     );
+  }
+
+  OutlineInputBorder outlineImputBorder() {
+    return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(25),
+  borderSide: const BorderSide(
+  color: Colors.transparent,
+
+  ),);
   }
 }

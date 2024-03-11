@@ -1,10 +1,19 @@
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 
-class ClockInForm extends StatelessWidget {
+class ClockInForm extends StatefulWidget {
   const ClockInForm({super.key});
 
+  @override
+  State<ClockInForm> createState() => _ClockInFormState();
+}
+
+class _ClockInFormState extends State<ClockInForm> {
+  String? startTime ;
+  String? endTime ;
+  String? mealTime ;
+  String? noMealReason ;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -14,7 +23,7 @@ class ClockInForm extends StatelessWidget {
         children: [
 Container(height: 80,width: double.infinity,decoration: const BoxDecoration(
   color: Color(0xffD9D9D9),
-  
+
   borderRadius: BorderRadius.only(
     topLeft: Radius.circular(20),
     topRight: Radius.circular(20),
@@ -33,7 +42,7 @@ child: const Column(
         color: Color(0xff5B5B5B),
         fontSize: 15,fontWeight: FontWeight.w500
     ),),
-    
+
   ],
 ),
 ),
@@ -45,9 +54,11 @@ child: const Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                      buildTitleText("Start Time"),
-                    BMSDropDownForm(options: const ["8:00 AM","9:00 AM","10:00 AM"], onChooseOptions: (String val){
-
-                    }
+                    BMSDropDownForm(options:timeOptions, onChooseOptions: (String val){
+setState(() {
+  startTime =val;
+});
+                    },hint: startTime,
                     )
                   ],
                 ),
@@ -57,9 +68,11 @@ child: const Column(
                   children: [
                      buildTitleText("End Time"),
 
-                    BMSDropDownForm(options: const ["04:00 PM","05:00 PM","06:00 PM"], onChooseOptions: (String val){
-
-                    }
+                    BMSDropDownForm(options:timeOptions, onChooseOptions: (String val){
+setState(() {
+  endTime =val;
+});
+                    },hint: endTime,
                     )
                   ],
                 ),
@@ -69,9 +82,11 @@ child: const Column(
                   children: [
                     buildTitleText("Meal Time"),
 
-                    BMSDropDownForm(options: const ["30 Minutes","35 minutes","45 Minutes"], onChooseOptions: (String val){
-
-                    }
+                    BMSDropDownForm(options: mealTimeOption, onChooseOptions: (String val){
+setState(() {
+  mealTime =val;
+});
+                    },hint: mealTime,
                     )
                   ],
                 ),
@@ -82,8 +97,11 @@ child: const Column(
                     buildTitleText("No Meal Reason"),
 
                     BMSDropDownForm(options: const ["","Reason A","Reason B","Reason C"], onChooseOptions: (String val){
-
-                    }
+setState(() {
+  noMealReason = val;
+});
+                    },hint: mealTime!=null?" ":noMealReason,
+                      ignoring: mealTime!=null,
                     )
                   ],
                 ),
@@ -97,14 +115,14 @@ child: const Column(
                     child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff3B85FF)),
+                                const Color(0xff1870FF)),
                             shape: MaterialStateProperty.all(
                                 const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20))))
                         ),
                         onPressed: (){
-                          Navigator.pop(context);
+                          Navigator.pop(context,"save");
                         }, child: const Text("Save",style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,fontWeight: FontWeight.bold

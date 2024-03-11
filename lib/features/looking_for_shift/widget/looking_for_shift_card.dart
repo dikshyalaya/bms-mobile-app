@@ -16,6 +16,7 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
       height: 138,
       width: double.infinity,
       child: Card(
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: Colors.white,
         child:  Column(
@@ -52,9 +53,10 @@ const Text("Available?",style: TextStyle(
                   Row(
                     children: [
                       SizedBox(
-                        width: 24,height: 22,
+                        width: 30,height: 25,
                         child: FittedBox(
                           child: Switch(
+                            activeColor: Colors.blue,
                             key: UniqueKey(),
 
                               value: isTrue, onChanged: (bool val){

@@ -14,8 +14,7 @@ class PriorClockInHeader extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,
-      child: index.isEven
-          ? const Column(
+      child: const Column(
         children: [
           Text(
             "2/10/2024 - 2/16/2024",
@@ -43,7 +42,7 @@ class PriorClockInHeader extends StatelessWidget {
           ),
         ],
       )
-          : const SizedBox.shrink(),
+         ,
     );
   }
 }

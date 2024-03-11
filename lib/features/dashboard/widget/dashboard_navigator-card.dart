@@ -24,6 +24,7 @@ class DashBoardNavigatorCard extends StatelessWidget {
                 color: Colors.grey, offset: Offset(-3, -3), blurRadius: 4),
           ]),
       child: ListView.separated(
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => BottomCard(cardProvider: cardProvider,index: index,),
         separatorBuilder: (context, index) => const SizedBox(
           height: 22,
@@ -47,10 +48,10 @@ class CardProvider {
     CardModel(title: "Clock In", asset: "clock-in".pngImage()),
     CardModel(title: "My Schedule", asset: "schedule".pngImage()),
     CardModel(
-        title: "Shift\nAvailability", asset: "shift-availiability".pngImage()),
+        title: "Shift Availability", asset: "shift-availiability".pngImage()),
     CardModel(title: "Prior Clock-In", asset: "prior-clock-in".pngImage()),
     CardModel(title: "Add a Shift", asset: "add-shift".pngImage()),
-    CardModel(title: "Looking for\nShift", asset: "looking".pngImage()),
+    CardModel(title: "Looking for Shift", asset: "looking".pngImage()),
   ];
 }
 

@@ -46,7 +46,7 @@ class AppBarLeadingIcon extends StatelessWidget {
         height: 34,
         width: 34,
         child: Card(color: Colors.white,
-            margin: const EdgeInsets.only(left: 20,bottom: 14),
+            margin: const EdgeInsets.only(left: 20,bottom: 10,top: 12),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(34)
             ),

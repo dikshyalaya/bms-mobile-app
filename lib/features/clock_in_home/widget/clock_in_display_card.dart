@@ -1,5 +1,6 @@
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form.dart';
 import 'package:beacon_flutter/utils/bottom_modal_sheet.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 class ClockInDisplayCard extends StatelessWidget {
   const ClockInDisplayCard({
@@ -66,12 +67,14 @@ class ClockInDisplayCard extends StatelessWidget {
                 child: Card(
                   margin: EdgeInsets.zero,
                   shadowColor: Colors.grey,
+                  color: Colors.white,
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(34)),
                   child: IconButton(
                     onPressed: () async{
-                      BottomModalSheetUtils.onOpenBottomModalSheet(context, const ClockInForm());
+                   BottomModalSheetUtils.onOpenBottomModalSheet(context, const ClockInForm());
+
                     },
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),

@@ -1,5 +1,4 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
-import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget{
         shadowColor: Colors.grey,
         backgroundColor: const Color(0xff4579FF),
         automaticallyImplyLeading: true,
-        leadingWidth:leadingIcon==null? 0:62,
+        leadingWidth:leadingIcon==null? 0:54,
         leading:  IfBuilder(
           condition: leadingIcon != null,
           builder: (context) => leadingIcon!,
@@ -53,7 +52,9 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget{
           Padding(
             padding:  EdgeInsetsDirectional.only(end: 17, top:leadingIcon != null?0: 17),
             child: GestureDetector(
-              onTap: ()=>DialogueUtils.onProfileIconClickDialogue(context: context,onChangePassword: (){DialogueUtils.changePasswordDialogue(context: context);}),
+              onTap: ()async {
+               final changePassword=await DialogueUtils.onProfileIconClickDialogue(context: context);
+              },
               child: Image.asset(
                 "profile".pngImage(),
                 height: 34,

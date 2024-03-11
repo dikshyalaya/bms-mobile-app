@@ -4,7 +4,6 @@ class BeaconBaseResponse<T> {
 
   BeaconBaseResponse({this.body, this.exception});
 
-  BeaconBaseResponse.onError(Exception exception)
-      : body = null,
-        exception = exception;
+  BeaconBaseResponse.onError(Exception this.exception)
+      : body = null;
 }

@@ -5,7 +5,9 @@ class BMSDropDownForm extends StatelessWidget {
   List<String> options;
   Function(String)onChooseOptions;
   double? width;
-   BMSDropDownForm({super.key,required this.options,required this.onChooseOptions,this.width});
+  final String? hint;
+  final bool? ignoring;
+   BMSDropDownForm({super.key,required this.options,required this.onChooseOptions,this.width,this.hint,this.ignoring});
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +22,25 @@ class BMSDropDownForm extends StatelessWidget {
       ),
       padding: const EdgeInsetsDirectional.only(start: 8,end: 8),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          underline: const SizedBox.shrink(),
-          focusColor:  Colors.white,
-          hint: Text(options.first),
-          isExpanded: true,
-        
-          items: options.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (val) {
-            onChooseOptions.call(val??"");
-          },
+        child: IgnorePointer(
+          ignoring: ignoring??false,
+          child: DropdownButton<String>(
+
+            underline: const SizedBox.shrink(),
+            focusColor:  Colors.white,
+            hint: Text(hint??options.first),
+            isExpanded: true,
+
+            items: options.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (val) {
+              onChooseOptions.call(val??"");
+            },
+          ),
         ),
       ),
     );

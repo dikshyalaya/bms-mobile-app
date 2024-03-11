@@ -1,4 +1,3 @@
-import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_grid.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
