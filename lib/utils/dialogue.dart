@@ -1,9 +1,12 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/password_change_field.dart';
+import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
+import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DialogueUtils {
   DialogueUtils._();
@@ -25,12 +28,14 @@ class DialogueUtils {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      message,
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: const Color(0xffD40000),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400),
+                    Expanded(
+                      child: Text(
+                        message,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: const Color(0xffD40000),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                     SizedBox(
                       height: 40,
@@ -246,6 +251,7 @@ class DialogueUtils {
 
   static Future<bool> onProfileIconClickDialogue(
       {required BuildContext context}) async {
+    final authProvider = Provider.of<AuthProvider>(context,listen: false);
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -301,9 +307,9 @@ class DialogueUtils {
                        const SizedBox(height: 16,),
                        GestureDetector(
                          onTap: (){
+                           authProvider.logOut();
                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
-
-                         },
+                           },
                          child: const Text("Log Out",style: TextStyle(
                            color: Color(0xff6F6F6F),
                            fontWeight: FontWeight.bold,
@@ -312,7 +318,7 @@ class DialogueUtils {
                        ),
                        const SizedBox(height: 37,), GestureDetector(
                          onTap: (){
-                           Navigator.pop(context);
+                           Navigator.pop(context,false);
                          },
                          child: const Text("Close",style: TextStyle(
                              color: Colors.black,
@@ -463,6 +469,17 @@ class DialogueUtils {
                 ),
               )
             ));
+  }
+
+  static Future<void>showProgressDialogue(BuildContext context,String message)async{
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return ProgressDialog(
+            message:message,
+          );
+        });
   }
 
 }

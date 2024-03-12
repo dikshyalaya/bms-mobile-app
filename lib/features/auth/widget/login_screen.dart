@@ -1,10 +1,14 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
+import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
+import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/utils/constants.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = "";
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context,listen: false);
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -93,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 40,
                                 width: 104.84,
                                 child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async{
                                       if (userName.isEmpty ||
                                           password.isEmpty) {
                                         final errorMessage = userName.isEmpty
@@ -104,11 +109,38 @@ class _LoginScreenState extends State<LoginScreen> {
                                             message: errorMessage);
                                       } else {
                                         FocusScope.of(context).unfocus();
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const DashBoardScreen()));
+                                        DialogueUtils.showProgressDialogue(context,  "Signing in, Please wait...");
+
+                                       await authProvider.logIn(userName, password,onErrorState: (val){
+                                         Navigator.pop(context);
+                                          print(val);
+                                        },
+                                        onAccessToken: (Map<String,dynamic>onData){
+                                         Navigator.pop(context);
+
+                                          if(onData['data']!=null){
+                                            final accessToken = onData["accessToken"];
+                                            final email = onData['data']['email'];
+                                            final isActive = onData['data']['isActive'];
+                                            final userTypeId = onData['data']['userTypeId'];
+                                            final empId = onData['data']['empId'];
+                                            final empFirstName = onData['data']['employee']['empFirstName'];
+                                            final empLastName = onData['data']['employee']['empLastName'];
+                                            authProvider.savedLoginInfo(accessToken, BmsUserModel(email: email,isActive: isActive,userTypeId: userTypeId,empFirstName: empFirstName,empLastName: empLastName,empId: empId));
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => const DashBoardScreen()),
+                                                    (route) => false);
+                                          }
+                                          else{
+                                          shoErrorToast(onData['message']);
+
+                                          }
+
+
+                                        }
+                                        );
+
                                       }
                                     },
                                     style: ButtonStyle(
@@ -228,4 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+void shoErrorToast(String message){
+  Fluttertoast.showToast(msg: message,backgroundColor: Colors.red,textColor: Colors.white);
 }
