@@ -5,6 +5,7 @@ import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
+import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -337,8 +338,9 @@ class DialogueUtils {
 
 
 
-  static Future<bool> selectSchedulePeriodDialogue(
-      {required BuildContext context,}) async {
+  static Future<String> selectSchedulePeriodDialogue(
+      {required BuildContext context,required List<SchedulePeriod>schedulePeriods}) async {
+    String? schedulePeriod ;
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -368,8 +370,13 @@ class DialogueUtils {
                       ),),
                     ),
                     const SizedBox(height: 18,),
-                    BMSDropDownForm(onChooseOptions: (String val){},options: const ["3/2/2024 - 3/8/2024","4/2/2024 - 3/8/2024","5/2/2024 - 3/8/2024"],width: 217,)
-                   , const SizedBox(height: 8,),
+                   StatefulBuilder(builder: (context,setState)=> BMSDropDownForm(onChooseOptions: (String val){
+                     setState((){
+                       schedulePeriod = val;
+                     });
+
+                   },options: schedulePeriods.map((e) => e.schedulePeriod).toList(),width: 217,hint: schedulePeriod,)
+                     ,), const SizedBox(height: 8,),
                     SizedBox(
                         height: 40,
                         width: 163,
@@ -382,7 +389,9 @@ class DialogueUtils {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))))
                             ),
-                            onPressed: (){}, child: const Text("Search",style: TextStyle(
+                            onPressed: (){
+                              Navigator.pop(context,schedulePeriod);
+                            }, child: const Text("Search",style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,fontWeight: FontWeight.bold
                         ),))),

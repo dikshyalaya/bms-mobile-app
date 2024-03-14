@@ -1,14 +1,58 @@
 import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
+import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_card.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/widgets/scaffold_background_wrapper.dart';
 
-class LookingForShiftHomeScreen extends StatelessWidget {
+class LookingForShiftHomeScreen extends StatefulWidget {
   const LookingForShiftHomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LookingForShiftHomeScreen> createState() => _LookingForShiftHomeScreenState();
+}
+
+class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
+  bool isInit =true;
+  late LookingForShiftProvider _lookingForShiftProvider;
+  String schedulePeriod = "3/2/2024 - 3/8/2024 ";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _lookingForShiftProvider = Provider.of<LookingForShiftProvider>(context,listen: false);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async{
+
+    // TODO: implement didChangeDependencies
+    if(isInit){
+      if(_lookingForShiftProvider.schedulePeriodResponseModel?.data?.isNotEmpty??false){
+       final res = await DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: _lookingForShiftProvider.schedulePeriodResponseModel!.data!);
+
+       setState(() {
+         schedulePeriod =res;
+       });
+      }
+      else{
+       await _lookingForShiftProvider.getAllSchedulePeriods().then((value)async {
+        final res = await  DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: value.body?.data??[]);
+
+      setState(() {
+        schedulePeriod =res;
+      });
+        });
+
+      }
+    }
+    isInit =false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return ScaffoldBackGroundWrapper(
@@ -17,8 +61,12 @@ class LookingForShiftHomeScreen extends StatelessWidget {
           leadingIcon: const AppBarLeadingIcon(),
           action: [
             GestureDetector(
-              onTap: (){
-                DialogueUtils.selectSchedulePeriodDialogue(context: context);
+              onTap: () async {
+             final res= await   DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: _lookingForShiftProvider.schedulePeriodResponseModel!.data!);
+
+            setState(() {
+              schedulePeriod =res;
+            });
               },
               child: SizedBox(
                 height: 34,
@@ -35,25 +83,25 @@ class LookingForShiftHomeScreen extends StatelessWidget {
             )
           ],
           title: "Looking For Shift",
-      
+
         ),
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
           child: Column(
-          
+
             children: [
-              const Align(
+               Align(
                 alignment: Alignment.center,
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
+                      const TextSpan(
                           text: "Schedule Period: ",
                           style: TextStyle(color: Colors.white, fontSize: 15)),
                       TextSpan(
-                        text: "3/2/2024 - 3/8/2024 ",
-                        style: TextStyle(
+                        text: schedulePeriod,
+                        style: const TextStyle(
                             fontSize: 15,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),

@@ -1,8 +1,10 @@
+import 'package:beacon_flutter/features/prior_clock_in/data/prior_cloc_in_response_model.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_in_header.dart';
 import 'package:flutter/material.dart';
 class PriorClockInCard extends StatelessWidget {
   final int index;
-  const PriorClockInCard({Key? key, required this.index}) : super(key: key);
+  final PriorClockInModel? priorClockInModel;
+  const PriorClockInCard({Key? key, required this.index,required this.priorClockInModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,37 +22,38 @@ class PriorClockInCard extends StatelessWidget {
           children: [
             PriorClockInHeader(
               index: index,
+              priorClockInModel: priorClockInModel,
             ),
             const SizedBox(
               height: 6,
             ),
-            richText('ScheduleDate: ', '2/10/2024'),
+            richText('ScheduleDate: ', priorClockInModel?.scheduleDate??''),
             buildDivider(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                richText("Start Time: ", "08:00 AM"),
+                richText("Start Time: ", priorClockInModel?.startTime??''),
                 const SizedBox(
                   width: 8,
                 ),
-                richText("End Time: ", "04:00 PM")
+                richText("End Time: ", priorClockInModel?.endTime??'')
               ],
             ),
             buildDivider(),
-            index == 0
-                ? richText("No Meal Reason: ", "No relief given")
-                : richText("Meal Time: ", "30 Min"),
+            (priorClockInModel?.noBreakReason.isNotEmpty??false)?
+             richText("No Meal Reason: ",priorClockInModel?.noBreakReason??'')
+                : richText("Meal Time: ", "${priorClockInModel?.lunchTime??''} Min"),
             buildDivider(),
-            const Text.rich(
+             Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                       text: "Total Time: ",
                       style: TextStyle(color: Colors.black, fontSize: 15)),
                   TextSpan(
-                    text: "08:00 hrs",
-                    style: TextStyle(fontSize: 15, color: Color(0xff2B2B2B)),
+                    text: priorClockInModel?.totalTime??"null ",
+                    style: const TextStyle(fontSize: 15, color: Color(0xff2B2B2B)),
                   ),
                 ],
               ),

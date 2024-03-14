@@ -4,6 +4,7 @@ import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
+import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()..getUserDetail()),
+        ChangeNotifierProvider<LookingForShiftProvider>(create: (_) => LookingForShiftProvider()..getAllSchedulePeriods()),
         ChangeNotifierProvider<NavigationHandler>(
             create: (_) => NavigationHandler()),
       ],

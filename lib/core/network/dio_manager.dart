@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -83,7 +84,7 @@ class TokenInterceptor extends QueuedInterceptor {
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     String? accessToken;
-    accessToken ="";
+    accessToken =await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
 
 
     const Map<String, dynamic> apiHeaders = {
@@ -124,8 +125,7 @@ class ErrorInterceptor extends Interceptor {
     }
 
     if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
-      const refreshToken ="";
-         "";
+
     }
 
     if (err.response?.data != null) {

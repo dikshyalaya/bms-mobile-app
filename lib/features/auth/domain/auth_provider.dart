@@ -8,7 +8,14 @@ import 'package:flutter/cupertino.dart';
 
 class AuthProvider extends ChangeNotifier{
 
-  BmsUserModel? bmsUserModel;
+  BmsUserModel? _bmsUserModel;
+
+  BmsUserModel? get bmsUserModel => _bmsUserModel;
+
+  set bmsUserModel(BmsUserModel? value) {
+    _bmsUserModel = value;
+  }
+
   final LoginRepo _loginRepo =LoginRepo();
   Future<void> logIn(String name, String password,
       {LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
@@ -33,19 +40,22 @@ class AuthProvider extends ChangeNotifier{
     );
   }
 
-void savedLoginInfo(String accessToken,BmsUserModel bmsUserModel)async{
+void savedLoginInfo(String accessToken,BmsUserModel _bmsUserModel)async{
 await  BMSHiveModel.hive.put(BMSHiveModel.ACCESS_TOKEN, accessToken);
- await BMSHiveModel.hive.put(BMSHiveModel.USER_PROFILE, jsonEncode(bmsUserModel.toJson()));
+ await BMSHiveModel.hive.put(BMSHiveModel.USER_PROFILE, jsonEncode(_bmsUserModel.toJson()));
  await getUserDetail();
   }
 
   Future<BmsUserModel>getUserDetail()async{
     await BMSHiveModel.init();
     final response =  await BMSHiveModel.hive.get(BMSHiveModel.USER_PROFILE);
-  bmsUserModel =  BmsUserModel.fromJson(jsonDecode(response));
+    if(response!=null){
+      _bmsUserModel =  BmsUserModel.fromJson(jsonDecode(response));
+
+    }
   notifyListeners();
 
-  return bmsUserModel!;
+  return _bmsUserModel??BmsUserModel(email: "", empLastName: "", empFirstName: "", empId: 0, userTypeId: 0, isActive: false);
   }
 
   void logOut()async{

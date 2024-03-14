@@ -113,8 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                        await authProvider.logIn(userName, password,onErrorState: (val){
                                          Navigator.pop(context);
-                                          print(val);
-                                        },
+shoErrorToast(val.response?.exception?.message??"") ;                                      },
                                         onAccessToken: (Map<String,dynamic>onData){
                                          Navigator.pop(context);
 

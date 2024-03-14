@@ -1,10 +1,13 @@
+import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form.dart';
 import 'package:beacon_flutter/utils/bottom_modal_sheet.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 class ClockInDisplayCard extends StatelessWidget {
+  final ClockInResponse? clockInResponse;
   const ClockInDisplayCard({
     Key? key,
+     this.clockInResponse
   }) : super(key: key);
 
   @override
@@ -25,34 +28,34 @@ class ClockInDisplayCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Column(
+               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Little Flower - Laurelton IRA ",
-                    style: TextStyle(
+                    "${clockInResponse?.accountName} - ${clockInResponse?.houseName} ",
+                    style: const TextStyle(
                         color: Color(0xff5B5B5B),
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 7,
                   ),
-                  Row(
+                   Row(
                     children: [
                       Text(
-                        "04/24/2024",
-                        style: TextStyle(
+                       clockInResponse?.scheduleDate??'',
+                        style: const TextStyle(
                             color: Color(0xff5B5B5B),
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 19,
                       ),
-                      Text(
-                        "08:00 AM - 04:00 PM",
-                        style: TextStyle(
+                       Text(
+                        "${clockInResponse?.startTime} - ${clockInResponse?.endTime}",
+                        style: const TextStyle(
                             color: Color(0xff5B5B5B),
                             fontSize: 15,
                             fontWeight: FontWeight.w400),

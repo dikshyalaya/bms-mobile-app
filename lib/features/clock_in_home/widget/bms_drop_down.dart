@@ -28,7 +28,7 @@ class BMSDropDownForm extends StatelessWidget {
 
             underline: const SizedBox.shrink(),
             focusColor:  Colors.white,
-            hint: Text(hint??options.first),
+            hint: FittedBox(child: Text(hint??options.first,maxLines: 1,)),
             isExpanded: true,
 
             items: options.map((String value) {
