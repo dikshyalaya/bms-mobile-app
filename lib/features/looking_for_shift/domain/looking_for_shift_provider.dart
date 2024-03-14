@@ -2,23 +2,34 @@ import 'dart:convert';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
+import 'package:beacon_flutter/features/looking_for_shift/data/look_for_shift_response_model.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_repo.dart';
 import 'package:flutter/cupertino.dart';
 
 class LookingForShiftProvider extends ChangeNotifier{
+  final int dcId;
+  LookingForShiftProvider(this.dcId);
 
   bool isDataFetching = false;
   SchedulePeriodResponseModel? _schedulePeriodResponseModel;
-
-
+  LookForShiftResponseModel? _lookForShiftResponseModel;
 
   final SchedulePeriodRepo _schedulePeriodRepo =SchedulePeriodRepo();
+  final LookingForShiftRepo _lookingForShiftRepo =LookingForShiftRepo();
 
   void setLoading(bool val) {
     isDataFetching = val;
     futureNotifyListeners();
   }
+
+  LookForShiftResponseModel? get lookForShiftResponseModel =>
+      _lookForShiftResponseModel;
+
+  set lookForShiftResponseModel(LookForShiftResponseModel? value) {
+    _lookForShiftResponseModel = value;
+  }
+
   SchedulePeriodResponseModel? get schedulePeriodResponseModel =>
       _schedulePeriodResponseModel;
 
@@ -52,6 +63,41 @@ class LookingForShiftProvider extends ChangeNotifier{
             },
           );
         }
+    );
+    return BMSResponse(body: _schedulePeriodResponseModel);
+  }
+
+  Future<BMSResponse<SchedulePeriodResponseModel>> getAllLookingForShift(String schedPeriod) async {
+    setLoading(true);
+    await _lookingForShiftRepo.post(
+        apiCallback: (networkState) {
+          onApiCallback<dynamic>(
+            networkState: networkState,
+            // networkState: networkState,
+            onLoadedState: (loadedState) {
+              setLoading(false);
+              onFutureNotifyListeners(() {
+                final Map<String,dynamic> map = loadedState.response?.body;
+                _lookForShiftResponseModel =
+                    lookForShiftResponseModelFromJson(jsonEncode(map['response']));
+              });
+            },
+            onErrorState: (errorState) {
+              _lookForShiftResponseModel?.data=null;
+              onFutureNotifyListeners(() {
+                setLoading(false);
+
+              });
+            },
+            onLoadingState: (loadingState) {
+            },
+          );
+        }, body:
+      {
+        "dcId": dcId.toString(),
+        "schedulePeriod": schedPeriod
+
+    }
     );
     return BMSResponse(body: _schedulePeriodResponseModel);
   }

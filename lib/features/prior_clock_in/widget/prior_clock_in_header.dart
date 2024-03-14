@@ -10,7 +10,7 @@ class PriorClockInHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 75,
+      height: 78,
       padding: const EdgeInsets.symmetric(vertical: 7.55),
       decoration: const BoxDecoration(
           color: Color(0xffD7ECFF),
@@ -21,14 +21,14 @@ class PriorClockInHeader extends StatelessWidget {
         children: [
           Text(
             priorClockInModel?.schedulePeriod??'',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Color(0xff373737),
                 fontSize: 13,
                 fontWeight: FontWeight.w500),
           ),
           Text(
             "${priorClockInModel?.accountName??""} - ${priorClockInModel?.houseName??''}",
-            style: TextStyle(
+            style: const TextStyle(
                 color: Color(0xff1B1B1B),
                 fontSize: 15,
                 fontWeight: FontWeight.bold),
@@ -36,11 +36,14 @@ class PriorClockInHeader extends StatelessWidget {
           // SizedBox(
           //   height: 3,
           // ),
-          Text(
-              priorClockInModel?.houseAddress??'house address, null',
-            style: TextStyle(
-              color: Color(0xff1B1B1B),
-              fontSize: 13,
+          Expanded(
+            child: Text(
+                priorClockInModel?.houseAddress??'house address, null',
+              maxLines: 1,
+              style: const TextStyle(
+                color: Color(0xff1B1B1B),
+                fontSize: 13,
+              ),
             ),
           ),
         ],

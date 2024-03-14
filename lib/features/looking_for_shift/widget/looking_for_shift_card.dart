@@ -1,8 +1,10 @@
+import 'package:beacon_flutter/features/looking_for_shift/data/look_for_shift_response_model.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_card_header.dart';
 import 'package:flutter/material.dart';
 class LookingForShiftCard extends StatefulWidget {
   final int index;
-  const LookingForShiftCard({Key? key,required this.index}) : super(key: key);
+  final LookForShiftModel? lookForShiftModel;
+  const LookingForShiftCard({Key? key,required this.index, this.lookForShiftModel}) : super(key: key);
 
   @override
   State<LookingForShiftCard> createState() => _LookingForShiftCardState();
@@ -22,23 +24,25 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
         child:  Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children:  [const LookingForShiftCardHeader(),  const SizedBox(height: 11,),
-            const Padding(
-              padding: EdgeInsetsDirectional.symmetric(horizontal: 19),
-              child: Text("Adapt - Brooklyn IRA (Apt 6N)",style: TextStyle(
+          children:  [ LookingForShiftCardHeader(lookForShiftModel: widget.lookForShiftModel,),  const SizedBox(height: 11,),
+             Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
+
+              child: Text("${widget.lookForShiftModel?.accountName} - ${widget.lookForShiftModel?.houseName}",style: const TextStyle(
                 color: Color(0xff1B1B1B),
                 fontWeight: FontWeight.w500,
                 fontSize: 13
-              ),),
+              ),maxLines: 1,),
             ),
-            const Padding(
-              padding: EdgeInsetsDirectional.symmetric(horizontal: 19),
+             Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
 
-              child: Text("175 Willoughby St,Brooklyn,NY 11201",style: TextStyle(
+              child: Text(widget.lookForShiftModel?.houseAddress??"",style: const TextStyle(
                 color: Color(0xff1B1B1B),
+
                 fontWeight: FontWeight.w400,
                 fontSize: 13
-              ),),
+              ),maxLines: 1,),
             ),
              const Divider(color: Color(0xffEDEDED),),
             Padding(

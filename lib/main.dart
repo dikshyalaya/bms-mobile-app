@@ -24,9 +24,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()..getUserDetail()),
-        ChangeNotifierProvider<LookingForShiftProvider>(create: (_) => LookingForShiftProvider()..getAllSchedulePeriods()),
+    ChangeNotifierProxyProvider<AuthProvider,
+        LookingForShiftProvider>(
+    update: (_, authProvider, clockInProvide) {
+    return LookingForShiftProvider(authProvider.bmsUserModel?.empId??0);
+    },
+    lazy: false,
+    create: (_) => LookingForShiftProvider(
+    0
+    )..getAllSchedulePeriods()),
         ChangeNotifierProvider<NavigationHandler>(
             create: (_) => NavigationHandler()),
+
+
       ],
       child:
       Consumer<NavigationHandler>(

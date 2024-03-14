@@ -84,6 +84,8 @@ class TokenInterceptor extends QueuedInterceptor {
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     String? accessToken;
+    await BMSHiveModel.init();
+
     accessToken =await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
 
 

@@ -1,7 +1,10 @@
+import 'package:beacon_flutter/features/looking_for_shift/data/look_for_shift_response_model.dart';
 import 'package:flutter/material.dart';
 
 class LookingForShiftCardHeader extends StatelessWidget {
-  const LookingForShiftCardHeader({Key? key}) : super(key: key);
+  final LookForShiftModel? lookForShiftModel;
+
+  const LookingForShiftCardHeader({Key? key,this.lookForShiftModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +16,14 @@ class LookingForShiftCardHeader extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(15), topRight: Radius.circular(15))),
         alignment: Alignment.center,
-        child: const Row(
+        child:  Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Wednesday - 3/6/2024",style: TextStyle(
+            Text(lookForShiftModel?.scheduleDate??"",style: const TextStyle(
               color: Color(0xff1B1B1B),
               fontSize: 15,fontWeight: FontWeight.w500
             ),),
-            Text("11:30 PM - 09:30 AM",style: TextStyle(
+            Text("${lookForShiftModel?.startTime??""} - ${lookForShiftModel?.endTime}",style: const TextStyle(
               color: Color(0xff1B1B1B),
               fontSize: 15,fontWeight: FontWeight.w500
             ),),

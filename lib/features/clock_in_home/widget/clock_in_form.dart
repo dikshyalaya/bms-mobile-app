@@ -1,9 +1,13 @@
+import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
+import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 
 class ClockInForm extends StatefulWidget {
-  const ClockInForm({super.key});
+  List<NoMealResponseModel> niMealResonList;
+  ClockInResponse ?clockInResponse;
+   ClockInForm({super.key,required this.niMealResonList, this.clockInResponse});
 
   @override
   State<ClockInForm> createState() => _ClockInFormState();
@@ -12,10 +16,19 @@ class ClockInForm extends StatefulWidget {
 class _ClockInFormState extends State<ClockInForm> {
   String? startTime ;
   String? endTime ;
-  String? mealTime ;
+  String mealTime  ="None";
   String? noMealReason ;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    startTime =widget.clockInResponse?.startTime??"";
+    endTime =widget.clockInResponse?.endTime??"";
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: 430,
       width: MediaQuery.of(context).size.height,
@@ -29,16 +42,16 @@ Container(height: 80,width: double.infinity,decoration: const BoxDecoration(
     topRight: Radius.circular(20),
   )
 ),
-child: const Column(
+child:  Column(
   crossAxisAlignment: CrossAxisAlignment.center,
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
-    Text("Little Flower - Laurelton IRA",style: TextStyle(
+    Text("${widget.clockInResponse?.accountName} - ${widget.clockInResponse?.houseName}",style: const TextStyle(
       color: Colors.black,
       fontSize: 15,fontWeight: FontWeight.bold
     ),),
-    SizedBox(height: 8,),
-    Text("2/24/2024     08:00 AM - 04:00 PM",style: TextStyle(
+    const SizedBox(height: 8,),
+     Text("${widget.clockInResponse?.scheduleDate??''}     ${widget.clockInResponse?.startTime} - ${widget.clockInResponse?.endTime}",style: const TextStyle(
         color: Color(0xff5B5B5B),
         fontSize: 15,fontWeight: FontWeight.w500
     ),),
@@ -96,12 +109,12 @@ setState(() {
                   children: [
                     buildTitleText("No Meal Reason"),
 
-                    BMSDropDownForm(options: const ["","Reason A","Reason B","Reason C"], onChooseOptions: (String val){
+                    BMSDropDownForm(options: widget.niMealResonList.map((e) => e.name).toList(), onChooseOptions: (String val){
 setState(() {
   noMealReason = val;
 });
-                    },hint: mealTime!=null?" ":noMealReason,
-                      ignoring: mealTime!=null,
+                    },hint: mealTime!="None"?"":noMealReason,
+                      ignoring:mealTime!="None",
                     )
                   ],
                 ),

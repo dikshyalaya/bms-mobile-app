@@ -19,3 +19,13 @@ class ClockInRepo extends BaseApiRepository<Map<String, dynamic>> {
     // }
   }
 }
+
+class NoMealReasonRepo extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+      return noMealReasonUrl;
+  }
+}

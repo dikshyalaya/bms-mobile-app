@@ -3,4 +3,5 @@ const logInUrl = "Authentication/Login";
 const clockInUrl = "ShiftInfo/ListPunchCardShifts";
 const priorClockInUrl = "ShiftInfo/ClockinHistory";
 const lookingForShiftUrl = "ShiftInfo/LookForShift";
-const schedulePeriodUrl = "ShiftInfo/SchedulePeriods";
+const schedulePeriodUrl = "ShiftInfo/SchedulePeriodsLookingForShift";
+const noMealReasonUrl = "ShiftInfo/MasterLookup/NoBreakReason";

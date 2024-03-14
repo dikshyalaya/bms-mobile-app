@@ -338,11 +338,12 @@ class DialogueUtils {
 
 
 
-  static Future<String> selectSchedulePeriodDialogue(
+  static Future<String?> selectSchedulePeriodDialogue(
       {required BuildContext context,required List<SchedulePeriod>schedulePeriods}) async {
-    String? schedulePeriod ;
+    String schedulePeriod =schedulePeriods.first.schedulePeriod??"";
     return await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,

@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,27 +22,33 @@ class BMSDropDownForm extends StatelessWidget {
           )
       ),
       padding: const EdgeInsetsDirectional.only(start: 8,end: 8),
-      child: DropdownButtonHideUnderline(
-        child: IgnorePointer(
-          ignoring: ignoring??false,
-          child: DropdownButton<String>(
+      child: IfElseBuilder(
+        condition: ignoring??false,
+        elseBulider: (context) {
+          return DropdownButtonHideUnderline(
+            child: IgnorePointer(
+              ignoring: ignoring??false,
+              child: DropdownButton<String>(
 
-            underline: const SizedBox.shrink(),
-            focusColor:  Colors.white,
-            hint: FittedBox(child: Text(hint??options.first,maxLines: 1,)),
-            isExpanded: true,
+                underline: const SizedBox.shrink(),
+                focusColor:  Colors.white,
+                hint: FittedBox(child: Text(hint??options.first,maxLines: 1,)),
+                isExpanded: true,
 
-            items: options.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (val) {
-              onChooseOptions.call(val??"");
-            },
-          ),
-        ),
+                items: options.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  onChooseOptions.call(val??"");
+                },
+              ),
+            ),
+          );
+        },
+        ifBuilder: (context)=>const FittedBox(child: Text('')),
       ),
     );
   }

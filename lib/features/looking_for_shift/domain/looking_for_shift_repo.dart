@@ -12,3 +12,13 @@ class SchedulePeriodRepo extends BaseApiRepository<Map<String, dynamic>> {
     return schedulePeriodUrl;
   }
 }
+class LookingForShiftRepo extends BaseApiRepository<Map<String, dynamic>> {
+
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+    return lookingForShiftUrl;
+  }
+}

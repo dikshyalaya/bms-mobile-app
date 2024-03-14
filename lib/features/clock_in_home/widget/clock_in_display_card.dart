@@ -1,8 +1,10 @@
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
+import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form.dart';
 import 'package:beacon_flutter/utils/bottom_modal_sheet.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 class ClockInDisplayCard extends StatelessWidget {
   final ClockInResponse? clockInResponse;
   const ClockInDisplayCard({
@@ -32,7 +34,7 @@ class ClockInDisplayCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${clockInResponse?.accountName} - ${clockInResponse?.houseName} ",
+                    "${clockInResponse?.accountName} - ${clockInResponse?.houseName}",
                     style: const TextStyle(
                         color: Color(0xff5B5B5B),
                         fontSize: 15,
@@ -76,7 +78,8 @@ class ClockInDisplayCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(34)),
                   child: IconButton(
                     onPressed: () async{
-                   BottomModalSheetUtils.onOpenBottomModalSheet(context, const ClockInForm());
+                      final clockInProvider = Provider.of<CLockInProvider>(context,listen: false);
+                   BottomModalSheetUtils.onOpenBottomModalSheet(context,  ClockInForm(niMealResonList: clockInProvider.noMealReasonResponseModel?.data??[],clockInResponse: clockInResponse,),);
 
                     },
                     padding: EdgeInsets.zero,

@@ -24,7 +24,7 @@ class DashBoardScreen extends StatelessWidget {
             child: Selector<AuthProvider,BmsUserModel?>(
               selector: (context,provider)=>provider.bmsUserModel,
               builder: (context,bmsUserModel,child)=>BeaconAppBar(
-                title: "Hey, ${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+                title: "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
               ),
 
             )),
