@@ -45,19 +45,28 @@ class PriorClockInCard extends StatelessWidget {
              richText("No Meal Reason: ",priorClockInModel?.noBreakReason??'')
                 : richText("Meal Time: ", "${priorClockInModel?.lunchTime??''} Min"),
             buildDivider(),
-             Text.rich(
-              TextSpan(
-                children: [
-                  const TextSpan(
-                      text: "Total Time: ",
-                      style: TextStyle(color: Colors.black, fontSize: 15)),
-                  TextSpan(
-                    text: priorClockInModel?.totalTime??"null ",
-                    style: const TextStyle(fontSize: 15, color: Color(0xff2B2B2B)),
-                  ),
-                ],
-              ),
-            )
+             Container(
+               alignment: Alignment.center,
+               decoration: const BoxDecoration(
+                 color: Color(0xffF2F2F2),
+                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))
+               ),
+
+               child: Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                        text: "Total Time: ",
+                        style: TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.w500)),
+                    TextSpan(
+                      text: (priorClockInModel?.totalTime.toString())??"",
+                      style: const TextStyle(fontSize: 15, color: Color(0xff2B2B2B)),
+                    ),
+                  ],
+                ),
+                           ),
+             ),
+            const SizedBox(height: 6.55,)
           ],
         ),
       ),
@@ -66,6 +75,7 @@ class PriorClockInCard extends StatelessWidget {
 
   Divider buildDivider() {
     return const Divider(
+      thickness: 0.25,
       color: Color(0xffB5B5B5),
     );
   }

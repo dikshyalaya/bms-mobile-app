@@ -40,6 +40,20 @@ dependencies:
   provider: ^6.1.2
   fluttertoast: ^8.2.4
   hive_flutter: ^1.1.0
+  flutter_launcher_icons: ^0.13.1
+
+
+flutter_launcher_icons:
+  image_path_android: "assets/images/app-logo.png"
+  image_path_ios: "assets/images/app-logo.png"
+  android: true
+  ios: true
+#  adaptive_icon_background: "assets/images/DashBoard.png"
+#  adaptive_icon_foreground: "assets/images/login_bg.png"
+#  adaptive_icon_monochrome: "assets/images/login_bg.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  background_color_ios: "#FF0000"
 
 dev_dependencies:
   flutter_test:

@@ -14,6 +14,13 @@ class PriorClockInHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7.55),
       decoration: const BoxDecoration(
           color: Color(0xffD7ECFF),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey,
+                blurRadius: 15.0,
+                offset: Offset(0.0, 0.75)
+            )
+          ],
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,

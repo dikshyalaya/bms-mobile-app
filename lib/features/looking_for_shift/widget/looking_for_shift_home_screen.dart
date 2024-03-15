@@ -44,7 +44,6 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   Future<void> onInitScreen() async {
      if(_lookingForShiftProvider.schedulePeriodResponseModel?.data?.isNotEmpty??false){
     Future.delayed(const Duration(milliseconds: 200),()async{
-      schedulePeriod = _lookingForShiftProvider.schedulePeriodResponseModel?.data?.first.schedulePeriod??'';
       final res = await DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: _lookingForShiftProvider.schedulePeriodResponseModel!.data!)??"";
 
      setState(() {
@@ -59,7 +58,7 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
        if(value.body?.data?.isNotEmpty??false){
          setState(() {
            initialState = false;
-           schedulePeriod = value.body?.data?.first.schedulePeriod??"";
+           // schedulePeriod = value.body?.data?.first.schedulePeriod??"";
          });
          final res = await  DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: value.body?.data??[])??"";
 
@@ -144,7 +143,7 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 9,
                         ),
-                        itemCount: 8), isDataFetching: isDataFetching, isNullData: _lookingForShiftProvider.lookForShiftResponseModel?.data==null), selector: (context,provider)=>provider.isDataFetching),
+                        itemCount: _lookingForShiftProvider.lookForShiftResponseModel?.data?.length??0), isDataFetching: isDataFetching, isNullData: _lookingForShiftProvider.lookForShiftResponseModel?.data==null), selector: (context,provider)=>provider.isDataFetching),
                   )
               ,
                    SizedBox(

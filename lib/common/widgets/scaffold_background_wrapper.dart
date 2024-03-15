@@ -15,7 +15,7 @@ class ScaffoldBackGroundWrapper extends StatelessWidget {
             image: AssetImage(
               "Dashboard".pngImage(),
             ),
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           )),
       child: child,
     );

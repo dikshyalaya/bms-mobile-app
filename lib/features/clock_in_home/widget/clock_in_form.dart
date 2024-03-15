@@ -109,12 +109,14 @@ setState(() {
                   children: [
                     buildTitleText("No Meal Reason"),
 
-                    BMSDropDownForm(options: widget.niMealResonList.map((e) => e.name).toList(), onChooseOptions: (String val){
-setState(() {
-  noMealReason = val;
-});
-                    },hint: mealTime!="None"?"":noMealReason,
-                      ignoring:mealTime!="None",
+                    Expanded(
+                      child: BMSDropDownForm(options: widget.niMealResonList.map((e) => e.name).toList(), onChooseOptions: (String val){
+                      setState(() {
+                        noMealReason = val;
+                      });
+                      },hint: mealTime!="None"?"":noMealReason,
+                        ignoring:mealTime!="None",
+                      ),
                     )
                   ],
                 ),

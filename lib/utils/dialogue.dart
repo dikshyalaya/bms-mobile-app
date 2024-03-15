@@ -251,7 +251,7 @@ class DialogueUtils {
 
 
   static Future<bool> onProfileIconClickDialogue(
-      {required BuildContext context}) async {
+      {required BuildContext context,required String userName}) async {
     final authProvider = Provider.of<AuthProvider>(context,listen: false);
     return await showDialog(
         context: context,
@@ -279,7 +279,7 @@ class DialogueUtils {
                         const SizedBox(
                           height: 20,
                         ),
-                        const Text("Beacon App",style: TextStyle(
+                         Text(userName,style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,color: Color(0xff565656)
                         ),),]
@@ -340,7 +340,7 @@ class DialogueUtils {
 
   static Future<String?> selectSchedulePeriodDialogue(
       {required BuildContext context,required List<SchedulePeriod>schedulePeriods}) async {
-    String schedulePeriod =schedulePeriods.first.schedulePeriod??"";
+    String schedulePeriod =schedulePeriods.first.schedulePeriod;
     return await showDialog(
         context: context,
         barrierDismissible: false,

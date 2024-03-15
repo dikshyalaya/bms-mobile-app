@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fit: BoxFit.fill,
         )),
         child: SizedBox(
-          height: 423,
+          height: 466,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(
-                            top: 46, start: 22, end: 22, bottom: 18),
+                            top: 32, start: 22, end: 22, bottom: 18),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -69,10 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fontSize: 20),
                             ),
                             const SizedBox(
-                              height: 16,
+                              height: 19,
                             ),
                             BeaconTextFormField(
-                              iconData: Icons.person,
+                              iconData: Icons.person_pin,
                               hintText: "Username",
                               onChangedInput: (String input) {
                                 userName = input;

@@ -1,7 +1,9 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
+import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget{
   final Widget? leadingIcon;
@@ -18,6 +20,7 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget{
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthProvider>(context,listen: false);
     return PreferredSize(
       preferredSize: Size(MediaQuery.of(context).size.width,5),
       child: AppBar(
@@ -53,7 +56,7 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget{
             padding:  EdgeInsetsDirectional.only(end: 17, top:leadingIcon != null?0: 17),
             child: GestureDetector(
               onTap: ()async {
-               final changePassword=await DialogueUtils.onProfileIconClickDialogue(context: context);
+               final changePassword=await DialogueUtils.onProfileIconClickDialogue(context: context,userName: "${auth.bmsUserModel?.empFirstName} ${auth.bmsUserModel?.empLastName}");
               },
               child: Image.asset(
                 "profile".pngImage(),
