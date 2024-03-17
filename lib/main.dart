@@ -1,5 +1,4 @@
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
-import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
@@ -11,16 +10,24 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
-  runApp(const MyApp());
-  WidgetsFlutterBinding.ensureInitialized();
+  bool isLoggedIn=false;
   await Hive.initFlutter();
   await BMSHiveModel.init();
+  final accessToken = await  BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
+  isLoggedIn = accessToken?.isNotEmpty ?? false;
+  runApp( MyApp(isLoggedIn: isLoggedIn,));
+ WidgetsFlutterBinding.ensureInitialized();
+
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({key,required this.isLoggedIn});
   @override
   Widget build(BuildContext context) {
+
+    // FlutterNativeSplash.remove();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()..getUserDetail()),
@@ -45,8 +52,7 @@ class MyApp extends StatelessWidget {
               title: 'Beacon',
               debugShowCheckedModeBanner: false,
               theme: defaultLightTheme,
-              home: provider.navigationRouteName ==
-                  navigationDashBoardRoute
+              home:isLoggedIn
                   ? const DashBoardScreen()
                   : LoginScreen(
                 key: key,

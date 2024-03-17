@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class ClockInForm extends StatefulWidget {
   List<NoMealResponseModel> niMealResonList;
   ClockInResponse ?clockInResponse;
-   ClockInForm({super.key,required this.niMealResonList, this.clockInResponse});
+   ClockInForm({key,required this.niMealResonList, this.clockInResponse});
 
   @override
   State<ClockInForm> createState() => _ClockInFormState();

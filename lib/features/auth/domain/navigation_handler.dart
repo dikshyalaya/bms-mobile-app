@@ -9,8 +9,6 @@ class NavigationHandler with ChangeNotifier {
 
   }
   bool isLoggedIn = false;
-  bool isAdmin = false;
-
   String navigationRouteName = "";
 
   getInitialRoute() async {

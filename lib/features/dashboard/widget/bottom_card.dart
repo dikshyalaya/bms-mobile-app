@@ -7,7 +7,7 @@ class BottomCard extends StatelessWidget {
   final int index;
 
   const BottomCard({
-    super.key,
+    key,
     required this.index,
     required this.cardProvider,
   });

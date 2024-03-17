@@ -53,7 +53,7 @@ class ClockInHomeScreen extends StatelessWidget {
 
 class AppBarLeadingIcon extends StatelessWidget {
   const AppBarLeadingIcon({
-    super.key,
+    key,
   });
 
   @override

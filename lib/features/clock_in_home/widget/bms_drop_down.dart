@@ -8,7 +8,7 @@ class BMSDropDownForm extends StatelessWidget {
   double? width;
   final String? hint;
   final bool? ignoring;
-   BMSDropDownForm({super.key,required this.options,required this.onChooseOptions,this.width,this.hint,this.ignoring});
+   BMSDropDownForm({key,required this.options,required this.onChooseOptions,this.width,this.hint,this.ignoring});
 
   @override
   Widget build(BuildContext context) {

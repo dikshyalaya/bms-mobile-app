@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 class ScaffoldBackGroundWrapper extends StatelessWidget {
   final Widget child;
-  const ScaffoldBackGroundWrapper({super.key,required this.child});
+  const ScaffoldBackGroundWrapper({key,required this.child});
 
   @override
   Widget build(BuildContext context) {
