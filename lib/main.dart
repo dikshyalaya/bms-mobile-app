@@ -1,4 +1,6 @@
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
+import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
+import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
@@ -48,12 +50,19 @@ class MyApp extends StatelessWidget {
       child:
       Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
+            final authProvider = Provider.of<AuthProvider>(context,listen: false);
             return MaterialApp(
               title: 'Beacon',
               debugShowCheckedModeBanner: false,
               theme: defaultLightTheme,
               home:isLoggedIn
-                  ? const DashBoardScreen()
+                  ? IfElseBuilder(
+                condition: authProvider.bmsUserModel?.userTypeId==1,
+                ifBuilder: (context)=>const DashBoardScreen(),
+                    elseBulider: (context) {
+                      return const EmptyDashBoard();
+                    }
+                  )
                   : LoginScreen(
                 key: key,
               ),

@@ -1,5 +1,6 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
+import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
@@ -126,10 +127,18 @@ shoErrorToast(val.response?.exception?.message??"") ;                           
                                             final empFirstName = onData['data']['employee']['empFirstName'];
                                             final empLastName = onData['data']['employee']['empLastName'];
                                             authProvider.savedLoginInfo(accessToken, BmsUserModel(email: email,isActive: isActive,userTypeId: userTypeId,empFirstName: empFirstName,empLastName: empLastName,empId: empId));
-                                            Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => const DashBoardScreen()),
-                                                    (route) => false);
+
+                                            if(userTypeId==1){
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const DashBoardScreen()),
+                                                      (route) => false);
+                                            }else{
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const EmptyDashBoard()),
+                                                      (route) => false);
+                                            }
                                           }
                                           else{
                                           shoErrorToast(onData['message']);

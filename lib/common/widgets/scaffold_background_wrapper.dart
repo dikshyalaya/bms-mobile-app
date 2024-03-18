@@ -3,20 +3,23 @@ import 'package:flutter/cupertino.dart';
 
 class ScaffoldBackGroundWrapper extends StatelessWidget {
   final Widget child;
-  const ScaffoldBackGroundWrapper({key,required this.child});
+  const ScaffoldBackGroundWrapper({Key? key,required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              "Dashboard".pngImage(),
-            ),
-            fit: BoxFit.cover,
-          )),
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF174CD6), // Top part color
+              Color(0xFF98BBFF), // Bottom part color
+            ],
+          ),
+          ),
       child: child,
     );
   }

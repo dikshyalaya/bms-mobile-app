@@ -113,25 +113,30 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
               return Column(
 
                 children: [
-                   Align(
-                    alignment: Alignment.center,
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(
-                              text: "Schedule Period: ",
-                              style: TextStyle(color: Colors.white, fontSize: 15)),
+                   IfBuilder(
+                     condition: schedulePeriod.isNotEmpty,
+                     builder: (context) {
+                       return Align(
+                        alignment: Alignment.center,
+                        child: Text.rich(
                           TextSpan(
-                            text: schedulePeriod,
-                            style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                            children: [
+                              const TextSpan(
+                                  text: "Schedule Period: ",
+                                  style: TextStyle(color: Colors.white, fontSize: 15)),
+                              TextSpan(
+                                text: schedulePeriod,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
+                                         );
+                     }
+                   ),
                   const SizedBox(height: 18,),
 
                   Expanded(
@@ -174,7 +179,7 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                   .copyWith(
                                   fontSize: 13,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w400),
+                                  fontWeight: FontWeight.bold),
                             )),
                       ),),
                     ),

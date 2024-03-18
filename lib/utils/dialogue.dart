@@ -412,7 +412,7 @@ class DialogueUtils {
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: Container(
-                height: 124,
+                // height: 124,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   color: Colors.white,
@@ -420,6 +420,7 @@ class DialogueUtils {
                 width: MediaQuery.of(context).size.height,
                 padding: const EdgeInsetsDirectional.symmetric(horizontal: 27,vertical: 20),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children:[
                     Row(
                       children: [
@@ -438,9 +439,11 @@ class DialogueUtils {
                           ),
                         ),
                         const SizedBox(width: 11,),
-                        Text(successMessage,style: const TextStyle(
-                          fontWeight: FontWeight.bold,fontSize: 15,color: Colors.black
-                        ),)
+                        Expanded(
+                          child: Text(successMessage,style: const TextStyle(
+                            fontWeight: FontWeight.bold,fontSize: 15,color: Colors.black
+                          ),),
+                        )
                       ],
                     ),
                     const SizedBox(height: 4,),
@@ -464,7 +467,7 @@ class DialogueUtils {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))))),
                             child: Text(
-                              "Save",
+                              "Ok",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!

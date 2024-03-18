@@ -14,85 +14,82 @@ class ClockInDisplayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // height: 78,
-      width: double.infinity,
-      child: Card(
-        color: const Color(0xffFBFBFB),
-        elevation: 4,
-        shadowColor: const Color(0xff7A7A7A),
-        surfaceTintColor: const Color(0xff7A7A7A),
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 24, top: 17, bottom: 17, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${clockInResponse?.accountName} - ${clockInResponse?.houseName}",
-                    style: const TextStyle(
-                        color: Color(0xff5B5B5B),
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 7,
-                  ),
-                   Row(
-                    children: [
-                      Text(
-                       clockInResponse?.scheduleDate??'',
-                        style: const TextStyle(
-                            color: Color(0xff5B5B5B),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(
-                        width: 19,
-                      ),
-                       Text(
-                        "${clockInResponse?.startTime} - ${clockInResponse?.endTime}",
-                        style: const TextStyle(
-                            color: Color(0xff5B5B5B),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 34,
-                width: 34,
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  shadowColor: Colors.grey,
-                  color: Colors.white,
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(34)),
-                  child: IconButton(
-                    onPressed: () async{
-                      final clockInProvider = Provider.of<CLockInProvider>(context,listen: false);
-                   BottomModalSheetUtils.onOpenBottomModalSheet(context,  ClockInForm(niMealResonList: clockInProvider.noMealReasonResponseModel?.data??[],clockInResponse: clockInResponse,),);
-
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
+    return GestureDetector(
+      onTap: (){
+        final clockInProvider = Provider.of<CLockInProvider>(context,listen: false);
+        BottomModalSheetUtils.onOpenBottomModalSheet(context,  ClockInForm(niMealResonList: clockInProvider.noMealReasonResponseModel?.data??[],clockInResponse: clockInResponse,),);
+      },
+      child: SizedBox(
+        // height: 78,
+        width: double.infinity,
+        child: Card(
+          color: const Color(0xffFBFBFB),
+          elevation: 4,
+          shadowColor: const Color(0xff7A7A7A),
+          surfaceTintColor: const Color(0xff7A7A7A),
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 24, top: 17, bottom: 17, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${clockInResponse?.accountName} - ${clockInResponse?.houseName}",
+                      style: const TextStyle(
+                          color: Color(0xff5B5B5B),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                     Row(
+                      children: [
+                        Text(
+                         clockInResponse?.scheduleDate??'',
+                          style: const TextStyle(
+                              color: Color(0xff5B5B5B),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        const SizedBox(
+                          width: 19,
+                        ),
+                         Text(
+                          "${clockInResponse?.startTime} - ${clockInResponse?.endTime}",
+                          style: const TextStyle(
+                              color: Color(0xff5B5B5B),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 34,
+                  width: 34,
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    shadowColor: Colors.grey,
+                    color: Colors.white,
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(34)),
+                    child: const Icon(
                       Icons.navigate_next_sharp,
                       color: Color(0xff325CA1),
                       size: 34,
-                    ),
+                    )
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -11,6 +11,7 @@ class BottomCard extends StatelessWidget {
     required this.index,
     required this.cardProvider,
   });
+  
 
   final CardProvider cardProvider;
 

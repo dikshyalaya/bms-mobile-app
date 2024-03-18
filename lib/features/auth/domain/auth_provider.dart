@@ -11,6 +11,7 @@ class AuthProvider extends ChangeNotifier{
   BmsUserModel? _bmsUserModel;
 
   BmsUserModel? get bmsUserModel => _bmsUserModel;
+  String get userFullName =>"${_bmsUserModel?.empFirstName??''} ${_bmsUserModel?.empLastName??''}";
 
   set bmsUserModel(BmsUserModel? value) {
     _bmsUserModel = value;
