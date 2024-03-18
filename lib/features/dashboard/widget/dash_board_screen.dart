@@ -14,27 +14,38 @@ class DashBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context,listen: false)..getUserDetail();
-    return  ScaffoldBackGroundWrapper(
-
+    final authProvider = Provider.of<AuthProvider>(context, listen: false)
+      ..getUserDetail();
+    return ScaffoldBackGroundWrapper(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: PreferredSize(
             preferredSize: const Size(double.infinity, 68),
-            child: Selector<AuthProvider,BmsUserModel?>(
-              selector: (context,provider)=>provider.bmsUserModel,
-              builder: (context,bmsUserModel,child)=>BeaconAppBar(
-                title: "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+            child: Selector<AuthProvider, BmsUserModel?>(
+              selector: (context, provider) => provider.bmsUserModel,
+              builder: (context, bmsUserModel, child) => BeaconAppBar(
+                title:
+                    "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
               ),
-
             )),
-        body: const Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-
-            Expanded(child: DashBoardGrid()),
-            DashBoardNavigatorCard(),
-          ],
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF174CD6), // Top part color
+                Color(0xFF98BBFF), // Bottom part color
+              ],
+            ),
+          ),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: DashBoardGrid()),
+              DashBoardNavigatorCard(),
+            ],
+          ),
         ),
       ),
     );
