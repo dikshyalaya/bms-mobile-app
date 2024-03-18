@@ -1,6 +1,9 @@
 // import 'package:hive_flutter/adapters.dart';
+// ignore_for_file: constant_identifier_names
+
+import 'dart:io';
+
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 class BMSHiveModel {
   static const String localStorageKey = "bms_hive_kv";
@@ -12,8 +15,9 @@ class BMSHiveModel {
 
   //call only once in main()
   static Future<Box> init() async {
-    final appDocumentDirectory = await getApplicationDocumentsDirectory();
-    Hive.init(appDocumentDirectory.path);
+    final appDocumentDirectory =
+        Directory.current.path; //await getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDirectory);
     Hive.initFlutter();
     hive = await Hive.openBox(localStorageKey);
     return hive;
