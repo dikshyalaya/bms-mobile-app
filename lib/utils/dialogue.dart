@@ -335,6 +335,72 @@ class DialogueUtils {
               ),
             ));
   }
+ static Future<bool> onPressedMyScheduleDialogue(
+      {required BuildContext context}) async {
+    final authProvider = Provider.of<AuthProvider>(context,listen: false);
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: Container(
+                height: 338,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+Container(  decoration: const BoxDecoration(
+    color: Color(0xffD7ECFF),
+    boxShadow: [
+      BoxShadow(
+          color: Colors.grey,
+          blurRadius: 15.0,
+          offset: Offset(0.0, 0.75)
+      )
+    ],
+    borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(15), topRight: Radius.circular(15))),height: 41,width: double.infinity,alignment: Alignment.center,child: const Text("Add a Shift",style: TextStyle(
+  color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold
+),),),
+                    const SizedBox(height: 14.37,),
+                     Padding(
+                        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text("Was this shift given to you by manager?",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,color: Colors.black
+                                ),),
+                                const SizedBox(width: 8,),
+                                Expanded(child: BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){}))
+                              ],
+                            ),
+                            const SizedBox(height: 7.25,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("House",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,color: Colors.black
+                                ),),
+                                const SizedBox(width: 8,),
+                                BMSDropDownForm(options: const ["Select","No"], onChooseOptions: (String val){})
+                              ],
+                            ),
+                          ],
+                        ))
+
+                  ],
+                ),
+              ),
+            ));
+  }
 
 
 

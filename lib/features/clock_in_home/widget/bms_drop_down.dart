@@ -1,4 +1,5 @@
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
+import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,7 @@ class BMSDropDownForm extends StatelessWidget {
   double? width;
   final String? hint;
   final bool? ignoring;
-   BMSDropDownForm({key,required this.options,required this.onChooseOptions,this.width,this.hint,this.ignoring});
+   BMSDropDownForm({Key? key,required this.options,required this.onChooseOptions,this.width,this.hint,this.ignoring}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class BMSDropDownForm extends StatelessWidget {
       width:width?? 184,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
           border: Border.all(
               color: const Color(0xffA9A9A9)
           )
@@ -30,12 +32,17 @@ class BMSDropDownForm extends StatelessWidget {
               ignoring: ignoring??false,
               child: DropdownButton<String>(
 
+
                 underline: const SizedBox.shrink(),
-                focusColor:  Colors.white,
-                hint: FittedBox(child: Text(hint??options.first,maxLines: 1,)),
+                hint: IfBuilder(
+                  condition: options.first.isNotEmpty||hint!=null,
+                  builder: (context) {
+                    return FittedBox(child: Text(hint??options.first,maxLines: 1,));
+                  }
+                ),
                 isExpanded: true,
 
-                items: options.map((String value) {
+                items: options.where((element) => element.isNotEmpty).toList().map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

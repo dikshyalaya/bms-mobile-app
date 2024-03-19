@@ -16,14 +16,15 @@ class ClockInForm extends StatefulWidget {
 class _ClockInFormState extends State<ClockInForm> {
   String? startTime ;
   String? endTime ;
-  String mealTime  ="None";
+  String? mealTime;
   String? noMealReason ;
 
   @override
   void initState() {
     // TODO: implement initState
+   widget.niMealResonList.insert(0,NoMealResponseModel(name: '', description: '', masterFor: '', id: 0));
     startTime =widget.clockInResponse?.startTime??"";
-    endTime =widget.clockInResponse?.endTime??"";
+    // endTime =widget.clockInResponse?.endTime??"";
     super.initState();
   }
   @override

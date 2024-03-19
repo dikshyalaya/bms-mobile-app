@@ -1,11 +1,9 @@
 import 'package:beacon_flutter/features/prior_clock_in/data/prior_cloc_in_response_model.dart';
 import 'package:flutter/material.dart';
 
-class PriorClockInHeader extends StatelessWidget {
-  final int index;
-  final PriorClockInModel? priorClockInModel;
+class ShiftAvailabilityCardHeader extends StatelessWidget {
 
-  const PriorClockInHeader({Key? key, required this.index, this.priorClockInModel}) : super(key: key);
+  const ShiftAvailabilityCardHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +23,18 @@ class PriorClockInHeader extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,
-      child:  Column(
+      child:  const Column(
         children: [
           Text(
-            priorClockInModel?.schedulePeriod??'',
-            style: const TextStyle(
+            "2/10/2024 - 2/16/2024",
+            style: TextStyle(
                 color: Color(0xff373737),
                 fontSize: 13,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "${priorClockInModel?.accountName??""} - ${priorClockInModel?.houseName??''}",
-            style: const TextStyle(
+            "Adapt - Brooklyn IRA (Apt 6N)",
+            style: TextStyle(
                 color: Color(0xff1B1B1B),
                 fontSize: 15,
                 fontWeight: FontWeight.bold),
@@ -46,9 +44,9 @@ class PriorClockInHeader extends StatelessWidget {
           // ),
           Expanded(
             child: Text(
-                priorClockInModel?.houseAddress??'house address, null',
+              "175 Willoughby St,Brooklyn,NY 11201",
               maxLines: 1,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Color(0xff1B1B1B),
                 fontSize: 13,
               ),
@@ -56,7 +54,7 @@ class PriorClockInHeader extends StatelessWidget {
           ),
         ],
       )
-         ,
+      ,
     );
   }
 }

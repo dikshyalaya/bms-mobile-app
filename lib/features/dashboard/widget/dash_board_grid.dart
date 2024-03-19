@@ -1,7 +1,9 @@
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
+import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_home.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_screen.dart';
+import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardGrid extends StatelessWidget {
@@ -40,6 +42,12 @@ class GridCard extends StatelessWidget {
         switch(index){
           case 0:
             Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClockInHomeScreen()));
+            break;
+            case 1:
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const MyScheduleHomeScreen()));
+            break;
+            case 2:
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShiftAvailabilityHome()));
             break;
           case 3:
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const PriorClockInHomeScreen()));
