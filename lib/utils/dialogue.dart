@@ -146,101 +146,6 @@ class DialogueUtils {
             ));
   }
 
-  static Future<bool> changePasswordDialogue(
-      {required BuildContext context}) async {
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-          content: Container(
-            height: 240,
-            width: MediaQuery.of(context).size.width,
-            // padding: const EdgeInsets.symmetric(horizontal: 6),
-            decoration: BoxDecoration(
-                color:  Colors.white,
-                borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-               Container(
-                 height: 50,
-                 width: double.infinity,
-                 decoration: const BoxDecoration(
-                   borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Color(0xffD9D9D9)
-                 ),
-                 alignment: Alignment.center,
-                 child:  buildText("Change Password"),
-               ),
-                const SizedBox(
-                  height: 20,
-                ),
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.end,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: [
-                   buildText('New Password'),
-                   const SizedBox(width: 15,),
-                   SizedBox(
-                     width: MediaQuery.of(context).size.width/2,
-                     child: PWChangeTextFormField(onChangedInput: (String val){},),
-                   )
-                 ],
-               ),
-                const SizedBox(height: 14,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    buildText('Confirm Password'),
-                    const SizedBox(width: 15,),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2,
-                      child: PWChangeTextFormField(onChangedInput: (String val){},),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: SizedBox(
-                    height: 40,
-                    width: 163,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                EdgeInsetsDirectional.zero),
-                            elevation: MaterialStateProperty.all(4),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff3B85FF)),
-                            shape: MaterialStateProperty.all(
-                                const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20))))),
-                        child: Text(
-                          "Change Password",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                              fontSize: 13,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400),
-                        )),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
-  }
 
   static Text buildText(String text) {
     return  Text(text,style: const TextStyle(
@@ -250,7 +155,7 @@ class DialogueUtils {
   }
 
 
-  static Future<bool> onProfileIconClickDialogue(
+  static Future<void> onProfileIconClickDialogue(
       {required BuildContext context,required String userName}) async {
     final authProvider = Provider.of<AuthProvider>(context,listen: false);
     return await showDialog(
@@ -299,8 +204,8 @@ class DialogueUtils {
                                                Radius.circular(20))))
                                ),
                                onPressed: (){
-                                 // changePasswordDialogue(context: context);
-                                 Navigator.pop(context,true);
+                                 changePasswordDialogue(context: context);
+                                 // Navigator.pop(context,true);
                                }, child: const Text("Change Password",style: TextStyle(
                              color: Colors.white,
                              fontSize: 15,fontWeight: FontWeight.bold
@@ -335,16 +240,15 @@ class DialogueUtils {
               ),
             ));
   }
- static Future<bool> onPressedMyScheduleDialogue(
-      {required BuildContext context}) async {
-    final authProvider = Provider.of<AuthProvider>(context,listen: false);
+ static Future<void> onPressedMyScheduleDialogue(
+      {required BuildContext context,required VoidCallback onSaveSchedule}) async {
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: Container(
-                height: 338,
+                height: 358,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -382,17 +286,38 @@ Container(  decoration: const BoxDecoration(
                               ],
                             ),
                             const SizedBox(height: 7.25,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("House",style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,color: Colors.black
-                                ),),
-                                const SizedBox(width: 8,),
-                                BMSDropDownForm(options: const ["Select","No"], onChooseOptions: (String val){})
-                              ],
-                            ),
+                            rowBuilder("House",const ["Select","No"]),
+
+                            const SizedBox(height: 7.25,),
+                            rowBuilder("Schedule Date",const ["Select","No"]),
+
+                            const SizedBox(height: 7.25,),
+                            rowBuilder("Start Time",const ["Select","No"]),
+                            const SizedBox(height: 7.25,),
+                            rowBuilder("End Time",const ["Select","No"]),
+                            const SizedBox(height: 16.25,),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child:  SizedBox(
+                                  height: 38.33,
+                                  width: 108.05,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all(
+                                              const Color(0xff3B85FF)),
+                                          shape: MaterialStateProperty.all(
+                                              const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(20))))
+                                      ),
+                                      onPressed: (){
+                                        onSaveSchedule.call();
+                                      }, child: const Text("Save",style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,fontWeight: FontWeight.bold
+                                  ),))),
+                            )
+
                           ],
                         ))
 
@@ -401,6 +326,20 @@ Container(  decoration: const BoxDecoration(
               ),
             ));
   }
+
+ static Row rowBuilder(String text,List<String>options) {
+   return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                               Text(text,style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,color: Colors.black
+                              ),),
+                              const SizedBox(width: 8,),
+                              BMSDropDownForm(options: options, onChooseOptions: (String val){})
+                            ],
+                          );
+ }
 
 
 
@@ -470,7 +409,7 @@ Container(  decoration: const BoxDecoration(
 
 
 
-  static Future<bool> successMessageDialogue(
+  static Future<void> successMessageDialogue(
       {required BuildContext context,required String successMessage}) async {
     return await showDialog(
         context: context,
@@ -559,6 +498,102 @@ Container(  decoration: const BoxDecoration(
             message:message,
           );
         });
+  }
+
+  static Future<bool> changePasswordDialogue(
+      {required BuildContext context}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+          content: Container(
+            height: 240,
+            width: MediaQuery.of(context).size.width,
+            // padding: const EdgeInsets.symmetric(horizontal: 6),
+            decoration: BoxDecoration(
+                color:  Colors.white,
+                borderRadius: BorderRadius.circular(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),color: Color(0xffD9D9D9)
+                  ),
+                  alignment: Alignment.center,
+                  child:  buildText("Change Password"),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildText('New Password'),
+                    const SizedBox(width: 15,),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width/2,
+                      child: PWChangeTextFormField(onChangedInput: (String val){},),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 14,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildText('Confirm Password'),
+                    const SizedBox(width: 15,),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width/2,
+                      child: PWChangeTextFormField(onChangedInput: (String val){},),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    height: 40,
+                    width: 163,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          successMessageDialogue(context: context, successMessage: "Password changed successfully.");
+                        },
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                EdgeInsetsDirectional.zero),
+                            elevation: MaterialStateProperty.all(4),
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color(0xff3B85FF)),
+                            shape: MaterialStateProperty.all(
+                                const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20))))),
+                        child: Text(
+                          "Change Password",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                              fontSize: 13,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
 }

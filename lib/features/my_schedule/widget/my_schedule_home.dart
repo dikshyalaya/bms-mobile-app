@@ -18,7 +18,10 @@ class MyScheduleHomeScreen extends StatelessWidget {
           GestureDetector(
           onTap: () async {
 
-     DialogueUtils.onPressedMyScheduleDialogue(context: context);
+     DialogueUtils.onPressedMyScheduleDialogue(context: context,onSaveSchedule: (){
+       Navigator.pop(context);
+       DialogueUtils.successMessageDialogue(context: context, successMessage: "Shift Added Successfully.");
+     });
           },
           child: SizedBox(
             height: 34,
