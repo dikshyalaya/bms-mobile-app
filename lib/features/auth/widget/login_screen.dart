@@ -4,6 +4,7 @@ import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
+import 'package:beacon_flutter/features/new_dashboard/widget/new_dashboard_home.dart';
 import 'package:beacon_flutter/utils/constants.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/gestures.dart';
@@ -37,7 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
           fit: BoxFit.fill,
         )),
         child: SizedBox(
-          height: 466,
+          height: 442,
+          width: double.infinity,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -114,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                        await authProvider.logIn(userName, password,onErrorState: (val){
                                          Navigator.pop(context);
-shoErrorToast(val.response?.exception?.message??"") ;                                      },
+              shoErrorToast(val.response?.exception?.message??"") ;                                      },
                                         onAccessToken: (Map<String,dynamic>onData){
                                          Navigator.pop(context);
 
@@ -133,7 +135,16 @@ shoErrorToast(val.response?.exception?.message??"") ;                           
                                                   context,
                                                   MaterialPageRoute(builder: (context) => const DashBoardScreen()),
                                                       (route) => false);
-                                            }else{
+                                            }
+
+                                            else if(userTypeId==4){
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const NewDashBoardScreen()),
+                                                      (route) => false);
+                                            }
+
+                                            else{
                                               Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(builder: (context) => const EmptyDashBoard()),

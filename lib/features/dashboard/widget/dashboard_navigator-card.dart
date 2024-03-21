@@ -50,7 +50,6 @@ class CardProvider {
     CardModel(
         title: "Shift Availability", asset: "shift-availiability".pngImage()),
     CardModel(title: "Prior Clock-In", asset: "prior-clock-in".pngImage()),
-    CardModel(title: "Add a Shift", asset: "add-shift".pngImage()),
     CardModel(title: "Looking for Shift", asset: "looking".pngImage()),
   ];
 }

@@ -1,0 +1,83 @@
+import 'package:beacon_flutter/common/extension/extension.dart';
+import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
+import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
+import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
+import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_home.dart';
+import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_screen.dart';
+import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
+import 'package:flutter/material.dart';
+
+class NewDashBoardGrid extends StatelessWidget {
+  const NewDashBoardGrid({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cardProvider = CardProvider();
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsetsDirectional.all(14),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 22.0,
+            crossAxisSpacing: 12.0,
+            childAspectRatio: 1 / 1.3),
+        itemCount: newGridCardProviders.length,
+        itemBuilder: (BuildContext ctx, index) {
+          return GridCard(
+            cardModel: newGridCardProviders[index],
+            index: index,
+          );
+        });
+  }
+}
+
+class GridCard extends StatelessWidget {
+  final CardModel cardModel;
+  final int index;
+  const GridCard({Key? key, required this.cardModel,required this.index}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Card(
+              color: Colors.white,
+              child: Center(
+                child: Image.asset(
+                  cardModel.asset,
+                  height: 52,
+                  width: 62,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 38,
+            child: Text(
+              cardModel.title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
+
+List<CardModel> newGridCardProviders = [
+  CardModel(title: "Manager Approval", asset: "clock-in".pngImage()),
+  CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
+  CardModel(
+      title: "Approval History", asset: "shift-availiability".pngImage()),
+  CardModel(title: "Manage Shifts", asset: "prior-clock-in".pngImage()),
+  CardModel(title: "House Employees", asset: "add-shift".pngImage()),
+];

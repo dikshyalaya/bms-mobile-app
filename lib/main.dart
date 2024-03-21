@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
+import 'features/new_dashboard/widget/new_dashboard_home.dart';
+
 void main() async{
   bool isLoggedIn=false;
   await Hive.initFlutter();
@@ -60,7 +62,15 @@ class MyApp extends StatelessWidget {
                 condition: authProvider.bmsUserModel?.userTypeId==1,
                 ifBuilder: (context)=>const DashBoardScreen(),
                     elseBulider: (context) {
-                      return const EmptyDashBoard();
+                    return  IfElseBuilder(
+                          condition: authProvider.bmsUserModel?.userTypeId==4,
+                          ifBuilder: (context)=>const NewDashBoardScreen(),
+                          elseBulider: (context) {
+                            return EmptyDashBoard(
+                              key: key,
+                            );
+                          }
+                      ) ;
                     }
                   )
                   : LoginScreen(
