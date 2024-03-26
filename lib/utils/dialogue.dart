@@ -1,17 +1,19 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
+import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/password_change_field.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
+import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DialogueUtils {
   DialogueUtils._();
-  static Future<bool> showErrorDialogue(
+  static Future<void> showErrorDialogue(
       {required BuildContext context,
       required String message,}) async {
     return await showDialog(
@@ -81,7 +83,7 @@ class DialogueUtils {
               backgroundColor: Colors.transparent,
               content: Container(
                 height: 211,
-                width: MediaQuery.of(context).size.width,
+                width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 decoration: BoxDecoration(
                     color: const Color(0xff033992),
@@ -147,6 +149,7 @@ class DialogueUtils {
   }
 
 
+
   static Text buildText(String text) {
     return  Text(text,style: const TextStyle(
                  color: Colors.black,
@@ -165,7 +168,7 @@ class DialogueUtils {
               backgroundColor: Colors.transparent,
               content: Container(
                 height: 403,
-                width: MediaQuery.of(context).size.width,
+                width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.symmetric(vertical: 23),
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -249,7 +252,7 @@ class DialogueUtils {
               backgroundColor: Colors.transparent,
               content: Container(
                 height: 358,
-                width: MediaQuery.of(context).size.width,
+                width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
@@ -276,13 +279,20 @@ Container(  decoration: const BoxDecoration(
                         child: Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text("Was this shift given to you by manager?",style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,color: Colors.black
                                 ),),
                                 const SizedBox(width: 8,),
-                                Expanded(child: BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){}))
+                                IfElseBuilder(
+                                  condition: DimensionUtils.isTab(context),
+                                  ifBuilder:(context)=>BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){}) ,
+                                  elseBulider: (context) {
+                                    return Expanded(child: BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){}));
+                                  }
+                                )
                               ],
                             ),
                             const SizedBox(height: 7.25,),
@@ -358,7 +368,7 @@ Container(  decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   color: Colors.white,
                 ),
-                width: MediaQuery.of(context).size.height,
+                width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
                     Container(height: 40,width: double.infinity,decoration: const BoxDecoration(
@@ -407,6 +417,8 @@ Container(  decoration: const BoxDecoration(
             ));
   }
 
+  static double _width() => 560;
+
 
 
   static Future<void> successMessageDialogue(
@@ -422,7 +434,7 @@ Container(  decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   color: Colors.white,
                 ),
-                width: MediaQuery.of(context).size.height,
+                width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
                 padding: const EdgeInsetsDirectional.symmetric(horizontal: 27,vertical: 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -500,8 +512,11 @@ Container(  decoration: const BoxDecoration(
         });
   }
 
-  static Future<bool> changePasswordDialogue(
+  static Future<void> changePasswordDialogue(
       {required BuildContext context}) async {
+    final authProvider = Provider.of<AuthProvider>(context,listen: false);
+    String newPassword = "";
+    String confirmPassword = "";
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -539,7 +554,9 @@ Container(  decoration: const BoxDecoration(
                     const SizedBox(width: 15,),
                     SizedBox(
                       width: MediaQuery.of(context).size.width/2,
-                      child: PWChangeTextFormField(onChangedInput: (String val){},),
+                      child: PWChangeTextFormField(onChangedInput: (String val){
+                        newPassword = val;
+                      },),
                     )
                   ],
                 ),
@@ -552,7 +569,9 @@ Container(  decoration: const BoxDecoration(
                     const SizedBox(width: 15,),
                     SizedBox(
                       width: MediaQuery.of(context).size.width/2,
-                      child: PWChangeTextFormField(onChangedInput: (String val){},),
+                      child: PWChangeTextFormField(onChangedInput: (String val){
+                        confirmPassword = val;
+                      },),
                     )
                   ],
                 ),
@@ -565,9 +584,28 @@ Container(  decoration: const BoxDecoration(
                     height: 40,
                     width: 163,
                     child: ElevatedButton(
-                        onPressed: () {
-                          successMessageDialogue(context: context, successMessage: "Password changed successfully.");
-                        },
+                        onPressed: ()async {
+                          if(newPassword.isEmpty||confirmPassword.isEmpty){
+                            shoErrorToast("Password field must not be empty");
+                          }else if(newPassword!=confirmPassword){
+                            shoErrorToast( "Password is not match");
+                          }else{
+                            FocusScope.of(context).unfocus();
+                            showProgressDialogue(context,  "Signing in, Please wait...");
+
+                            await authProvider.changePassword(confirmPassword,onErrorState: (val){
+                              Navigator.pop(context);
+                              shoErrorToast(val.response?.exception?.message??"") ;
+                            },onLoadedState: (val){
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              successMessageDialogue(context: context, successMessage: "Password changed successfully.");
+
+                            }
+                            );
+                          }
+                          },
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all(
                                 EdgeInsetsDirectional.zero),

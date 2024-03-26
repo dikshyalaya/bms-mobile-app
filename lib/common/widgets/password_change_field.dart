@@ -27,6 +27,7 @@ class _PWChangeTextFormFieldState extends State<PWChangeTextFormField> {
     const textColor = Color(0xffC1C1C1);
     return SizedBox(
       height: widget.height ?? 40,
+
       child: TextFormField(
         textAlign: TextAlign.start,
         textAlignVertical: TextAlignVertical.center,

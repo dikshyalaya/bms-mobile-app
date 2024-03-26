@@ -1,18 +1,12 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
-import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
-import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
-import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_home.dart';
-import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_screen.dart';
-import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
 import 'package:flutter/material.dart';
 
-class NewDashBoardGrid extends StatelessWidget {
-  const NewDashBoardGrid({Key? key}) : super(key: key);
+class ManagerDashBoardGrid extends StatelessWidget {
+  const ManagerDashBoardGrid({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final cardProvider = CardProvider();
     return GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsetsDirectional.all(14),

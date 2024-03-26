@@ -4,7 +4,10 @@ import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_repo.dart';
+import 'package:beacon_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 
 class AuthProvider extends ChangeNotifier{
 
@@ -18,18 +21,46 @@ class AuthProvider extends ChangeNotifier{
   }
 
   final LoginRepo _loginRepo =LoginRepo();
+  final ChangePasswordRepo _changePasswordRepo =ChangePasswordRepo();
   Future<void> logIn(String name, String password,
       {LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
         ErrorStateCallback<Map<String, dynamic>>? onErrorState,
         LoadedStateCallback<Map<String, dynamic>>? onLoadedState,ValueChanged<Map<String, dynamic>>? onAccessToken,}) async {
+
+    final hasPermission = await handleLocationPermission();
+    if (!hasPermission) return;
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
     _loginRepo.post(
       body: {
         "password": password,
         "loginName": name,
+        "location": {
+          "latitude": position.latitude,
+          "longitude": position.longitude
+        }
 
       },
       onAccessToken: (val){
         onAccessToken?.call(val);
+      },
+      apiCallback: (networkState) {
+        onApiCallback(
+            networkState: networkState,
+            onLoadedState: onLoadedState,
+            onErrorState: onErrorState,
+            onLoadingState: onLoadingState);
+      },
+    );
+  }
+
+  Future<void> changePassword(String newPassword,
+      {LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
+        ErrorStateCallback<Map<String, dynamic>>? onErrorState,
+        LoadedStateCallback<Map<String, dynamic>>? onLoadedState}) async {
+    _changePasswordRepo.post(
+      body: {
+        "newPassword": newPassword,
       },
       apiCallback: (networkState) {
         onApiCallback(
