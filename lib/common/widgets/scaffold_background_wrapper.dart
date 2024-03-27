@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 
 class ScaffoldBackGroundWrapper extends StatelessWidget {
   final Widget child;
-  const ScaffoldBackGroundWrapper({Key? key,required this.child}) : super(key: key);
+  PreferredSizeWidget? appBar;
+   ScaffoldBackGroundWrapper({Key? key,required this.child,this.appBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
       backgroundColor:DimensionUtils.isTab(context)? Colors.grey:Colors.transparent,
       body: Center(
         child: Container(

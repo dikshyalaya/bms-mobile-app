@@ -15,6 +15,10 @@ class PriorClockInHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScaffoldBackGroundWrapper(
+      appBar: const BeaconAppBar(
+        leadingIcon: AppBarLeadingIcon(),
+        title: "Prior Clock-In",
+      ),
       child: ChangeNotifierProxyProvider<AuthProvider, PriorClockInProvider>(
         update: (_, authProvider, clockInProvide) {
           return PriorClockInProvider(authProvider.bmsUserModel?.empId ?? 0)
@@ -23,10 +27,7 @@ class PriorClockInHomeScreen extends StatelessWidget {
         lazy: false,
         create: (_) => PriorClockInProvider(0),
         builder: (context, child) => Scaffold(
-          appBar: const BeaconAppBar(
-            leadingIcon: AppBarLeadingIcon(),
-            title: "Prior Clock-In",
-          ),
+
           backgroundColor: Colors.transparent,
           body: Column(
             children: [

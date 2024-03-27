@@ -11,13 +11,15 @@ class ShiftAvailabilityHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  ScaffoldBackGroundWrapper(child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: const BeaconAppBar(
-        title: "Shift Availablity",
-        leadingIcon: AppBarLeadingIcon(),
+    return  ScaffoldBackGroundWrapper(
+        appBar: const BeaconAppBar(
+          title: "Shift Availablity",
+          leadingIcon: AppBarLeadingIcon(),
 
-      ),
+        ),
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
+
       body: Padding(
         padding: const EdgeInsetsDirectional.symmetric(horizontal: 12),
         child: Column(

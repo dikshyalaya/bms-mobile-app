@@ -10,34 +10,36 @@ class MyScheduleHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  ScaffoldBackGroundWrapper(child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: BeaconAppBar(
-        title: "My Schedule",
-        action: [
-          GestureDetector(
-          onTap: () async {
+    return  ScaffoldBackGroundWrapper(
+        appBar: BeaconAppBar(
+          title: "My Schedule",
+          action: [
+            GestureDetector(
+              onTap: () async {
 
-     DialogueUtils.onPressedMyScheduleDialogue(context: context,onSaveSchedule: (){
-       Navigator.pop(context);
-       DialogueUtils.successMessageDialogue(context: context, successMessage: "Shift Added Successfully.");
-     });
-          },
-          child: SizedBox(
-            height: 34,
-            width: 34,
-            child: Card(
-              margin:  EdgeInsets.zero,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(34)
+                DialogueUtils.onPressedMyScheduleDialogue(context: context,onSaveSchedule: (){
+                  Navigator.pop(context);
+                  DialogueUtils.successMessageDialogue(context: context, successMessage: "Shift Added Successfully.");
+                });
+              },
+              child: SizedBox(
+                height: 34,
+                width: 34,
+                child: Card(
+                  margin:  EdgeInsets.zero,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(34)
+                  ),
+                  child: const Icon(Icons.add,color: Color(0xff325CA1),),
+                ),
               ),
-              child: const Icon(Icons.add,color: Color(0xff325CA1),),
-            ),
-          ),
-        )],
-        leadingIcon: const AppBarLeadingIcon(),
-      ),
+            )],
+          leadingIcon: const AppBarLeadingIcon(),
+        ),
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
+
       body: Padding(
         padding: const EdgeInsetsDirectional.symmetric(horizontal: 12,vertical: 22),
         child: ListView.builder(itemBuilder: (context,index)=>const MySchedulecard(),itemCount: 14,),

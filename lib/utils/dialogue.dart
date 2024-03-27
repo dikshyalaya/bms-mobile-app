@@ -525,7 +525,7 @@ Container(  decoration: const BoxDecoration(
           contentPadding: const EdgeInsets.symmetric(horizontal: 8),
           content: Container(
             height: 240,
-            width: MediaQuery.of(context).size.width,
+            width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
             // padding: const EdgeInsets.symmetric(horizontal: 6),
             decoration: BoxDecoration(
                 color:  Colors.white,
@@ -550,13 +550,15 @@ Container(  decoration: const BoxDecoration(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    buildText('New Password'),
+                    buildText('New Password       '),
                     const SizedBox(width: 15,),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2,
-                      child: PWChangeTextFormField(onChangedInput: (String val){
-                        newPassword = val;
-                      },),
+                    Expanded(
+                      child: SizedBox(
+
+                        child: PWChangeTextFormField(onChangedInput: (String val){
+                          newPassword = val;
+                        },),
+                      ),
                     )
                   ],
                 ),
@@ -567,8 +569,7 @@ Container(  decoration: const BoxDecoration(
                   children: [
                     buildText('Confirm Password'),
                     const SizedBox(width: 15,),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2,
+                    Expanded(
                       child: PWChangeTextFormField(onChangedInput: (String val){
                         confirmPassword = val;
                       },),

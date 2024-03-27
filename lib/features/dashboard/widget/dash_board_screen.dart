@@ -17,17 +17,17 @@ class DashBoardScreen extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context, listen: false)
       ..getUserDetail();
     return ScaffoldBackGroundWrapper(
+      appBar:PreferredSize(
+          preferredSize: const Size(double.infinity, 68),
+          child: Selector<AuthProvider, BmsUserModel?>(
+            selector: (context, provider) => provider.bmsUserModel,
+            builder: (context, bmsUserModel, child) => BeaconAppBar(
+              title:
+              "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+            ),
+          )) ,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: PreferredSize(
-            preferredSize: const Size(double.infinity, 68),
-            child: Selector<AuthProvider, BmsUserModel?>(
-              selector: (context, provider) => provider.bmsUserModel,
-              builder: (context, bmsUserModel, child) => BeaconAppBar(
-                title:
-                    "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
-              ),
-            )),
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(

@@ -22,12 +22,12 @@ class ClockInHomeScreen extends StatelessWidget {
       lazy: false,
       create: (_) => CLockInProvider(0),
       child: ScaffoldBackGroundWrapper(
+        appBar: BeaconAppBar(
+          leadingIcon: const AppBarLeadingIcon(),
+          title: "Clock-In".toUpperCase(),
+        ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: BeaconAppBar(
-            leadingIcon: const AppBarLeadingIcon(),
-            title: "Clock-In".toUpperCase(),
-          ),
           body: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
