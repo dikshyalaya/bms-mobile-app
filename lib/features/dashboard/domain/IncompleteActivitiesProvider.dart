@@ -25,8 +25,8 @@ class IncompleteActivitiesProvider extends ChangeNotifier{
   onLoadedState: (loadedState) async{
   onFutureNotifyListeners(() {
   final Map<String,dynamic> _map = loadedState.response?.body;
-  // incompleteActivitiesModel =
-  // incompleteActivitiesFromJson(jsonEncode(_map['response']));
+  incompleteActivitiesModel =
+  incompleteActivitiesFromJson(jsonEncode(_map['response']));
   });
   },
   onErrorState: (errorState) {
