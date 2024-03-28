@@ -5,11 +5,14 @@ import 'dashboard_navigator-card.dart';
 
 class BottomCard extends StatelessWidget {
   final int index;
+  final CardModel cardModel;
+
 
   const BottomCard({
     key,
     required this.index,
     required this.cardProvider,
+    required this.cardModel
   });
   
 
@@ -24,7 +27,7 @@ class BottomCard extends StatelessWidget {
       child: Card(
         elevation: 4,
         shadowColor: Colors.green,
-        color: cardProvider.navigatorCards[index].bgColor,
+        color: cardModel.bgColor,
         margin: const EdgeInsetsDirectional.symmetric(horizontal: 24),
         child: SizedBox(
           height: 98,
@@ -35,7 +38,7 @@ class BottomCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    cardProvider.navigatorCards[index].title,
+                   cardModel.title,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: const Color(0xff1E1D1D),
                         fontSize: 22,
