@@ -1,16 +1,11 @@
 # beacon_flutter
 
-A new Flutter project.
+Beacon Management System
 
-## Getting Started
+This is a companion app for BMS (Beacon Management System)
 
-This project is a starting point for a Flutter application.
+Beacon Management System is Schedule Management Sysetem with AI.
+It has built in QuickBooks Integration for Invoice generation and Billing.
 
-A few resources to get you started if this is your first Flutter project:
+BMS has strong Real Time Text Messaging and Interactive Voice Response (IVR) System based on Twilio.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
