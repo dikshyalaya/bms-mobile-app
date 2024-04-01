@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1061920149341",
+    "project_id": "beaconmanagementsystem",
+    "storage_bucket": "beaconmanagementsystem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061920149341:android:8b17a99d6aa27462a922b4",
+        "android_client_info": {
+          "package_name": "com.beaconnysystem.app1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB97M3jgu7Iu5szjjQBt12U8ZiG3fvV5Do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

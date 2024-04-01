@@ -6,6 +6,7 @@ import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
+import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:flutter/material.dart';
@@ -631,6 +632,27 @@ Container(  decoration: const BoxDecoration(
                 ),
               ],
             ),
+          ),
+        ));
+  }
+
+
+  static Future<void> onSystemSettingsDialogue(
+      {required BuildContext context}) async {
+    final authProvider = Provider.of<AuthProvider>(context,listen: false);
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          content: Container(
+            // height: 403,
+            width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
+            // padding: const EdgeInsets.symmetric(vertical: 23),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20)),
+            child: const DashBoardNavigatorCard(),
           ),
         ));
   }

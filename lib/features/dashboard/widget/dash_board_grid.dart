@@ -1,10 +1,13 @@
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
+import 'package:beacon_flutter/features/dashboard/domain/systemSetting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_home.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_screen.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashBoardGrid extends StatelessWidget {
   const DashBoardGrid({Key? key}) : super(key: key);
@@ -37,23 +40,49 @@ class GridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final systemSettingsProvider = Provider.of<SystemSettingProvider>(context,listen: false);
     return GestureDetector(
       onTap: (){
         switch(index){
           case 0:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClockInHomeScreen()));
+
+            if(systemSettingsProvider.systemSettingsModel?.siteSetting.clockIn.enable??false){
+              onSystemSettingsDialogue(context);
+            }else{
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClockInHomeScreen()));
+            }
             break;
             case 1:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const MyScheduleHomeScreen()));
+              if(systemSettingsProvider.systemSettingsModel?.siteSetting.mySchedule.enable??false){
+                onSystemSettingsDialogue(context);
+              }else {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const MyScheduleHomeScreen()));
+              }
             break;
             case 2:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShiftAvailabilityHome()));
-            break;
+              if(systemSettingsProvider.systemSettingsModel?.siteSetting.shiftAvailability.enable??false){
+                onSystemSettingsDialogue(context);
+              }else {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const ShiftAvailabilityHome()));
+              }
+              break;
           case 3:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const PriorClockInHomeScreen()));
+            if(systemSettingsProvider.systemSettingsModel?.siteSetting.priorClockIn.enable??false){
+              onSystemSettingsDialogue(context);
+            }else {
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const PriorClockInHomeScreen()));
+            }
             break;
             case 5:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const LookingForShiftHomeScreen()));
+              if(systemSettingsProvider.systemSettingsModel?.siteSetting.lookingForShift.enable??false){
+                onSystemSettingsDialogue(context);
+              }else {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const LookingForShiftHomeScreen()));
+              }
             break;
 
 
@@ -86,5 +115,9 @@ class GridCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void onSystemSettingsDialogue(BuildContext context) {
+    DialogueUtils.onSystemSettingsDialogue(context: context,);
   }
 }

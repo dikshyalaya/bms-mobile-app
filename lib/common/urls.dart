@@ -8,3 +8,21 @@ const lookingForShiftUrl = "ShiftInfo/LookForShift";
 const schedulePeriodUrl = "ShiftInfo/SchedulePeriodsLookingForShift";
 const noMealReasonUrl = "ShiftInfo/MasterLookup/NoBreakReason";
 const managerPermission = "Authentication/GetPermissions";
+const systemSettings = "SystemSettings/DSPSwitchBoardPageSettings";
+
+
+
+
+// pending invitations =>Shift availibility
+
+
+
+//2 apis before landing dash board
+
+// button click
+
+//pending action== popup
+
+// if(pending action>0&&enabled){
+//
+// }
