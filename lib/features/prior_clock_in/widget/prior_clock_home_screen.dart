@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
@@ -27,13 +28,10 @@ class PriorClockInHomeScreen extends StatelessWidget {
         lazy: false,
         create: (_) => PriorClockInProvider(0),
         builder: (context, child) => Scaffold(
-
           backgroundColor: Colors.transparent,
           body: Column(
             children: [
-              const SizedBox(
-                height: 29,
-              ),
+              SizedBox(height: 0.025.h(context)),
               Expanded(
                 child: Selector<PriorClockInProvider, bool>(
                     builder: (context, isDataFetching, child) {
@@ -45,30 +43,25 @@ class PriorClockInHomeScreen extends StatelessWidget {
                       return ServerResponseBuilder(
                           builder: (context) => ListView.separated(
                               shrinkWrap: true,
-                              itemBuilder: (context, index) =>
-                                  PriorClockInCard(
+                              itemBuilder: (context, index) => PriorClockInCard(
                                     index: index,
                                     priorClockInModel:
-                                        priorClockInResponseData
-                                            ?.data?[index],
+                                        priorClockInResponseData?.data?[index],
                                   ),
                               padding: const EdgeInsets.only(
                                   left: 12, right: 12, bottom: 29),
                               separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                    height: 9,
-                                  ),
+                                  SizedBox(height: 0.009.h(context)),
                               itemCount:
-                                  priorClockInResponseData?.data?.length ??
-                                      0),
+                                  priorClockInResponseData?.data?.length ?? 0),
                           isDataFetching: isDataFetching,
                           isNullData: priorClockInResponseData?.data == null);
                     },
                     selector: (context, provider) => provider.isDataFetching),
               ),
-              const SizedBox(
-                height: 29,
-              ),
+              // const SizedBox(
+              //   height: 29,
+              // ),
             ],
           ),
         ),

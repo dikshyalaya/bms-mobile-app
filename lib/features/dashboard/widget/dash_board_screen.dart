@@ -1,4 +1,3 @@
-import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
@@ -14,18 +13,18 @@ class DashBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false)
-      ..getUserDetail();
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false)
+    //   ..getUserDetail();
     return ScaffoldBackGroundWrapper(
-      appBar:PreferredSize(
+      appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 68),
           child: Selector<AuthProvider, BmsUserModel?>(
             selector: (context, provider) => provider.bmsUserModel,
             builder: (context, bmsUserModel, child) => BeaconAppBar(
               title:
-              "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+                  "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
             ),
-          )) ,
+          )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
@@ -42,7 +41,9 @@ class DashBoardScreen extends StatelessWidget {
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: DashBoardGrid()),
+              Expanded(
+                child: DashBoardGrid(),
+              ),
               DashBoardNavigatorCard(),
             ],
           ),

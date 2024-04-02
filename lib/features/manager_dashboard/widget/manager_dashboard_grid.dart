@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ManagerDashBoardGrid extends StatelessWidget {
   const ManagerDashBoardGrid({Key? key}) : super(key: key);
@@ -28,13 +29,13 @@ class ManagerDashBoardGrid extends StatelessWidget {
 class GridCard extends StatelessWidget {
   final CardModel cardModel;
   final int index;
-  const GridCard({Key? key, required this.cardModel,required this.index}) : super(key: key);
+  const GridCard({Key? key, required this.cardModel, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-      },
+      onTap: () {},
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -44,19 +45,21 @@ class GridCard extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   cardModel.asset,
-                  height: 52,
-                  width: 62,
+                  height: 0.06.h(context),
+                  width: 0.06.h(context),
                 ),
               ),
             ),
           ),
           SizedBox(
-            height: 38,
+            height: 0.05.h(context),
             child: Text(
               cardModel.title,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Colors.white, fontSize: 13),
+                    color: Colors.white,
+                    fontSize: 0.011.res(context),
+                  ),
             ),
           )
         ],
@@ -65,13 +68,10 @@ class GridCard extends StatelessWidget {
   }
 }
 
-
-
 List<CardModel> newGridCardProviders = [
   CardModel(title: "Manager Approval", asset: "clock-in".pngImage()),
   CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
-  CardModel(
-      title: "Approval History", asset: "shift-availiability".pngImage()),
+  CardModel(title: "Approval History", asset: "shift-availiability".pngImage()),
   CardModel(title: "Manage Shifts", asset: "prior-clock-in".pngImage()),
   CardModel(title: "House Employees", asset: "add-shift".pngImage()),
 ];

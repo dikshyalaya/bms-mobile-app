@@ -12,9 +12,9 @@ class DashBoardNavigatorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardProvider = CardProvider();
-    return ChangeNotifierProvider<IncompleteActivitiesProvider>(create: (_)=>IncompleteActivitiesProvider()..getIncompleteActivities(),
-
-      builder:(context,child)=> Selector<IncompleteActivitiesProvider, bool>(
+    return ChangeNotifierProvider<IncompleteActivitiesProvider>(
+      create: (_) => IncompleteActivitiesProvider()..getIncompleteActivities(),
+      builder: (context, child) => Selector<IncompleteActivitiesProvider, bool>(
         selector: (context, provider) => provider.isDataFetching,
         builder: (context, isDataFetching, child) {
           final incompleteActivities =
@@ -22,24 +22,29 @@ class DashBoardNavigatorCard extends StatelessWidget {
                   .incompleteActivitiesModel;
 
           List<CardModel> navigatorCards = [
-            if((incompleteActivities?.data?.pendingClockIns.count??0)>0)
-            CardModel(
-                title: "You have ${incompleteActivities?.data?.pendingClockIns.count} Pending Clock-In(s)",
-                bgColor: const Color(0xffFFB986)),
-            if((incompleteActivities?.data?.pendingInvites.count??0)>0)
-            CardModel(
-                title: "You have  ${incompleteActivities?.data?.pendingInvites.count} Pending  Invitation(s)",
-                bgColor: const Color(0xff51AAFD)),
+            if ((incompleteActivities?.data?.pendingClockIns.count ?? 0) > 0)
+              CardModel(
+                  title:
+                      "You have ${incompleteActivities?.data?.pendingClockIns.count} Pending Clock-In(s)",
+                  bgColor: const Color(0xffFFB986)),
+            if ((incompleteActivities?.data?.pendingInvites.count ?? 0) > 0)
+              CardModel(
+                  title:
+                      "You have  ${incompleteActivities?.data?.pendingInvites.count} Pending  Invitation(s)",
+                  bgColor: const Color(0xff51AAFD)),
           ];
           return ServerResponseBuilder(
-            builder: (context) =>  IfBuilder(
-              condition: !(incompleteActivities?.data?.pendingClockIns.count==0&&incompleteActivities?.data?.pendingInvites.count==0),
-              builder: (context) {
-                return Container(
-                  height: 285,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsetsDirectional.symmetric(vertical: 30),
-                  decoration: BoxDecoration(
+            builder: (context) => IfBuilder(
+                condition:
+                    !(incompleteActivities?.data?.pendingClockIns.count == 0 &&
+                        incompleteActivities?.data?.pendingInvites.count == 0),
+                builder: (context) {
+                  return Container(
+                    height: 0.38.h(context),
+                    width: 1.0.w(context),
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(vertical: 30),
+                    decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(12),
@@ -48,30 +53,35 @@ class DashBoardNavigatorCard extends StatelessWidget {
                           bottomRight: Radius.zero),
                       boxShadow: const [
                         BoxShadow(
-                            color: Colors.grey, offset: Offset(-3, -3), blurRadius: 4),
-                      ]),
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => BottomCard(cardProvider: cardProvider,index: index,cardModel: navigatorCards[index],),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 22,
+                            color: Colors.grey,
+                            offset: Offset(-3, -3),
+                            blurRadius: 4),
+                      ],
                     ),
-                    itemCount: navigatorCards.length,
-                  ),
-                );
-              }
-            ),
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => BottomCard(
+                        cardProvider: cardProvider,
+                        index: index,
+                        cardModel: navigatorCards[index],
+                      ),
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: 0.02.h(context),
+                      ),
+                      itemCount: navigatorCards.length,
+                    ),
+                  );
+                }),
             isDataFetching: isDataFetching,
             isNullData: incompleteActivities?.data == null,
           );
         },
-      ),);
-
+      ),
+    );
   }
 }
 
 class CardProvider {
-
   List<CardModel> gridCardProviders = [
     CardModel(title: "Clock In", asset: "clock-in".pngImage()),
     CardModel(title: "My Schedule", asset: "schedule".pngImage()),

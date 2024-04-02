@@ -6,30 +6,33 @@ import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_repo.dart';
 import 'package:beacon_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
-class AuthProvider extends ChangeNotifier{
-
+class AuthProvider extends ChangeNotifier {
   BmsUserModel? _bmsUserModel;
 
   BmsUserModel? get bmsUserModel => _bmsUserModel;
-  String get userFullName =>"${_bmsUserModel?.empFirstName??''} ${_bmsUserModel?.empLastName??''}";
+  String get userFullName =>
+      "${_bmsUserModel?.empFirstName ?? ''} ${_bmsUserModel?.empLastName ?? ''}";
 
   set bmsUserModel(BmsUserModel? value) {
     _bmsUserModel = value;
   }
 
-  final LoginRepo _loginRepo =LoginRepo();
-  final ChangePasswordRepo _changePasswordRepo =ChangePasswordRepo();
-  Future<void> logIn(String name, String password,
-      {LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
-        ErrorStateCallback<Map<String, dynamic>>? onErrorState,
-        LoadedStateCallback<Map<String, dynamic>>? onLoadedState,ValueChanged<Map<String, dynamic>>? onAccessToken,}) async {
-
+  final LoginRepo _loginRepo = LoginRepo();
+  final ChangePasswordRepo _changePasswordRepo = ChangePasswordRepo();
+  Future<void> logIn(
+    String name,
+    String password, {
+    LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
+    ErrorStateCallback<Map<String, dynamic>>? onErrorState,
+    LoadedStateCallback<Map<String, dynamic>>? onLoadedState,
+    ValueChanged<Map<String, dynamic>>? onAccessToken,
+  }) async {
     final hasPermission = await handleLocationPermission();
     if (!hasPermission) return;
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     _loginRepo.post(
       body: {
@@ -39,9 +42,8 @@ class AuthProvider extends ChangeNotifier{
           "latitude": position.latitude,
           "longitude": position.longitude
         }
-
       },
-      onAccessToken: (val){
+      onAccessToken: (val) {
         onAccessToken?.call(val);
       },
       apiCallback: (networkState) {
@@ -56,8 +58,8 @@ class AuthProvider extends ChangeNotifier{
 
   Future<void> changePassword(String newPassword,
       {LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
-        ErrorStateCallback<Map<String, dynamic>>? onErrorState,
-        LoadedStateCallback<Map<String, dynamic>>? onLoadedState}) async {
+      ErrorStateCallback<Map<String, dynamic>>? onErrorState,
+      LoadedStateCallback<Map<String, dynamic>>? onLoadedState}) async {
     _changePasswordRepo.post(
       body: {
         "newPassword": newPassword,
@@ -72,26 +74,32 @@ class AuthProvider extends ChangeNotifier{
     );
   }
 
-void savedLoginInfo(String accessToken,BmsUserModel _bmsUserModel)async{
-await  BMSHiveModel.hive.put(BMSHiveModel.ACCESS_TOKEN, accessToken);
- await BMSHiveModel.hive.put(BMSHiveModel.USER_PROFILE, jsonEncode(_bmsUserModel.toJson()));
- await getUserDetail();
+  void savedLoginInfo(String accessToken, BmsUserModel _bmsUserModel) async {
+    await BMSHiveModel.hive.put(BMSHiveModel.ACCESS_TOKEN, accessToken);
+    await BMSHiveModel.hive
+        .put(BMSHiveModel.USER_PROFILE, jsonEncode(_bmsUserModel.toJson()));
+    await getUserDetail();
   }
 
-  Future<BmsUserModel>getUserDetail()async{
+  Future<BmsUserModel> getUserDetail() async {
     await BMSHiveModel.init();
-    final response =  await BMSHiveModel.hive.get(BMSHiveModel.USER_PROFILE);
-    if(response!=null){
-      _bmsUserModel =  BmsUserModel.fromJson(jsonDecode(response));
-
+    final response = await BMSHiveModel.hive.get(BMSHiveModel.USER_PROFILE);
+    if (response != null) {
+      _bmsUserModel = BmsUserModel.fromJson(jsonDecode(response));
     }
-  notifyListeners();
+    notifyListeners();
 
-  return _bmsUserModel??BmsUserModel(email: "", empLastName: "", empFirstName: "", empId: 0, userTypeId: 0, isActive: false);
+    return _bmsUserModel ??
+        BmsUserModel(
+            email: "",
+            empLastName: "",
+            empFirstName: "",
+            empId: 0,
+            userTypeId: 0,
+            isActive: false);
   }
 
-  void logOut()async{
-   await BMSHiveModel.hive.clear();
+  void logOut() async {
+    await BMSHiveModel.hive.clear();
   }
-
 }

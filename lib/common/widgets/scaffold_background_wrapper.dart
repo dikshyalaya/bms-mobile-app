@@ -1,6 +1,4 @@
-import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldBackGroundWrapper extends StatelessWidget {

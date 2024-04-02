@@ -14,7 +14,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-
 Future<bool> handleLocationPermission() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -36,76 +35,68 @@ Future<bool> handleLocationPermission() async {
   return true;
 }
 
-void main() async{
-  bool isLoggedIn=false;
+void main() async {
+  bool isLoggedIn = false;
   // await handleLocationPermission();
   await Hive.initFlutter();
   await BMSHiveModel.init();
-  final accessToken = await  BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
+  final accessToken = await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
   isLoggedIn = accessToken?.isNotEmpty ?? false;
-  runApp( MyApp(isLoggedIn: isLoggedIn,));
- WidgetsFlutterBinding.ensureInitialized();
-
+  runApp(MyApp(
+    isLoggedIn: isLoggedIn,
+  ));
+  WidgetsFlutterBinding.ensureInitialized();
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({key,required this.isLoggedIn});
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
     // FlutterNativeSplash.remove();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()..getUserDetail()),
-        ChangeNotifierProvider<ManagePermissionProvider>(create: (_) => ManagePermissionProvider()..getManagerPermission()),
-    ChangeNotifierProxyProvider<AuthProvider,
-        LookingForShiftProvider>(
-    update: (_, authProvider, clockInProvide) {
-    return LookingForShiftProvider(authProvider.bmsUserModel?.empId??0);
-    },
-    lazy: false,
-    create: (_) => LookingForShiftProvider(
-    0
-    )..getAllSchedulePeriods()),
+        ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider()..getUserDetail()),
+        ChangeNotifierProvider<ManagePermissionProvider>(
+            create: (_) => ManagePermissionProvider()..getManagerPermission()),
+        ChangeNotifierProxyProvider<AuthProvider, LookingForShiftProvider>(
+            update: (_, authProvider, clockInProvide) {
+              return LookingForShiftProvider(
+                  authProvider.bmsUserModel?.empId ?? 0);
+            },
+            lazy: false,
+            create: (_) => LookingForShiftProvider(0)..getAllSchedulePeriods()),
         ChangeNotifierProvider<NavigationHandler>(
             create: (_) => NavigationHandler()),
-
-
       ],
-      child:
-      Consumer<NavigationHandler>(
+      child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
-            final authProvider = Provider.of<AuthProvider>(context,listen: false);
-            return MaterialApp(
-              title: 'Beacon',
-              debugShowCheckedModeBanner: false,
-              theme: defaultLightTheme,
-              home:isLoggedIn
-                  ? IfElseBuilder(
-                condition: authProvider.bmsUserModel?.userTypeId==1,
-                ifBuilder: (context)=>const DashBoardScreen(),
-                    elseBulider: (context) {
-                    return  IfElseBuilder(
-                          condition: authProvider.bmsUserModel?.userTypeId==4,
-                          ifBuilder: (context)=>const ManagerDashBoardScreen(),
-                          elseBulider: (context) {
-                            return EmptyDashBoard(
-                              key: key,
-                            );
-                          }
-                      ) ;
-                    }
-                  )
-                  : LoginScreen(
-                key: key,
-              ),
-
-            );
-          }),
-
-
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        return MaterialApp(
+          title: 'Beacon',
+          debugShowCheckedModeBanner: false,
+          theme: defaultLightTheme,
+          home: isLoggedIn
+              ? IfElseBuilder(
+                  condition: authProvider.bmsUserModel?.userTypeId == 1,
+                  ifBuilder: (context) => const DashBoardScreen(),
+                  elseBulider: (context) {
+                    return IfElseBuilder(
+                        condition: authProvider.bmsUserModel?.userTypeId == 4,
+                        ifBuilder: (context) => const ManagerDashBoardScreen(),
+                        elseBulider: (context) {
+                          return EmptyDashBoard(
+                            key: key,
+                          );
+                        });
+                  })
+              : LoginScreen(
+                  key: key,
+                ),
+        );
+      }),
     );
   }
 }

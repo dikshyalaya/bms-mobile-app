@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
@@ -33,30 +34,44 @@ class DashBoardGrid extends StatelessWidget {
 class GridCard extends StatelessWidget {
   final CardModel cardModel;
   final int index;
-  const GridCard({Key? key, required this.cardModel,required this.index}) : super(key: key);
+  const GridCard({Key? key, required this.cardModel, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        switch(index){
+      onTap: () {
+        switch (index) {
           case 0:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClockInHomeScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ClockInHomeScreen()));
             break;
-            case 1:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const MyScheduleHomeScreen()));
+          case 1:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MyScheduleHomeScreen()));
             break;
-            case 2:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShiftAvailabilityHome()));
+          case 2:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ShiftAvailabilityHome()));
             break;
           case 3:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const PriorClockInHomeScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const PriorClockInHomeScreen()));
             break;
-            case 5:
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const LookingForShiftHomeScreen()));
+          case 4:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const LookingForShiftHomeScreen()));
             break;
-
-
         }
       },
       child: Column(
@@ -68,19 +83,21 @@ class GridCard extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   cardModel.asset,
-                  height: 52,
-                  width: 62,
+                  height: 0.06.h(context),
+                  width: 0.06.h(context),
                 ),
               ),
             ),
           ),
           SizedBox(
-            height: 38,
+            height: 0.05.h(context),
             child: Text(
               cardModel.title,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Colors.white, fontSize: 13,),
+                    color: Colors.white,
+                    fontSize: 0.011.res(context),
+                  ),
             ),
           )
         ],

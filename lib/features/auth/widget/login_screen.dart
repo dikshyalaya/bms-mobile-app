@@ -25,22 +25,25 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = "";
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context,listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       body: Center(
         child: Container(
           alignment: Alignment.center,
-          height:  MediaQuery.of(context).size.height,
-          width:MediaQuery.of(context).size.shortestSide > 600?600: MediaQuery.of(context).size.width,
+          height: 1.0.h(context),
+          width: MediaQuery.of(context).size.shortestSide > 600
+              ? 600
+              : MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage(
-              "login_bg".pngImage(),
+            image: DecorationImage(
+              image: AssetImage(
+                "login_bg".pngImage(),
+              ),
+              fit: BoxFit.fill,
             ),
-            fit: BoxFit.fill,
-          )),
+          ),
           child: SizedBox(
-            height:DimensionUtils.isTab(context)? 432:456,
+            height: DimensionUtils.isTab(context) ? 432 : 456,
             width: double.infinity,
             child: Stack(
               alignment: Alignment.bottomCenter,
@@ -55,7 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Card(
                         color: Theme.of(context).cardColor,
                         elevation: 4,
-                        margin: const EdgeInsetsDirectional.all(horizontalPadding),
+                        margin:
+                            const EdgeInsetsDirectional.all(horizontalPadding),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         child: SizedBox(
@@ -64,8 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsetsDirectional.only(
                                 top: 32, start: 22, end: 22, bottom: 18),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.symmetric(horizontal: DimensionUtils.isTab(context)?40:0),
-
+                              padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal:
+                                      DimensionUtils.isTab(context) ? 40 : 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -75,13 +80,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 0.015.res(context),
+                                        ),
                                   ),
-                                  const SizedBox(
-                                    height: 19,
-                                  ),
+                                  SizedBox(height: 0.015.h(context)),
                                   BeaconTextFormField(
                                     iconData: Icons.person_pin,
                                     hintText: "Username",
@@ -89,9 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       userName = input;
                                     },
                                   ),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
+                                  SizedBox(height: 0.012.h(context)),
                                   BeaconTextFormField(
                                     obscureText: true,
                                     iconData: Icons.lock,
@@ -100,123 +102,146 @@ class _LoginScreenState extends State<LoginScreen> {
                                       password = input;
                                     },
                                   ),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
+                                  SizedBox(height: 0.014.h(context)),
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: SizedBox(
-                                      height: 40,
-                                      width: 104.84,
+                                      height: 0.05.h(context),
+                                      width: 0.27.w(context),
                                       child: ElevatedButton(
-                                          onPressed: () async{
-                                            if (userName.isEmpty ||
-                                                password.isEmpty) {
-                                              final errorMessage = userName.isEmpty
-                                                  ? "Username is Required."
-                                                  : "Password is Required.";
-                                              DialogueUtils.showErrorDialogue(
-                                                  context: context,
-                                                  message: errorMessage);
-                                            } else {
-                                              FocusScope.of(context).unfocus();
-                                              DialogueUtils.showProgressDialogue(context,  "Signing in, Please wait...");
+                                        onPressed: () async {
+                                          if (userName.isEmpty ||
+                                              password.isEmpty) {
+                                            final errorMessage =
+                                                userName.isEmpty
+                                                    ? "Username is Required."
+                                                    : "Password is Required.";
+                                            DialogueUtils.showErrorDialogue(
+                                                context: context,
+                                                message: errorMessage);
+                                          } else {
+                                            FocusScope.of(context).unfocus();
+                                            DialogueUtils.showProgressDialogue(
+                                                context,
+                                                "Signing in, Please wait...");
 
-                                             await authProvider.logIn(userName, password,onErrorState: (val){
-                                               Navigator.pop(context);
-                                              shoErrorToast(val.response?.exception?.message??"") ;                                      },
-                                              onAccessToken: (Map<String,dynamic>onData){
-                                               Navigator.pop(context);
+                                            await authProvider
+                                                .logIn(userName, password,
+                                                    onErrorState: (val) {
+                                              Navigator.pop(context);
+                                              shoErrorToast(val.response
+                                                      ?.exception?.message ??
+                                                  "");
+                                            }, onAccessToken:
+                                                        (Map<String, dynamic>
+                                                            onData) {
+                                              Navigator.pop(context);
 
-                                                if(onData['data']!=null){
-                                                  final accessToken = onData["accessToken"];
-                                                  final email = onData['data']['email'];
-                                                  final isActive = onData['data']['isActive'];
-                                                  final userTypeId = onData['data']['userTypeId'];
-                                                  final empId = onData['data']['empId'];
-                                                  final empFirstName = onData['data']['employee']['empFirstName'];
-                                                  final empLastName = onData['data']['employee']['empLastName'];
-                                                  authProvider.savedLoginInfo(accessToken, BmsUserModel(email: email,isActive: isActive,userTypeId: userTypeId,empFirstName: empFirstName,empLastName: empLastName,empId: empId));
+                                              if (onData['data'] != null) {
+                                                final accessToken =
+                                                    onData["accessToken"];
+                                                final email =
+                                                    onData['data']['email'];
+                                                final isActive =
+                                                    onData['data']['isActive'];
+                                                final userTypeId =
+                                                    onData['data']
+                                                        ['userTypeId'];
+                                                final empId =
+                                                    onData['data']['empId'];
+                                                final empFirstName =
+                                                    onData['data']['employee']
+                                                        ['empFirstName'];
+                                                final empLastName =
+                                                    onData['data']['employee']
+                                                        ['empLastName'];
+                                                authProvider.savedLoginInfo(
+                                                    accessToken,
+                                                    BmsUserModel(
+                                                        email: email,
+                                                        isActive: isActive,
+                                                        userTypeId: userTypeId,
+                                                        empFirstName:
+                                                            empFirstName,
+                                                        empLastName:
+                                                            empLastName,
+                                                        empId: empId));
 
-                                                  if(userTypeId==1){
-                                                    Navigator.pushAndRemoveUntil(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => const DashBoardScreen()),
-                                                            (route) => false);
-                                                  }
-
-                                                  else if(userTypeId==4){
-                                                    Navigator.pushAndRemoveUntil(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => const ManagerDashBoardScreen()),
-                                                            (route) => false);
-                                                  }
-
-                                                  else{
-                                                    Navigator.pushAndRemoveUntil(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => const EmptyDashBoard()),
-                                                            (route) => false);
-                                                  }
+                                                if (userTypeId == 1) {
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const DashBoardScreen()),
+                                                      (route) => false);
+                                                } else if (userTypeId == 4) {
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const ManagerDashBoardScreen()),
+                                                      (route) => false);
+                                                } else {
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const EmptyDashBoard()),
+                                                      (route) => false);
                                                 }
-                                                else{
-                                                shoErrorToast(onData['message']);
-
-                                                }
-
-
+                                              } else {
+                                                shoErrorToast(
+                                                    onData['message']);
                                               }
-                                              );
-
-                                            }
-                                          },
-                                          style: ButtonStyle(
-                                              padding: MaterialStateProperty.all(
-                                                  const EdgeInsetsDirectional.only(
-                                                start: 12,
-                                                end: 12,
-                                              )),
-                                              elevation: MaterialStateProperty.all(4),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      const Color(0xff1870FF)),
-                                              shape: MaterialStateProperty.all(
-                                                  const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(20))))),
-                                          child: Text(
-                                            "Login",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .copyWith(
-                                                    fontSize: 13,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold),
-                                          )),
+                                            });
+                                          }
+                                        },
+                                        style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                const EdgeInsetsDirectional
+                                                    .only(
+                                              start: 12,
+                                              end: 12,
+                                            )),
+                                            elevation:
+                                                MaterialStateProperty.all(4),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    const Color(0xff1870FF)),
+                                            shape: MaterialStateProperty.all(
+                                                const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20))))),
+                                        child: Text(
+                                          "Login",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontSize: 13,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
+                                  SizedBox(height: 0.017.h(context)),
                                   Text(
                                     "Forgot your password ?",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15),
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 0.013.res(context),
+                                        ),
                                   ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
+                                  SizedBox(height: 0.019.h(context)),
                                   Text.rich(
-
-
                                     TextSpan(
-
                                       children: [
                                         TextSpan(
                                           text: 'No worries, click, ',
@@ -226,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .copyWith(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400,
-                                                fontSize: 15,
+                                                fontSize: 0.013.res(context),
                                               ),
                                         ),
                                         TextSpan(
@@ -241,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .copyWith(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 15,
+                                                fontSize: 0.014.res(context),
                                               ),
                                         ),
                                         TextSpan(
@@ -252,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               .copyWith(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400,
-                                                fontSize: 15,
+                                                fontSize: 0.013.res(context),
                                               ),
                                         ),
                                       ],
@@ -265,21 +290,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 0.012.h(context)),
                       Text(
                         'The Beacon Group',
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 0.012.res(context),
+                            ),
                       )
                     ],
                   ),
                 ),
                 Positioned(
-                  top: 0,
+                  top: 0.02.h(context),
                   child: Image.asset(
                     "app-logo".pngImage(),
                     height: 107,
@@ -294,6 +318,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-void shoErrorToast(String message){
-  Fluttertoast.showToast(msg: message,backgroundColor: Colors.red,textColor: Colors.white);
+
+void shoErrorToast(String message) {
+  Fluttertoast.showToast(
+      msg: message, backgroundColor: Colors.red, textColor: Colors.white);
 }
