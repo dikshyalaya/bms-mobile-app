@@ -36,7 +36,6 @@ class DashBoardNavigatorCard extends StatelessWidget {
               condition: !(incompleteActivities?.data?.pendingClockIns.count==0&&incompleteActivities?.data?.pendingInvites.count==0),
               builder: (context) {
                 return Container(
-                  height: 285,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsetsDirectional.symmetric(vertical: 30),
                   decoration: BoxDecoration(
@@ -51,6 +50,7 @@ class DashBoardNavigatorCard extends StatelessWidget {
                             color: Colors.grey, offset: Offset(-3, -3), blurRadius: 4),
                       ]),
                   child: ListView.separated(
+                    shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => BottomCard(cardProvider: cardProvider,index: index,cardModel: navigatorCards[index],),
                     separatorBuilder: (context, index) => const SizedBox(

@@ -9,6 +9,7 @@ import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart'
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
+import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -246,99 +247,119 @@ class DialogueUtils {
   }
  static Future<void> onPressedMyScheduleDialogue(
       {required BuildContext context,required VoidCallback onSaveSchedule}) async {
+     String? shiftGivenByManager;
+     String? startTime;
+     String?endTime;
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
-              content: Container(
-                height: 358,
-                width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-Container(  decoration: const BoxDecoration(
-    color: Color(0xffD7ECFF),
-    boxShadow: [
-      BoxShadow(
-          color: Colors.grey,
-          blurRadius: 15.0,
-          offset: Offset(0.0, 0.75)
-      )
-    ],
-    borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(15), topRight: Radius.circular(15))),height: 41,width: double.infinity,alignment: Alignment.center,child: const Text("Add a Shift",style: TextStyle(
-  color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold
-),),),
-                    const SizedBox(height: 14.37,),
-                     Padding(
-                        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Was this shift given to you by manager?",style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,color: Colors.black
-                                ),),
-                                const SizedBox(width: 8,),
-                                IfElseBuilder(
-                                  condition: DimensionUtils.isTab(context),
-                                  ifBuilder:(context)=>BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){}) ,
-                                  elseBulider: (context) {
-                                    return Expanded(child: BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){}));
-                                  }
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 7.25,),
-                            rowBuilder("House",const ["Select","No"]),
-
-                            const SizedBox(height: 7.25,),
-                            rowBuilder("Schedule Date",const ["Select","No"]),
-
-                            const SizedBox(height: 7.25,),
-                            rowBuilder("Start Time",const ["Select","No"]),
-                            const SizedBox(height: 7.25,),
-                            rowBuilder("End Time",const ["Select","No"]),
-                            const SizedBox(height: 16.25,),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child:  SizedBox(
-                                  height: 38.33,
-                                  width: 108.05,
-                                  child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.all(
-                                              const Color(0xff3B85FF)),
-                                          shape: MaterialStateProperty.all(
-                                              const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(20))))
-                                      ),
-                                      onPressed: (){
-                                        onSaveSchedule.call();
-                                      }, child: const Text("Save",style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,fontWeight: FontWeight.bold
-                                  ),))),
+              content: StatefulBuilder(
+                builder: (context,setState)=>Container(
+                  height: 358,
+                  width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(  decoration: const BoxDecoration(
+                          color: Color(0xffD7ECFF),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 15.0,
+                                offset: Offset(0.0, 0.75)
                             )
-
                           ],
-                        ))
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15), topRight: Radius.circular(15))),height: 41,width: double.infinity,alignment: Alignment.center,child: const Text("Add a Shift",style: TextStyle(
+                          color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold
+                      ),),),
+                      const SizedBox(height: 14.37,),
+                      Padding(
+                          padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Was this shift given to you by manager?",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,color: Colors.black
+                                  ),),
+                                  const SizedBox(width: 8,),
+                                  IfElseBuilder(
+                                      condition: DimensionUtils.isTab(context),
+                                      ifBuilder:(context)=>BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){
+                                       setState((){
+                                         shiftGivenByManager=val;
+                                       });
+                                      },hint: shiftGivenByManager,) ,
+                                      elseBulider: (context) {
+                                        return Expanded(child: BMSDropDownForm(options: const ["Yes","No"], onChooseOptions: (String val){ setState((){
+                                          shiftGivenByManager=val;
+                                        });
+                                        },hint: shiftGivenByManager,));
+                                      }
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 7.25,),
+                              rowBuilder("House",const ["Select","No"]),
 
-                  ],
+                              const SizedBox(height: 7.25,),
+                              rowBuilder("Schedule Date",const ["Select","No"]),
+
+                              const SizedBox(height: 7.25,),
+                              rowBuilder("Start Time",timeOptions,hint: startTime,onChooseOption: (String val){
+                                setState((){
+                                  startTime = val;
+                                });
+                              }),
+                              const SizedBox(height: 7.25,),
+                              rowBuilder("End Time",timeOptions,hint: endTime,onChooseOption: (String val){
+                                setState((){
+                                  endTime = val;
+                                });
+                              }),
+                              const SizedBox(height: 16.25,),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child:  SizedBox(
+                                    height: 38.33,
+                                    width: 108.05,
+                                    child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(
+                                                const Color(0xff3B85FF)),
+                                            shape: MaterialStateProperty.all(
+                                                const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(20))))
+                                        ),
+                                        onPressed: (){
+                                          onSaveSchedule.call();
+                                        }, child: const Text("Save",style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,fontWeight: FontWeight.bold
+                                    ),))),
+                              )
+
+                            ],
+                          ))
+
+                    ],
+                  ),
                 ),
               ),
             ));
   }
 
- static Row rowBuilder(String text,List<String>options) {
+ static Row rowBuilder(String text,List<String>options,{String? hint,Function(String)?onChooseOption}) {
    return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -347,7 +368,7 @@ Container(  decoration: const BoxDecoration(
                                 fontSize: 13,color: Colors.black
                               ),),
                               const SizedBox(width: 8,),
-                              BMSDropDownForm(options: options, onChooseOptions: (String val){})
+                              BMSDropDownForm(options: options, onChooseOptions: (String val){onChooseOption?.call(val);},hint: hint,)
                             ],
                           );
  }
@@ -355,11 +376,11 @@ Container(  decoration: const BoxDecoration(
 
 
   static Future<String?> selectSchedulePeriodDialogue(
-      {required BuildContext context,required List<SchedulePeriod>schedulePeriods}) async {
+      {required BuildContext context,required List<SchedulePeriod>schedulePeriods,bool barrierDismissible=false }) async {
     String schedulePeriod =schedulePeriods.first.schedulePeriod;
     return await showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: barrierDismissible,
         builder: (context) => AlertDialog(
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,

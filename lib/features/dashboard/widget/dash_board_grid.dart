@@ -15,21 +15,25 @@ class DashBoardGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardProvider = CardProvider();
-    return GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsetsDirectional.all(14),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 22.0,
-            crossAxisSpacing: 12.0,
-            childAspectRatio: 1 / 1.3),
-        itemCount: cardProvider.gridCardProviders.length,
-        itemBuilder: (BuildContext ctx, index) {
-          return GridCard(
+    return Wrap(
+
+alignment: WrapAlignment.start,
+      children: [
+
+        ...cardProvider.gridCardProviders.map((e) {
+          final index= cardProvider.gridCardProviders.indexOf(e);
+          return Container(
+            height: 134,
+            margin: const EdgeInsetsDirectional.only(top: 14,start: 7,end: 7),
+            width: 110,
+            child: GridCard(
             cardModel: cardProvider.gridCardProviders[index],
             index: index,
+                    ),
           );
-        });
+        })
+      ],
+    );
   }
 }
 
@@ -76,7 +80,7 @@ class GridCard extends StatelessWidget {
                   builder: (context) => const PriorClockInHomeScreen()));
             }
             break;
-            case 5:
+            case 4:
               if(systemSettingsProvider.systemSettingsModel?.siteSetting.lookingForShift.enable??false){
                 onSystemSettingsDialogue(context);
               }else {
@@ -90,9 +94,13 @@ class GridCard extends StatelessWidget {
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
+          SizedBox(
+            height: 104,
+            width: 104,
             child: Card(
+              margin: EdgeInsetsDirectional.zero,
               color: Colors.white,
               child: Center(
                 child: Image.asset(
@@ -103,11 +111,12 @@ class GridCard extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 6,),
           SizedBox(
-            height: 38,
+            height: 24,
             child: Text(
               cardModel.title,
-              textAlign: TextAlign.center,
+              maxLines: 1,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Colors.white, fontSize: 13,),
             ),
