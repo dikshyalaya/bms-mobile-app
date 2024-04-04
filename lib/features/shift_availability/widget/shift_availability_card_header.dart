@@ -1,4 +1,3 @@
-import 'package:beacon_flutter/features/prior_clock_in/data/prior_cloc_in_response_model.dart';
 import 'package:flutter/material.dart';
 
 class ShiftAvailabilityCardHeader extends StatelessWidget {

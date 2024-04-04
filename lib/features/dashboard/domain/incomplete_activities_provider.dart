@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/dashboard/data/IncompleteActivitiesModel.dart';
-import 'package:beacon_flutter/features/dashboard/domain/IncompleteActivitiesRepo.dart';
+import 'package:beacon_flutter/features/dashboard/data/incomplete_activities_model.dart';
+import 'package:beacon_flutter/features/dashboard/domain/incomplete_activities_repo.dart';
 import 'package:flutter/cupertino.dart';
 
 class IncompleteActivitiesProvider extends ChangeNotifier{
@@ -24,9 +24,9 @@ class IncompleteActivitiesProvider extends ChangeNotifier{
   // networkState: networkState,
   onLoadedState: (loadedState) async{
   onFutureNotifyListeners(() {
-  final Map<String,dynamic> _map = loadedState.response?.body;
+  final Map<String,dynamic> map = loadedState.response?.body;
   incompleteActivitiesModel =
-  incompleteActivitiesFromJson(jsonEncode(_map['response']));
+  incompleteActivitiesFromJson(jsonEncode(map['response']));
   });
   },
   onErrorState: (errorState) {

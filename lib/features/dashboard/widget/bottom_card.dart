@@ -1,28 +1,27 @@
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'dashboard_navigator-card.dart';
+import 'dashboard_navigator_card.dart';
 
 class BottomCard extends StatelessWidget {
   final int index;
   final CardModel cardModel;
 
-
-  const BottomCard({
-    key,
-    required this.index,
-    required this.cardProvider,
-    required this.cardModel
-  });
-  
+  const BottomCard(
+      {Key? key,
+      required this.index,
+      required this.cardProvider,
+      required this.cardModel})
+      : super(key: key);
 
   final CardProvider cardProvider;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClockInHomeScreen()));
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ClockInHomeScreen()));
       },
       child: Card(
         elevation: 4,
@@ -38,7 +37,7 @@ class BottomCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                   cardModel.title,
+                    cardModel.title,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: const Color(0xff1E1D1D),
                         fontSize: 22,

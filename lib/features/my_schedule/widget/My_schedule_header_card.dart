@@ -1,4 +1,3 @@
-import 'package:beacon_flutter/features/looking_for_shift/data/look_for_shift_response_model.dart';
 import 'package:flutter/material.dart';
 
 class MyScheduleCardHeader extends StatelessWidget {

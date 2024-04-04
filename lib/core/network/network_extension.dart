@@ -16,16 +16,16 @@ extension ChangengeNotifierExt on ChangeNotifier {
     futureNotifyListeners();
   }
 
-
   void futureNotifyListeners() {
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     Future.delayed(Duration.zero, () => notifyListeners());
   }
 
   void onApiCallback<T>(
       {required NetworkState<T> networkState,
-        required LoadingStateCallback<T>? onLoadingState,
-        required ErrorStateCallback<T>? onErrorState,
-        required LoadedStateCallback<T>? onLoadedState}) {
+      required LoadingStateCallback<T>? onLoadingState,
+      required ErrorStateCallback<T>? onErrorState,
+      required LoadedStateCallback<T>? onLoadedState}) {
     if (networkState.state == DataFetchState.ERROR_ENCOUNTERED) {
       onErrorState?.call(networkState);
     } else if (networkState.state == DataFetchState.IS_LOADED) {

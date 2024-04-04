@@ -6,7 +6,6 @@ import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_repo.dart';
 import 'package:beacon_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
 class AuthProvider extends ChangeNotifier{
@@ -72,9 +71,9 @@ class AuthProvider extends ChangeNotifier{
     );
   }
 
-void savedLoginInfo(String accessToken,BmsUserModel _bmsUserModel)async{
+void savedLoginInfo(String accessToken,BmsUserModel bmsUserModel)async{
 await  BMSHiveModel.hive.put(BMSHiveModel.ACCESS_TOKEN, accessToken);
- await BMSHiveModel.hive.put(BMSHiveModel.USER_PROFILE, jsonEncode(_bmsUserModel.toJson()));
+ await BMSHiveModel.hive.put(BMSHiveModel.USER_PROFILE, jsonEncode(bmsUserModel.toJson()));
  await getUserDetail();
   }
 

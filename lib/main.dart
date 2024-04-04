@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
-import 'package:beacon_flutter/features/dashboard/domain/systemSetting_provider.dart';
+import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/domain/manager_permission_provider.dart';
@@ -15,12 +17,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 
 Future<bool> handleLocationPermission() async {
   bool serviceEnabled;
@@ -42,6 +44,7 @@ Future<bool> handleLocationPermission() async {
   }
   return true;
 }
+
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -49,7 +52,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       message,
       isAppInBackground: true);
 
-  print("Handling a background message: ${message.messageId}");
+  log("Handling a background message: ${message.messageId}");
 }
 
 void listenFCMForeground() async {
@@ -63,10 +66,9 @@ void listenFCMForeground() async {
         notification.body,
         NotificationDetails(
           android: AndroidNotificationDetails(channel.id, channel.name,
-              // TODO add a proper drawable resource to android, for now using
               //      one that already exists in example app.
               icon: '@drawable/app_icon',
-              color:Colors.transparent,
+              color: Colors.transparent,
               importance: Importance.max),
         ),
       );
@@ -74,14 +76,14 @@ void listenFCMForeground() async {
   });
 }
 
-void main() async{
-  bool isLoggedIn=false;
+void main() async {
+  bool isLoggedIn = false;
   // await handleLocationPermission();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
   await BMSHiveModel.init();
-  final accessToken = await  BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
+  final accessToken = await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
   isLoggedIn = accessToken?.isNotEmpty ?? false;
   await Firebase.initializeApp();
   PermissionStatus status = await Permission.notification.request();
@@ -102,7 +104,7 @@ void main() async{
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -112,7 +114,7 @@ void main() async{
     );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
+      log('A new onMessageOpenedApp event was published!');
     });
 
     // Register the foreground handler
@@ -121,69 +123,65 @@ void main() async{
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   LocalNotificationService.initialize();
-  runApp( MyApp(isLoggedIn: isLoggedIn,));
-
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  runApp(MyApp(
+    isLoggedIn: isLoggedIn,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({key,required this.isLoggedIn});
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
     // FlutterNativeSplash.remove();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()..getUserDetail()),
-        ChangeNotifierProvider<ManagePermissionProvider>(create: (_) => ManagePermissionProvider()..getManagerPermission()),
-        ChangeNotifierProvider<SystemSettingProvider>(create: (_) => SystemSettingProvider()..getSystemSettings()),
-    ChangeNotifierProxyProvider<AuthProvider,
-        LookingForShiftProvider>(
-    update: (_, authProvider, clockInProvide) {
-    return LookingForShiftProvider(authProvider.bmsUserModel?.empId??0);
-    },
-    lazy: false,
-    create: (_) => LookingForShiftProvider(
-    0
-    )..getAllSchedulePeriods()),
+        ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider()..getUserDetail()),
+        ChangeNotifierProvider<ManagePermissionProvider>(
+            create: (_) => ManagePermissionProvider()..getManagerPermission()),
+        ChangeNotifierProvider<SystemSettingProvider>(
+            create: (_) => SystemSettingProvider()..getSystemSettings()),
+        ChangeNotifierProxyProvider<AuthProvider, LookingForShiftProvider>(
+            update: (_, authProvider, clockInProvide) {
+              return LookingForShiftProvider(
+                  authProvider.bmsUserModel?.empId ?? 0);
+            },
+            lazy: false,
+            create: (_) => LookingForShiftProvider(0)..getAllSchedulePeriods()),
         ChangeNotifierProvider<NavigationHandler>(
             create: (_) => NavigationHandler()),
-
-
       ],
-      child:
-      Consumer<NavigationHandler>(
+      child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
-            final authProvider = Provider.of<AuthProvider>(context,listen: false);
-            return MaterialApp(
-              title: 'Beacon',
-              debugShowCheckedModeBanner: false,
-              theme: defaultLightTheme,
-              home:isLoggedIn
-                  ? IfElseBuilder(
-                condition: authProvider.bmsUserModel?.userTypeId==1,
-                ifBuilder: (context)=>const DashBoardScreen(),
-                    elseBulider: (context) {
-                    return  IfElseBuilder(
-                          condition: authProvider.bmsUserModel?.userTypeId==4,
-                          ifBuilder: (context)=>const ManagerDashBoardScreen(),
-                          elseBulider: (context) {
-                            return EmptyDashBoard(
-                              key: key,
-                            );
-                          }
-                      ) ;
-                    }
-                  )
-                  : LoginScreen(
-                key: key,
-              ),
-
-            );
-          }),
-
-
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        return MaterialApp(
+          title: 'Beacon',
+          debugShowCheckedModeBanner: false,
+          theme: defaultLightTheme,
+          home: isLoggedIn
+              ? IfElseBuilder(
+                  condition: authProvider.bmsUserModel?.userTypeId == 1,
+                  ifBuilder: (context) => const DashBoardScreen(),
+                  elseBulider: (context) {
+                    return IfElseBuilder(
+                        condition: authProvider.bmsUserModel?.userTypeId == 4,
+                        ifBuilder: (context) => const ManagerDashBoardScreen(),
+                        elseBulider: (context) {
+                          return EmptyDashBoard(
+                            key: key,
+                          );
+                        });
+                  })
+              : LoginScreen(
+                  key: key,
+                ),
+        );
+      }),
     );
   }
 }

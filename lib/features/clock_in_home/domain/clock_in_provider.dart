@@ -30,9 +30,9 @@ class CLockInProvider extends ChangeNotifier{
             // networkState: networkState,
             onLoadedState: (loadedState) async{
               onFutureNotifyListeners(() {
-                final Map<String,dynamic> _map = loadedState.response?.body;
+                final Map<String,dynamic> map = loadedState.response?.body;
                  clockInResponseModel =
-                clockInResponseModelFromJson(jsonEncode(_map['response']));
+                clockInResponseModelFromJson(jsonEncode(map['response']));
               });
              await getNoMealReasonList();
             },
@@ -63,9 +63,9 @@ class CLockInProvider extends ChangeNotifier{
             // networkState: networkState,
             onLoadedState: (loadedState) {
               // onFutureNotifyListeners(() {
-                final Map<String,dynamic> _map = loadedState.response?.body;
+                final Map<String,dynamic> map = loadedState.response?.body;
                 noMealReasonResponseModel =
-                noMealReasonResponseModelFromJson(jsonEncode(_map['response']));
+                noMealReasonResponseModelFromJson(jsonEncode(map['response']));
               // });
             },
             onErrorState: (errorState) {

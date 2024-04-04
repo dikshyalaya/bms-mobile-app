@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -10,9 +12,9 @@ class DioManager {
 
   final Dio _prodDio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds:15),
-    receiveTimeout: const Duration(seconds:15),
-    sendTimeout: const Duration(seconds:15),
+    connectTimeout: const Duration(seconds: 15),
+    receiveTimeout: const Duration(seconds: 15),
+    sendTimeout: const Duration(seconds: 15),
   ));
 
   DioManager._init() {
@@ -31,10 +33,9 @@ class DioManager {
 
   Future<Response<T>> get<T>(
       {required String path,
-        shouldCache = false,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      shouldCache = false,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     if (shouldCache) {
-
       return await getDio(baseUrlType).get(path);
     } else {
       return await getDio(baseUrlType).get(path);
@@ -43,38 +44,38 @@ class DioManager {
 
   Future<Response<T>> post<T>(
       {required String path,
-        required Map<String, dynamic> jsonBody,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      required Map<String, dynamic> jsonBody,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     return await getDio(baseUrlType).post(path, data: jsonBody);
   }
 
   Future<Response<T>> put<T>(
       {required String path,
-        required Map<String, dynamic> jsonBody,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      required Map<String, dynamic> jsonBody,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     return getDio(baseUrlType).patch(path, data: jsonBody);
   }
 
   Future<Response<T>> upload<T>(
       {required String path,
-        required FormData formData,
-        ProgressCallback? onSendProgress,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      required FormData formData,
+      ProgressCallback? onSendProgress,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     return getDio(baseUrlType)
         .post(path, data: formData, onSendProgress: onSendProgress);
   }
 
   Future<Response<T>> update<T>(
       {required String path,
-        required Map<String, dynamic> jsonBody,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      required Map<String, dynamic> jsonBody,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     return getDio(baseUrlType).put(path, data: jsonBody);
   }
 
   Future<Response<T>> delete<T>(
       {required String path,
-        required Map<String, dynamic> jsonBody,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      required Map<String, dynamic> jsonBody,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     return await getDio(baseUrlType).delete(path, data: jsonBody);
   }
 }
@@ -86,8 +87,7 @@ class TokenInterceptor extends QueuedInterceptor {
     String? accessToken;
     await BMSHiveModel.init();
 
-    accessToken =await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
-
+    accessToken = await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
 
     const Map<String, dynamic> apiHeaders = {
       "Accept": 'application/json',
@@ -108,7 +108,8 @@ class ErrorInterceptor extends Interceptor {
   var connectivityResult;
 
   @override
-  Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
     // debugPrintStack(label: err.response.toString(), maxFrames: 50);
     final ConnectivityResult result = await Connectivity().checkConnectivity();
 
@@ -126,15 +127,12 @@ class ErrorInterceptor extends Interceptor {
           err.response?.statusCode ?? 0));
     }
 
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
-
-    }
+    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {}
 
     if (err.response?.data != null) {
       return handler.next(ServerException(
           err.requestOptions,
-           err.response?.statusMessage??'Something went wrong'
-             ,
+          err.response?.statusMessage ?? 'Something went wrong',
           err.response?.statusCode ?? 0));
     }
 
@@ -171,7 +169,7 @@ class ErrorInterceptor extends Interceptor {
   }
 }
 
-class BadRequestException extends DioError {
+class BadRequestException extends DioException {
   BadRequestException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -180,7 +178,7 @@ class BadRequestException extends DioError {
   }
 }
 
-class InternalServerErrorException extends DioError {
+class InternalServerErrorException extends DioException {
   InternalServerErrorException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -189,7 +187,7 @@ class InternalServerErrorException extends DioError {
   }
 }
 
-class ConflictException extends DioError {
+class ConflictException extends DioException {
   ConflictException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -198,7 +196,7 @@ class ConflictException extends DioError {
   }
 }
 
-class UnauthorizedException extends DioError {
+class UnauthorizedException extends DioException {
   UnauthorizedException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -207,7 +205,7 @@ class UnauthorizedException extends DioError {
   }
 }
 
-class NotFoundException extends DioError {
+class NotFoundException extends DioException {
   NotFoundException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -216,7 +214,7 @@ class NotFoundException extends DioError {
   }
 }
 
-class NoInternetConnectionException extends DioError {
+class NoInternetConnectionException extends DioException {
   NoInternetConnectionException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -225,7 +223,7 @@ class NoInternetConnectionException extends DioError {
   }
 }
 
-class DeadlineExceededException extends DioError {
+class DeadlineExceededException extends DioException {
   DeadlineExceededException(RequestOptions r) : super(requestOptions: r);
 
   @override
@@ -234,7 +232,7 @@ class DeadlineExceededException extends DioError {
   }
 }
 
-class ServerException extends DioError {
+class ServerException extends DioException {
   final String errorMessage;
   final int statusCode;
 
@@ -245,10 +243,10 @@ class ServerException extends DioError {
   String toString() {
     // final Map<String, dynamic> errorResponse = errorMessage.jsonEncode();
     if (errorMessage.contains("message")) {
-      return "${errorMessage}";
+      return errorMessage;
       // return "Status Code: $statusCode, ${errorMessage["message"]}";
     }
-    return "$errorMessage";
+    return errorMessage;
   }
 }
 

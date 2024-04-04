@@ -5,17 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EmptyDashBoard extends StatelessWidget {
-  const EmptyDashBoard({key});
+  const EmptyDashBoard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  ScaffoldBackGroundWrapper(child: Scaffold(
+    return ScaffoldBackGroundWrapper(
+        child: Scaffold(
       appBar: BeaconAppBar(
-        title: Provider.of<AuthProvider>(context,listen: false).userFullName,
-
+        title: Provider.of<AuthProvider>(context, listen: false).userFullName,
       ),
-      backgroundColor: Colors.transparent,body: const Padding(padding: EdgeInsets.symmetric(horizontal: 31,vertical: 42),child: Text("Please contact System Administrator for setting up the App Permission.",
-      textAlign: TextAlign.center,
-      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.white),),),));
+      backgroundColor: Colors.transparent,
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 31, vertical: 42),
+        child: Text(
+          "Please contact System Administrator for setting up the App Permission.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
+        ),
+      ),
+    ));
   }
 }

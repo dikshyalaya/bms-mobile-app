@@ -14,8 +14,8 @@ class ManagerDashBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false)
-      ..getUserDetail();
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false)
+    //   ..getUserDetail();
     return ScaffoldBackGroundWrapper(
       child: Scaffold(
         backgroundColor: Colors.transparent,

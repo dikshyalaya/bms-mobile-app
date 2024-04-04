@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:beacon_flutter/core/network/dio_manager.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
@@ -12,15 +14,15 @@ abstract class BaseApiRepository<T> {
 
   Future<void> fetch(
       {Map<String, String>? params,
-        String? pathVariable,
-        required ApiCallback<T> apiCallback,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      String? pathVariable,
+      required ApiCallback<T> apiCallback,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     apiCallback(NetworkState.loading());
     try {
       String urlPath = path(params, pathVariable);
 
       if (pathVariable?.isNotEmpty ?? false) {
-        urlPath += '/' + pathVariable!;
+        urlPath += '/${pathVariable!}';
       }
       final response = await DioManager.instance
           .get(path: urlPath, baseUrlType: baseUrlType);
@@ -31,7 +33,7 @@ abstract class BaseApiRepository<T> {
         apiCallback(NetworkState.error(
             BMSResponse.error(exception: BMSException(response.data))));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       apiCallback(NetworkState.error(
           BMSResponse.error(exception: BMSException(error.toString()))));
     }
@@ -52,7 +54,7 @@ abstract class BaseApiRepository<T> {
       String urlPath = path(params, pathVariable);
 
       if (pathVariable?.isNotEmpty ?? false) {
-        urlPath += '/' + pathVariable!;
+        urlPath += '/${pathVariable!}';
       }
       final response = await DioManager.instance.post(
         path: urlPath,
@@ -72,7 +74,7 @@ abstract class BaseApiRepository<T> {
             exception: BMSException(response.data.toString()))));
       }
       return response.data;
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       apiCallback(NetworkState.error(
           BMSResponse.error(exception: BMSException(error.toString()))));
 
@@ -111,7 +113,7 @@ abstract class BaseApiRepository<T> {
             exception: BMSException(response.data.toString()))));
       }
       return response.data;
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       apiCallback(NetworkState.error(BMSResponse.error(
           exception: BMSException(error.response?.data[0]["message"]))));
 
@@ -122,16 +124,16 @@ abstract class BaseApiRepository<T> {
 
   void put(
       {Map<String, String>? params,
-        String? pathVariable,
-        required Map<String, dynamic> body,
-        required ApiCallback<T> apiCallback,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      String? pathVariable,
+      required Map<String, dynamic> body,
+      required ApiCallback<T> apiCallback,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     try {
       apiCallback(NetworkState.loading());
       String urlPath = path(params, pathVariable);
 
       if (pathVariable?.isNotEmpty ?? false) {
-        urlPath += '/' + pathVariable!;
+        urlPath += '/${pathVariable!}';
       }
 
       final response = await DioManager.instance
@@ -143,7 +145,7 @@ abstract class BaseApiRepository<T> {
         apiCallback(NetworkState.error(BMSResponse.error(
             exception: BMSException(response.data.toString()))));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       apiCallback(NetworkState.error(
           BMSResponse.error(exception: BMSException(error.toString()))));
     }
@@ -162,7 +164,7 @@ abstract class BaseApiRepository<T> {
       String urlPath = path(params, pathVariable);
 
       if (pathVariable?.isNotEmpty ?? false) {
-        urlPath += '/' + pathVariable!;
+        urlPath += '/${pathVariable!}';
       }
       final response = await DioManager.instance.delete(
         path: urlPath,
@@ -178,7 +180,7 @@ abstract class BaseApiRepository<T> {
             exception: BMSException(response.data.toString()))));
       }
       return response.data;
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       apiCallback(NetworkState.error(
           BMSResponse.error(exception: BMSException(error.toString()))));
 
