@@ -99,7 +99,6 @@ void main() async {
       importance: Importance.high,
       enableVibration: true,
     );
-
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     await flutterLocalNotificationsPlugin

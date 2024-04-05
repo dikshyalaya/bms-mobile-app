@@ -65,7 +65,7 @@ class ClockInResponse {
   String? endDateTime;
   dynamic actualStartDateTime;
   dynamic actualEndDateTime;
-  String lunchTime;
+  String? lunchTime;
   dynamic totalTime;
   dynamic noBreakReason;
   dynamic invoiceNumber;
@@ -112,7 +112,7 @@ class ClockInResponse {
     endDateTime: json["endDateTime"],
     actualStartDateTime: json["actualStartDateTime"],
     actualEndDateTime: json["actualEndDateTime"],
-    lunchTime: json["lunchTime"],
+    lunchTime: json["lunchTime"]??"",
     totalTime: json["totalTime"],
     noBreakReason: json["noBreakReason"],
     invoiceNumber: json["invoiceNumber"],

@@ -1,3 +1,4 @@
+
 import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
@@ -229,15 +230,15 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   }
 
   Future<void> onOpenPeriodDialogue(BuildContext context) async {
-    final res = await DialogueUtils.selectSchedulePeriodDialogue(
-        context: context,
-        schedulePeriods:
-            _lookingForShiftProvider.schedulePeriodResponseModel!.data!);
 
+     final res= await   DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: _lookingForShiftProvider.schedulePeriodResponseModel!.data!,barrierDismissible: true);
+
+  if(res!=null){
     setState(() {
       schedulePeriod = res ?? "";
     });
 
     _lookingForShiftProvider.getAllLookingForShift(schedulePeriod);
+  }
   }
 }
