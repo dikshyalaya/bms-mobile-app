@@ -145,8 +145,9 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                           );
                         }),
                     const SizedBox(
-                      height: 18,
+                      height: 18.0,
                     ),
+
                     Expanded(
                       child: Selector<LookingForShiftProvider, bool>(
                           builder: (context, isDataFetching, child) =>
