@@ -1,5 +1,6 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/widget/manager_approval_home.dart';
 import 'package:flutter/material.dart';
 
 class ManagerDashBoardGrid extends StatelessWidget {
@@ -28,12 +29,33 @@ class ManagerDashBoardGrid extends StatelessWidget {
 class GridCard extends StatelessWidget {
   final CardModel cardModel;
   final int index;
-  const GridCard({Key? key, required this.cardModel,required this.index}) : super(key: key);
+  const GridCard({Key? key, required this.cardModel, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
+        switch (index) {
+          case 0:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ManagerApprovalHomeScreen()));
+            break;
+          case 1:
+            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const MyScheduleHomeScreen()));
+            break;
+          case 2:
+            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShiftAvailavilityHomeScreen()));
+            break;
+          case 3:
+            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const PriorClockHomeScreen()));
+            break;
+          case 4:
+            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const LookingForShiftHomeScreen()));
+            break;
+        }
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,8 +77,10 @@ class GridCard extends StatelessWidget {
             child: Text(
               cardModel.title,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Colors.white, fontSize: 13),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: Colors.white, fontSize: 13),
             ),
           )
         ],
@@ -65,13 +89,10 @@ class GridCard extends StatelessWidget {
   }
 }
 
-
-
 List<CardModel> newGridCardProviders = [
   CardModel(title: "Manager Approval", asset: "clock-in".pngImage()),
   CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
-  CardModel(
-      title: "Approval History", asset: "shift-availiability".pngImage()),
+  CardModel(title: "Approval History", asset: "shift-availiability".pngImage()),
   CardModel(title: "Manage Shifts", asset: "prior-clock-in".pngImage()),
   CardModel(title: "House Employees", asset: "add-shift".pngImage()),
 ];

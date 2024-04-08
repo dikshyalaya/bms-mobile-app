@@ -25,7 +25,7 @@ class ManagerDashBoardScreen extends StatelessWidget {
               selector: (context, provider) => provider.bmsUserModel,
               builder: (context, bmsUserModel, child) => BeaconAppBar(
                 title:
-                "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+                    "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
               ),
             )),
         body: Container(
@@ -39,19 +39,17 @@ class ManagerDashBoardScreen extends StatelessWidget {
               ],
             ),
           ),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Selector<ManagePermissionProvider, bool?>(
-              selector: (context, provider) => provider.isManagerPermitted,
-          builder: (context, isManagerPermitted, child) => IfBuilder(
-            condition: isManagerPermitted??false,
-            builder: (context) {
-              return const Expanded(child: ManagerDashBoardGrid());
-            }
-          ),
-        )
+                selector: (context, provider) => provider.isManagerPermitted,
+                builder: (context, isManagerPermitted, child) => IfBuilder(
+                    condition: isManagerPermitted ?? false,
+                    builder: (context) {
+                      return const Expanded(child: ManagerDashBoardGrid());
+                    }),
+              )
 
               // DashBoardNavigatorCard(),
             ],
