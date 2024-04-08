@@ -122,7 +122,7 @@ abstract class BaseApiRepository<T> {
     }
   }
 
-  void put(
+  Future<void> put(
       {Map<String, String>? params,
       String? pathVariable,
       required Map<String, dynamic> body,

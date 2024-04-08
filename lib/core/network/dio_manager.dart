@@ -53,7 +53,7 @@ class DioManager {
       {required String path,
       required Map<String, dynamic> jsonBody,
       BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
-    return getDio(baseUrlType).patch(path, data: jsonBody);
+    return getDio(baseUrlType).put(path, data: jsonBody);
   }
 
   Future<Response<T>> upload<T>(

@@ -1,8 +1,9 @@
+import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:flutter/material.dart';
 
 class MyScheduleCardHeader extends StatelessWidget {
-
-  const MyScheduleCardHeader({Key? key}) : super(key: key);
+ final ScheduleCardModel scheduleCardModel;
+  const MyScheduleCardHeader({Key? key, required this.scheduleCardModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +23,14 @@ class MyScheduleCardHeader extends StatelessWidget {
           ],          borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,
-      child:  const Row(
+      child:   Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("3/6/2024 - Wednesday",style: TextStyle(
+          Text(scheduleCardModel.scheduleDate??"",style: const TextStyle(
               color: Color(0xff1B1B1B),
               fontSize: 15,fontWeight: FontWeight.w500
           ),),
-          Text("11:30 PM - 09:30 AM",style: TextStyle(
+          Text("${scheduleCardModel.startTime} - ${scheduleCardModel.endTime}",style: const TextStyle(
               color: Color(0xff1B1B1B),
               fontSize: 15,fontWeight: FontWeight.w500
           ),),

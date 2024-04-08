@@ -548,7 +548,7 @@ class DialogueUtils {
           content: Container(
             height: 240,
             width: DimensionUtils.isTab(context)?_width(): MediaQuery.of(context).size.width,
-            // padding: const EdgeInsets.symmetric(horizontal: 6),
+
             decoration: BoxDecoration(
                 color:  Colors.white,
                 borderRadius: BorderRadius.circular(20)),
@@ -568,87 +568,97 @@ class DialogueUtils {
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    buildText('New Password       '),
-                    const SizedBox(width: 15,),
-                    Expanded(
-                      child: SizedBox(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      buildText('New Password       '),
+                      const SizedBox(width: 15,),
+                      Expanded(
+                        child: SizedBox(
 
-                        child: PWChangeTextFormField(onChangedInput: (String val){
-                          newPassword = val;
-                        },),
-                      ),
-                    )
-                  ],
+                          child: PWChangeTextFormField(onChangedInput: (String val){
+                            newPassword = val;
+                          },),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 14,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    buildText('Confirm Password'),
-                    const SizedBox(width: 15,),
-                    Expanded(
-                      child: PWChangeTextFormField(onChangedInput: (String val){
-                        confirmPassword = val;
-                      },),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      buildText('Confirm Password'),
+                      const SizedBox(width: 15,),
+                      Expanded(
+                        child: PWChangeTextFormField(onChangedInput: (String val){
+                          confirmPassword = val;
+                        },),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: SizedBox(
-                    height: 40,
-                    width: 163,
-                    child: ElevatedButton(
-                        onPressed: ()async {
-                          if(newPassword.isEmpty||confirmPassword.isEmpty){
-                            shoErrorToast("Password field must not be empty");
-                          }else if(newPassword!=confirmPassword){
-                            shoErrorToast( "Password is not match");
-                          }else{
-                            FocusScope.of(context).unfocus();
-                            showProgressDialogue(context,  "Signing in, Please wait...");
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      height: 40,
+                      width: 163,
+                      child: ElevatedButton(
 
-                            await authProvider.changePassword(confirmPassword,onErrorState: (val){
-                              Navigator.pop(context);
-                              shoErrorToast(val.response?.exception?.message??"") ;
-                            },onLoadedState: (val){
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              successMessageDialogue(context: context, successMessage: "Password changed successfully.");
+                          onPressed: ()async {
+                            if(newPassword.isEmpty||confirmPassword.isEmpty){
+                              shoErrorToast("Password field must not be empty");
+                            }else if(newPassword!=confirmPassword){
+                              shoErrorToast( "Password is not match");
+                            }else{
+                              FocusScope.of(context).unfocus();
+                              showProgressDialogue(context,  "Signing in, Please wait...");
 
+                              await authProvider.changePassword(confirmPassword,onErrorState: (val){
+                                Navigator.pop(context);
+                                shoErrorToast(val.response?.exception?.message??"") ;
+                              },onLoadedState: (val){
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                successMessageDialogue(context: context, successMessage: "Password changed successfully.");
+
+                              }
+                              );
                             }
-                            );
-                          }
-                          },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                EdgeInsetsDirectional.zero),
-                            elevation: MaterialStateProperty.all(4),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff3B85FF)),
-                            shape: MaterialStateProperty.all(
-                                const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20))))),
-                        child: Text(
-                          "Change Password",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(
-                              fontSize: 13,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400),
-                        )),
+                            },
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsetsDirectional.zero),
+                              elevation: MaterialStateProperty.all(4),
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xff3B85FF)),
+                              shape: MaterialStateProperty.all(
+                                  const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))))),
+                          child: Text(
+                            "Change Password",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(
+                                fontSize: 13,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400),
+                          )),
+                    ),
                   ),
                 ),
               ],
