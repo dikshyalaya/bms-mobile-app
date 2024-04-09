@@ -1,5 +1,5 @@
-
 import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
+import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
@@ -24,6 +24,7 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   late LookingForShiftProvider _lookingForShiftProvider;
   String schedulePeriod = "";
   bool initialState = true;
+  List<int> lookForShiftIds = [];
 
   @override
   void initState() {
@@ -148,7 +149,6 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                     const SizedBox(
                       height: 18.0,
                     ),
-
                     Expanded(
                       child: Selector<LookingForShiftProvider, bool>(
                           builder: (context, isDataFetching, child) =>
@@ -163,6 +163,11 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                                 _lookingForShiftProvider
                                                     .lookForShiftResponseModel
                                                     ?.data?[index],
+                                            onSwitchEnabled: (isEnabled, id) {
+                                              isEnabled
+                                                  ? lookForShiftIds.add(id)
+                                                  : lookForShiftIds.remove(id);
+                                            },
                                           ),
                                       padding:
                                           const EdgeInsets.only(bottom: 18),
@@ -190,33 +195,56 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                           child: SizedBox(
                             height: 40,
                             width: 163,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  DialogueUtils.successMessageDialogue(
-                                      context: context,
-                                      successMessage:
-                                          "Availability Saved Successfully.");
-                                },
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsetsDirectional.zero),
-                                    elevation: MaterialStateProperty.all(4),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color(0xff1870FF)),
-                                    shape: MaterialStateProperty.all(
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))))),
-                                child: Text(
-                                  "Save",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                          fontSize: 13,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                )),
+                            child: Selector<LookingForShiftProvider, bool>(
+                              selector: (context, provider) =>
+                                  provider.isDataPosting,
+                              builder: (BuildContext context, bool isDataPosting,
+                                      Widget? child) =>
+                                  IfElseBuilder(
+                                      condition: isDataPosting,
+                                      ifBuilder: (context) =>
+                                          const Center(child: CircularProgressIndicator()),
+                                      elseBulider: (context) {
+                                        return ElevatedButton(
+                                            onPressed: () {
+                                              _lookingForShiftProvider
+                                                  .postAvailableForShift(
+                                                      lookForShiftIds, () {
+                                                DialogueUtils
+                                                    .successMessageDialogue(
+                                                        context: context,
+                                                        successMessage:
+                                                            "Availability Saved Successfully.");
+                                              });
+                                            },
+                                            style: ButtonStyle(
+                                                padding: MaterialStateProperty.all(
+                                                    EdgeInsetsDirectional.zero),
+                                                elevation:
+                                                    MaterialStateProperty.all(
+                                                        4),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        const Color(
+                                                            0xff1870FF)),
+                                                shape: MaterialStateProperty.all(
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(20))))),
+                                            child: Text(
+                                              "Save",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                      fontSize: 13,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ));
+                                      }),
+                            ),
                           ),
                         ),
                       ),
@@ -230,15 +258,18 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   }
 
   Future<void> onOpenPeriodDialogue(BuildContext context) async {
+    final res = await DialogueUtils.selectSchedulePeriodDialogue(
+        context: context,
+        schedulePeriods:
+            _lookingForShiftProvider.schedulePeriodResponseModel!.data!,
+        barrierDismissible: true);
 
-     final res= await   DialogueUtils.selectSchedulePeriodDialogue(context: context, schedulePeriods: _lookingForShiftProvider.schedulePeriodResponseModel!.data!,barrierDismissible: true);
+    if (res != null) {
+      setState(() {
+        schedulePeriod = res ?? "";
+      });
 
-  if(res!=null){
-    setState(() {
-      schedulePeriod = res ?? "";
-    });
-
-    _lookingForShiftProvider.getAllLookingForShift(schedulePeriod);
-  }
+      _lookingForShiftProvider.getAllLookingForShift(schedulePeriod);
+    }
   }
 }

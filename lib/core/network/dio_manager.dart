@@ -44,7 +44,7 @@ class DioManager {
 
   Future<Response<T>> post<T>(
       {required String path,
-      required Map<String, dynamic> jsonBody,
+      required Object jsonBody,
       BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     return await getDio(baseUrlType).post(path, data: jsonBody);
   }

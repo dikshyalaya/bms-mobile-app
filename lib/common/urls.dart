@@ -16,7 +16,7 @@ const availableShiftForDCList = "ShiftManagement/ListAvailableShiftsForDC";
 const availableForShift = "ShiftManagement/AvailableForShift";
 
 
-
+const bool isProduction = false;
 
 // pending invitations =>Shift availibility
 

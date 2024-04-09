@@ -42,7 +42,7 @@ abstract class BaseApiRepository<T> {
   Future<dynamic> post({
     Map<String, String>? params,
     String? pathVariable,
-    required Map<String, dynamic> body,
+    required Object body,
     required ApiCallback<T> apiCallback,
     BaseUrlType baseUrlType = BaseUrlType.DEFAULT,
     ValueChanged<Map<String, dynamic>>? onAccessToken,
