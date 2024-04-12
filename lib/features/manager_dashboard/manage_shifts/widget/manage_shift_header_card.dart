@@ -1,4 +1,3 @@
-import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:flutter/material.dart';
 
 class ManageShiftHeaderCard extends StatelessWidget {
@@ -37,16 +36,29 @@ class ManageShiftHeaderCard extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Container(
-            height: 26,
-            width: 26,
-            padding: const EdgeInsets.all(6),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+          InkWell(
+            child: Container(
+              height: 32,
+              width: 32,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF000000).withOpacity(0.38),
+                    offset: const Offset(0, 0),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              // child: Image.asset('edit'.iconImage()),
+              child: const Icon(
+                Icons.edit_note_outlined,
+                color: Color(0xFF325CA1),
+              ),
             ),
-            child: Image.asset('edit'.iconImage()),
-          )
+          ),
         ],
       ),
     );
