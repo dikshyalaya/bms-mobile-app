@@ -1,5 +1,8 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
+import 'package:beacon_flutter/features/manager_dashboard/house_employees/widget/house_employees_home.dart';
+import 'package:beacon_flutter/features/manager_dashboard/house_shift/widget/house_shift_home.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/widget/manage_shift_home.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/widget/manager_approval_home.dart';
 import 'package:flutter/material.dart';
 
@@ -44,16 +47,25 @@ class GridCard extends StatelessWidget {
                     builder: (context) => const ManagerApprovalHomeScreen()));
             break;
           case 1:
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const MyScheduleHomeScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HouseShiftHomeScreen()));
             break;
           case 2:
             // Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShiftAvailavilityHomeScreen()));
             break;
           case 3:
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const PriorClockHomeScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ManageShiftHomeScreen()));
             break;
           case 4:
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const LookingForShiftHomeScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HouseEmployeeHomeScreen()));
             break;
         }
       },
