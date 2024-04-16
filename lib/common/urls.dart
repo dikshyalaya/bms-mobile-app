@@ -3,6 +3,7 @@ const baseUrl = "http://api-beacon.byterays.com/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
 const clockInUrl = "PunchCard/ListPunchCardShifts";
+const punchInUrl = "PunchCard/PunchIn";
 const incompleteActivitiesUrl = "ShiftManagement/CheckIncompleteActivities";
 const priorClockInUrl = "PunchCard/ClockinHistory";
 const lookingForShiftUrl = "ShiftManagement/LookForShift";
@@ -14,6 +15,7 @@ const createShift = "ShiftManagement/CreateShift";
 const cancelShift = "ShiftManagement/CancelMyShift";
 const availableShiftForDCList = "ShiftManagement/ListAvailableShiftsForDC";
 const availableForShift = "ShiftManagement/AvailableForShift";
+const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
 
 
 const bool isProduction = false;

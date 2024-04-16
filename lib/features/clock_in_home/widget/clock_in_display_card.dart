@@ -16,7 +16,7 @@ class ClockInDisplayCard extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         final clockInProvider = Provider.of<CLockInProvider>(context,listen: false);
-        BottomModalSheetUtils.onOpenBottomModalSheet(context,  ClockInForm(niMealResonList: clockInProvider.noMealReasonResponseModel?.data??[],clockInResponse: clockInResponse,),);
+        BottomModalSheetUtils.onOpenBottomModalSheet(context,  ClockInForm(niMealResonList: clockInProvider.noMealReasonResponseModel?.data??[],clockInResponse: clockInResponse,cLockInProvider: clockInProvider,),);
       },
       child: SizedBox(
         // height: 78,

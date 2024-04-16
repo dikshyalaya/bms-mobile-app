@@ -1,14 +1,21 @@
+import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
+import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
+import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ClockInForm extends StatefulWidget {
   final List<NoMealResponseModel> niMealResonList;
+
   final ClockInResponse? clockInResponse;
+
+  final CLockInProvider cLockInProvider;
   const ClockInForm(
-      {Key? key, required this.niMealResonList, this.clockInResponse})
+      {Key? key, required this.niMealResonList, this.clockInResponse,required this.cLockInProvider})
       : super(key: key);
 
   @override
@@ -20,6 +27,7 @@ class _ClockInFormState extends State<ClockInForm> {
   String? endTime;
   String? mealTime;
   String? noMealReason;
+  bool isSaving = false;
 
   @override
   void initState() {
@@ -32,6 +40,7 @@ class _ClockInFormState extends State<ClockInForm> {
 
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: 430,
       width: MediaQuery.of(context).size.height,
@@ -155,24 +164,51 @@ class _ClockInFormState extends State<ClockInForm> {
                   child: SizedBox(
                       height: 40,
                       width: 94.11,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff1870FF)),
-                              shape: MaterialStateProperty.all(
-                                  const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))))),
-                          onPressed: () {
-                            Navigator.pop(context, "save");
-                          },
-                          child: const Text(
-                            "Save",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ))),
+                      child: IfElseBuilder(
+                        condition: isSaving,
+                        ifBuilder: (context)=>const Center(child: CircularProgressIndicator(),),
+                        elseBulider: (context) {
+                          return ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xff1870FF)),
+                                  shape: MaterialStateProperty.all(
+                                      const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))))),
+                              onPressed: () async{
+                                setState(() {
+                                  isSaving =true;
+                                });
+                                if((startTime!=null&&endTime!=null&&mealTime!=null)){
+                                  if(mealTime=="None"&&noMealReason==null){
+                                    shoErrorToast("Enter valid input");
+                                  }else{
+                                 await  widget.cLockInProvider.punchIn(widget.clockInResponse?.id??-1, startTime??'', endTime??'', mealTime??'', noMealReason??'',(val){
+                                   if(val){
+                                     Navigator.pop(context, "save");
+                                   }
+                                 });
+                                  }
+
+                                }else{
+                                  shoErrorToast("Enter valid input");
+                                }
+                                setState(() {
+                                  isSaving =false;
+                                });
+
+
+                              },
+                              child: const Text(
+                                "Save",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ));
+                        }
+                      )),
                 )
               ],
             ),

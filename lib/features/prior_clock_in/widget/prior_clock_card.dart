@@ -9,9 +9,6 @@ class PriorClockInCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
-
-      // surfaceTintColor: const Color(0xff7A7A7A),
       margin: EdgeInsets.zero,
       decoration: BoxDecoration(
           color: Colors.white,

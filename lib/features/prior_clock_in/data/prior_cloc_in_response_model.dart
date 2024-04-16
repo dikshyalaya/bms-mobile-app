@@ -9,7 +9,7 @@ PriorClockInResponseModel priorClockInResponseModelFromJson(String str) => Prior
 String priorClockInResponseModelToJson(PriorClockInResponseModel data) => json.encode(data.toJson());
 
 class PriorClockInResponseModel {
-  bool error;
+  bool? error;
   String message;
   List<PriorClockInModel>? data;
   int currentPage;

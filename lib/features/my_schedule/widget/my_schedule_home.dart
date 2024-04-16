@@ -22,7 +22,7 @@ class MyScheduleHomeScreen extends StatelessWidget {
       ChangeNotifierProxyProvider<AuthProvider, AvailableShiftProvider>(
         update: (_, authProvider, clockInProvide) {
           return AvailableShiftProvider(authProvider.bmsUserModel?.empId ?? 0)
-            ..getAvailableShiftsForDcModel();
+            ..getAvailableShiftsForDcModel()..getListHouseForDCAddShift();
         },
         lazy: false,
         create: (_) => AvailableShiftProvider(0),
@@ -36,7 +36,8 @@ class MyScheduleHomeScreen extends StatelessWidget {
                     DialogueUtils.onPressedMyScheduleDialogue(context: context,onSaveSchedule: (){
                       Navigator.pop(context);
                       DialogueUtils.successMessageDialogue(context: context, successMessage: "Shift Added Successfully.");
-                    });
+                    },listHouseForDcAddShiftModel: Provider.of<AvailableShiftProvider>(context,
+                        listen: false).listHouseForDCAddShiftModel);
                   },
                   child: SizedBox(
                     height: 34,
@@ -69,7 +70,7 @@ class MyScheduleHomeScreen extends StatelessWidget {
                     return ServerResponseBuilder(
                         builder: (context) =>   Padding(
                           padding: const EdgeInsetsDirectional.symmetric(horizontal: 12,vertical: 22),
-                          child: ListView.builder(itemBuilder: (context,index)=> MySchedulecard(scheduleCardModel: availableShiftsForDcModel.data![index],),itemCount: availableShiftsForDcModel.data!.length,),
+                          child: ListView.builder(itemBuilder: (context,index)=> MySchedulecard(scheduleCardModel: availableShiftsForDcModel.data![index],index: index,),itemCount: availableShiftsForDcModel.data!.length,),
                         ),
                         isDataFetching: isDataFetching,
                         isNullData: availableShiftsForDcModel?.data == null);

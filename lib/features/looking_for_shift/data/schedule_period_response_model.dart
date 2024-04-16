@@ -9,7 +9,7 @@ SchedulePeriodResponseModel schedulePeriodResponseModelFromJson(String str) => S
 String schedulePeriodResponseModelToJson(SchedulePeriodResponseModel data) => json.encode(data.toJson());
 
 class SchedulePeriodResponseModel {
-  bool error;
+  bool? error;
   String message;
   List<SchedulePeriod>? data;
   int currentPage;

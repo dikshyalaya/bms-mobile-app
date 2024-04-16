@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 class MySchedulecard extends StatelessWidget {
   final ScheduleCardModel scheduleCardModel;
-  const MySchedulecard({Key? key,required this.scheduleCardModel}) : super(key: key);
+  final int index;
+  const MySchedulecard({Key? key,required this.scheduleCardModel,required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +56,18 @@ class MySchedulecard extends StatelessWidget {
             ),
           ),
           Align(
+
             alignment: Alignment.center,
             child: SizedBox(
               height: 30.7,
               width: 125.47,
               child: IfElseBuilder(
-                condition: availableShiftProvider.isDataPosting,
+                condition: availableShiftProvider.isDataPosting&&index==availableShiftProvider.selectedIndex,
                 ifBuilder:(context)=>const Center(child:  CircularProgressIndicator()) ,
                 elseBulider: (context) {
                   return ElevatedButton(
                       onPressed: () {
+                        availableShiftProvider.selectedIndex = availableShiftProvider.availableShiftsForDcModel.data!.indexOf(scheduleCardModel);
                        availableShiftProvider.cancelShift(scheduleCardModel.id??-1);
                       },
                       style: ButtonStyle(

@@ -9,7 +9,7 @@ NoMealReasonResponseModel noMealReasonResponseModelFromJson(String str) => NoMea
 String noMealReasonResponseModelToJson(NoMealReasonResponseModel data) => json.encode(data.toJson());
 
 class NoMealReasonResponseModel {
-  bool error;
+  bool? error;
   String message;
   List<NoMealResponseModel> ?data;
   int currentPage;

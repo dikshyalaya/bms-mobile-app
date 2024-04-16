@@ -9,7 +9,7 @@ ClockInResponseModel clockInResponseModelFromJson(String str) => ClockInResponse
 String clockInResponseModelToJson(ClockInResponseModel data) => json.encode(data.toJson());
 
 class ClockInResponseModel {
-  bool error;
+  bool? error;
   String message;
   List<ClockInResponse>? data;
   int currentPage;

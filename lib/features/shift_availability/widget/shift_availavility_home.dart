@@ -13,7 +13,7 @@ class ShiftAvailabilityHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return  ScaffoldBackGroundWrapper(
         appBar: const BeaconAppBar(
-          title: "Shift Availablity",
+          title: "Shift Availability",
           leadingIcon: AppBarLeadingIcon(),
 
         ),

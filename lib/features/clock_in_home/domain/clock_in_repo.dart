@@ -29,3 +29,12 @@ class NoMealReasonRepo extends BaseApiRepository<Map<String, dynamic>> {
       return noMealReasonUrl;
   }
 }
+class PunchInRepo extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+      return punchInUrl;
+  }
+}
