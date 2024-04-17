@@ -1,4 +1,6 @@
-const baseUrl = "http://100.25.49.138/BeaconMobile/api/";
+const baseUrl =
+//"http://100.25.49.138/BeaconMobile/api/";
+    "http://api-beacon.byterays.com/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
 const clockInUrl = "ShiftInfo/ListPunchCardShifts";
@@ -9,6 +11,9 @@ const schedulePeriodUrl = "ShiftInfo/SchedulePeriodsLookingForShift";
 const noMealReasonUrl = "ShiftInfo/MasterLookup/NoBreakReason";
 const managerPermission = "Authentication/GetPermissions";
 const systemSettings = "SystemSettings/DSPSwitchBoardPageSettings";
+
+//Manager Dashboard Urls
+const accountHouses = "Manager/ShiftManagement/LoadAccounts/";
 
 
 

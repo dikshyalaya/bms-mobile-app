@@ -8,6 +8,7 @@ import 'package:beacon_flutter/features/dashboard/domain/systemSetting_provider.
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/domain/manager_permission_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
 import 'package:beacon_flutter/utils/themes.dart';
@@ -20,7 +21,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 
 Future<bool> handleLocationPermission() async {
   bool serviceEnabled;
@@ -42,6 +42,7 @@ Future<bool> handleLocationPermission() async {
   }
   return true;
 }
+
 late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -66,7 +67,7 @@ void listenFCMForeground() async {
               // TODO add a proper drawable resource to android, for now using
               //      one that already exists in example app.
               icon: '@drawable/app_icon',
-              color:Colors.transparent,
+              color: Colors.transparent,
               importance: Importance.max),
         ),
       );
@@ -74,14 +75,14 @@ void listenFCMForeground() async {
   });
 }
 
-void main() async{
-  bool isLoggedIn=false;
+void main() async {
+  bool isLoggedIn = false;
   // await handleLocationPermission();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
   await BMSHiveModel.init();
-  final accessToken = await  BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
+  final accessToken = await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
   isLoggedIn = accessToken?.isNotEmpty ?? false;
   await Firebase.initializeApp();
   PermissionStatus status = await Permission.notification.request();
@@ -101,7 +102,7 @@ void main() async{
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -120,69 +121,64 @@ void main() async{
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   LocalNotificationService.initialize();
-  runApp( MyApp(isLoggedIn: isLoggedIn,));
-
+  runApp(MyApp(
+    isLoggedIn: isLoggedIn,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({key,required this.isLoggedIn});
+  const MyApp({key, required this.isLoggedIn});
   @override
   Widget build(BuildContext context) {
-
     // FlutterNativeSplash.remove();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()..getUserDetail()),
-        ChangeNotifierProvider<ManagePermissionProvider>(create: (_) => ManagePermissionProvider()..getManagerPermission()),
-        ChangeNotifierProvider<SystemSettingProvider>(create: (_) => SystemSettingProvider()..getSystemSettings()),
-    ChangeNotifierProxyProvider<AuthProvider,
-        LookingForShiftProvider>(
-    update: (_, authProvider, clockInProvide) {
-    return LookingForShiftProvider(authProvider.bmsUserModel?.empId??0);
-    },
-    lazy: false,
-    create: (_) => LookingForShiftProvider(
-    0
-    )..getAllSchedulePeriods()),
+        ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider()..getUserDetail()),
+        ChangeNotifierProvider<ManagePermissionProvider>(
+            create: (_) => ManagePermissionProvider()..getManagerPermission()),
+        ChangeNotifierProvider<SystemSettingProvider>(
+            create: (_) => SystemSettingProvider()..getSystemSettings()),
+        ChangeNotifierProxyProvider<AuthProvider, LookingForShiftProvider>(
+            update: (_, authProvider, clockInProvide) {
+              return LookingForShiftProvider(
+                  authProvider.bmsUserModel?.empId ?? 0);
+            },
+            lazy: false,
+            create: (_) => LookingForShiftProvider(0)..getAllSchedulePeriods()),
         ChangeNotifierProvider<NavigationHandler>(
             create: (_) => NavigationHandler()),
-
-
+        ChangeNotifierProvider<ManagerApprovalProvider>(
+            create: (_) => ManagerApprovalProvider()),
       ],
-      child:
-      Consumer<NavigationHandler>(
+      child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
-            final authProvider = Provider.of<AuthProvider>(context,listen: false);
-            return MaterialApp(
-              title: 'Beacon',
-              debugShowCheckedModeBanner: false,
-              theme: defaultLightTheme,
-              home:isLoggedIn
-                  ? IfElseBuilder(
-                condition: authProvider.bmsUserModel?.userTypeId==1,
-                ifBuilder: (context)=>const DashBoardScreen(),
-                    elseBulider: (context) {
-                    return  IfElseBuilder(
-                          condition: authProvider.bmsUserModel?.userTypeId==4,
-                          ifBuilder: (context)=>const ManagerDashBoardScreen(),
-                          elseBulider: (context) {
-                            return EmptyDashBoard(
-                              key: key,
-                            );
-                          }
-                      ) ;
-                    }
-                  )
-                  : LoginScreen(
-                key: key,
-              ),
-
-            );
-          }),
-
-
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        return MaterialApp(
+          title: 'Beacon',
+          debugShowCheckedModeBanner: false,
+          theme: defaultLightTheme,
+          home: isLoggedIn
+              ? IfElseBuilder(
+                  condition: authProvider.bmsUserModel?.userTypeId == 1,
+                  ifBuilder: (context) => const DashBoardScreen(),
+                  elseBulider: (context) {
+                    return IfElseBuilder(
+                        condition: authProvider.bmsUserModel?.userTypeId == 4,
+                        ifBuilder: (context) => const ManagerDashBoardScreen(),
+                        elseBulider: (context) {
+                          return EmptyDashBoard(
+                            key: key,
+                          );
+                        });
+                  })
+              : LoginScreen(
+                  key: key,
+                ),
+        );
+      }),
     );
   }
 }

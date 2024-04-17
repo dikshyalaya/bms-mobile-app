@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/widget/manager_approval_card.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
     super.initState();
   }
 
-  @override
+  // @override
   // void didChangeDependencies() {
   //   DialogueUtils.managerApprovalFilterDialogue(
   //     context: context,
@@ -38,6 +39,7 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ManagerApprovalProvider().getAccountHouses();
     return ScaffoldBackGroundWrapper(
       appBar: BeaconAppBar(
         title: "Manager Approval",
