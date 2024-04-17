@@ -1,6 +1,6 @@
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
-import 'package:beacon_flutter/features/my_schedule/domain/AvailableShiftProvider.dart';
+import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_card.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class MySchedulecard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final availableShiftProvider = Provider.of<AvailableShiftProvider>(context,listen: true);
+    final availableShiftProvider = Provider.of<MyScheduleProvider>(context,listen: true);
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

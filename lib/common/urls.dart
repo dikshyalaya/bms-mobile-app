@@ -16,6 +16,7 @@ const cancelShift = "ShiftManagement/CancelMyShift";
 const availableShiftForDCList = "ShiftManagement/ListAvailableShiftsForDC";
 const availableForShift = "ShiftManagement/AvailableForShift";
 const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
+const myScheduleList = "ShiftManagement/GetMySchedules";
 
 
 const bool isProduction = false;

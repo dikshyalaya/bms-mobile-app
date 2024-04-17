@@ -9,7 +9,7 @@ LookForShiftResponseModel lookForShiftResponseModelFromJson(String str) => LookF
 String lookForShiftResponseModelToJson(LookForShiftResponseModel data) => json.encode(data.toJson());
 
 class LookForShiftResponseModel {
-  bool error;
+  bool? error;
   String message;
   List<LookForShiftModel>? data;
   int currentPage;

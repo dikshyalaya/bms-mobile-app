@@ -5,14 +5,14 @@ import 'package:beacon_flutter/core/network/network_state.dart';
 import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
-import 'package:beacon_flutter/features/my_schedule/domain/available_shift_repo.dart';
+import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class AvailableShiftProvider extends ChangeNotifier {
+class MyScheduleProvider extends ChangeNotifier {
   final int dcId;
 
-  AvailableShiftProvider(this.dcId);
+  MyScheduleProvider(this.dcId);
 
   bool isDataFetching = false;
   bool isDataPosting = false;
@@ -47,8 +47,8 @@ class AvailableShiftProvider extends ChangeNotifier {
 
   Future<BMSResponse<AvailableShiftsForDcModel>>
       getAvailableShiftsForDcModel() async {
-    final AvailableShiftRepo availableShiftRepo =
-        AvailableShiftRepo(dcId.toString());
+    final MyScheduleRepo availableShiftRepo =
+        MyScheduleRepo(dcId.toString());
     setLoading(true);
     await availableShiftRepo.fetch(
         params: {},

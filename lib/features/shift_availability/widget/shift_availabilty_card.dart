@@ -1,9 +1,11 @@
+import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:flutter/material.dart';
 
 import 'shift_availability_card_header.dart';
 
 class ShiftAvailabilityCard extends StatefulWidget {
-  const ShiftAvailabilityCard({Key? key}) : super(key: key);
+  final ScheduleCardModel scheduleCardModel;
+  const ShiftAvailabilityCard({Key? key,required this.scheduleCardModel}) : super(key: key);
 
   @override
   State<ShiftAvailabilityCard> createState() => _ShiftAvailabilityCardState();
@@ -28,7 +30,7 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
           borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
-          const ShiftAvailabilityCardHeader(),
+           ShiftAvailabilityCardHeader(scheduleCardModel: widget.scheduleCardModel,),
           const SizedBox(
             height: 6,
           ),
@@ -37,15 +39,15 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
             children: [
               Padding(
                   padding: const EdgeInsetsDirectional.only(start: 57),
-                  child: richText('Shift Date: : ', '2/10/2024')),
+                  child: richText('Shift Date: : ', widget.scheduleCardModel.startDateTime??'')),
               buildDivider(),
               Padding(
                   padding: const EdgeInsetsDirectional.only(start: 57),
-                  child: richText("Shift Time: ", '08:00 AM - 04:00 PM ')),
+                  child: richText("Shift Time: ", '${widget.scheduleCardModel.startTime??''} - ${widget.scheduleCardModel.endTime??''} ')),
               buildDivider(),
               Padding(
                   padding: const EdgeInsetsDirectional.only(start: 57),
-                  child: richText("Shift Date:  ", "2/10/2024")),
+                  child: richText("Shift Day:  ", "Tuesday")),
             ],
           ),
           const SizedBox(

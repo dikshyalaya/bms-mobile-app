@@ -9,7 +9,7 @@ import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart'
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
-import 'package:beacon_flutter/features/my_schedule/domain/AvailableShiftProvider.dart';
+import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
@@ -271,7 +271,7 @@ class DialogueUtils {
       required VoidCallback onSaveSchedule,
       ListHouseForDcAddShiftModel? listHouseForDcAddShiftModel}) async {
     final availableShiftsProvider =
-        Provider.of<AvailableShiftProvider>(context, listen: false);
+        Provider.of<MyScheduleProvider>(context, listen: false);
     List<String> listHouse = listHouseForDcAddShiftModel?.data
             ?.map((element) => element.accountNumber ?? '')
             .toList() ??

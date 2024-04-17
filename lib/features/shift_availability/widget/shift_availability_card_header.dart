@@ -1,8 +1,10 @@
+import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:flutter/material.dart';
 
 class ShiftAvailabilityCardHeader extends StatelessWidget {
+  final ScheduleCardModel scheduleCardModel;
 
-  const ShiftAvailabilityCardHeader({Key? key}) : super(key: key);
+  const ShiftAvailabilityCardHeader({Key? key,required this.scheduleCardModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +24,18 @@ class ShiftAvailabilityCardHeader extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,
-      child:  const Column(
+      child:   Column(
         children: [
           Text(
-            "2/10/2024 - 2/16/2024",
-            style: TextStyle(
+            "${scheduleCardModel?.schedulePeriod}",
+            style: const TextStyle(
                 color: Color(0xff373737),
                 fontSize: 13,
                 fontWeight: FontWeight.w500),
           ),
-          Text(
-            "Adapt - Brooklyn IRA (Apt 6N)",
-            style: TextStyle(
+           Text(
+            "${scheduleCardModel.accountName??''} ${scheduleCardModel.houseName}",
+            style: const TextStyle(
                 color: Color(0xff1B1B1B),
                 fontSize: 15,
                 fontWeight: FontWeight.bold),
@@ -41,11 +43,11 @@ class ShiftAvailabilityCardHeader extends StatelessWidget {
           // SizedBox(
           //   height: 3,
           // ),
-          Expanded(
+           Expanded(
             child: Text(
-              "175 Willoughby St,Brooklyn,NY 11201",
+              scheduleCardModel.houseAddress??'',
               maxLines: 1,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xff1B1B1B),
                 fontSize: 13,
               ),
