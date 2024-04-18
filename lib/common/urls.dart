@@ -15,6 +15,7 @@ const createShift = "ShiftManagement/CreateShift";
 const cancelShift = "ShiftManagement/CancelMyShift";
 const availableShiftForDCList = "ShiftManagement/ListAvailableShiftsForDC";
 const availableForShift = "ShiftManagement/AvailableForShift";
+const lookingForShift = "ShiftManagement/UpdateLookForShift";
 const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
 const myScheduleList = "ShiftManagement/GetMySchedules";
 

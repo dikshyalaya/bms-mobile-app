@@ -31,6 +31,6 @@ class PostAvailableForShiftReo extends BaseApiRepository<Map<String, dynamic>> {
 
   @override
   String path(Map<String, String>? params, String? pathVariable) {
-    return availableForShift;
+    return lookingForShift;
   }
 }

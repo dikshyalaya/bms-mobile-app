@@ -68,4 +68,28 @@ class AvailableShiftProvider extends ChangeNotifier {
     return BMSResponse(body: availableShiftsForDcModel);
   }
 
+
+  Future<void> postShiftAvailability(List<int> availableShifts,VoidCallback onCompleteCallBack) async {
+    final PostShiftAvailabilityRepo postShiftAvailabilityRepo = PostShiftAvailabilityRepo();
+    setDataPosting(true);
+    await postShiftAvailabilityRepo.post(
+        apiCallback: (networkState) {
+          onApiCallback<dynamic>(
+            networkState: networkState,
+            onLoadedState: (loadedState) {
+              setDataPosting(false);
+              onCompleteCallBack.call();
+            },
+            onErrorState: (errorState) {
+              setDataPosting(false);
+              shoErrorToast(errorState.message);
+            },
+            onLoadingState: (loadingState) {},
+          );
+        },
+        body:
+        availableShifts
+    );
+    setDataPosting(false);
+  }
 }

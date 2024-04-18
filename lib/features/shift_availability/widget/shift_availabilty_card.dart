@@ -5,7 +5,8 @@ import 'shift_availability_card_header.dart';
 
 class ShiftAvailabilityCard extends StatefulWidget {
   final ScheduleCardModel scheduleCardModel;
-  const ShiftAvailabilityCard({Key? key,required this.scheduleCardModel}) : super(key: key);
+  final Function(bool,int)onCardAvailable;
+  const ShiftAvailabilityCard({Key? key,required this.scheduleCardModel,required this.onCardAvailable}) : super(key: key);
 
   @override
   State<ShiftAvailabilityCard> createState() => _ShiftAvailabilityCardState();
@@ -86,6 +87,8 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
                             onChanged: (bool val) {
                               setState(() {
                                 isTrue = val;
+                                widget.onCardAvailable.call(
+                                    val, widget.scheduleCardModel.id ?? -0);
                               });
                             }),
                       ),
