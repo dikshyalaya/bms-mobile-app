@@ -98,16 +98,16 @@ class GridCard extends StatelessWidget {
             }
             break;
           case 4:
-            if (systemSettingsProvider
-                    .systemSettingsModel?.siteSetting.lookingForShift.enable ??
-                false) {
-              onSystemSettingsDialogue(context);
-            } else {
+            // if (systemSettingsProvider
+            //         .systemSettingsModel?.siteSetting.lookingForShift.enable ??
+            //     false) {
+            //   onSystemSettingsDialogue(context);
+            // } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const LookingForShiftHomeScreen()));
-            }
+            // }
             break;
         }
       },
@@ -131,15 +131,17 @@ class GridCard extends StatelessWidget {
           ),
           SizedBox(
             height: 24,
-            child: Text(
-              cardModel.title,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Colors.white,
-
-                    fontSize: 13,
-                  ),
+            child: FittedBox(
+              child: Text(
+                cardModel.title,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Colors.white,
+              
+                      fontSize: 13,
+                    ),
+              ),
             ),
           )
         ],

@@ -6,10 +6,12 @@ import 'dashboard_navigator_card.dart';
 class BottomCard extends StatelessWidget {
   final int index;
   final CardModel cardModel;
+  final bool isFromPopUp;
 
   const BottomCard(
       {Key? key,
       required this.index,
+        this.isFromPopUp=false,
       required this.cardProvider,
       required this.cardModel})
       : super(key: key);
@@ -27,7 +29,7 @@ class BottomCard extends StatelessWidget {
         elevation: 4,
         shadowColor: Colors.green,
         color: cardModel.bgColor,
-        margin: const EdgeInsetsDirectional.symmetric(horizontal: 24),
+        margin:  EdgeInsetsDirectional.symmetric(horizontal: isFromPopUp?8:24),
         child: SizedBox(
           height: 98,
           width: double.infinity,
@@ -40,7 +42,7 @@ class BottomCard extends StatelessWidget {
                     cardModel.title,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: const Color(0xff1E1D1D),
-                        fontSize: 22,
+                        fontSize: isFromPopUp?19:22,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -52,15 +54,10 @@ class BottomCard extends StatelessWidget {
                   width: 50,
                   decoration: const BoxDecoration(
                       shape: BoxShape.circle, color: Colors.white),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.navigate_next_sharp,
-                      color: Color(0xff325CA1),
-                      size: 44,
-                    ),
-                    onPressed: () {},
+                  child: const Icon(
+                    Icons.navigate_next_sharp,
+                    color: Color(0xff325CA1),
+                    size: 44,
                   ),
                 )
               ],

@@ -16,6 +16,15 @@ class LookingForShiftProvider extends ChangeNotifier {
 
   bool isDataFetching = false;
   bool isDataPosting = false;
+  List<int> lookForShiftIds = [];
+  void addRemoveShiftIds(bool add, int id){
+    if(add){
+      lookForShiftIds.add(id);
+    }else{
+      lookForShiftIds.remove(id);
+    }
+    notifyListeners();
+  }
   SchedulePeriodResponseModel? _schedulePeriodResponseModel;
   LookForShiftResponseModel? _lookForShiftResponseModel;
 

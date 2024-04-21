@@ -17,6 +17,16 @@ class AvailableShiftProvider extends ChangeNotifier {
   bool isDataFetching = false;
   bool isDataPosting = false;
   int selectedIndex = -1;
+  List<int> shiftIds = [];
+
+  void addRemoveShiftId(bool add,int id){
+    if(add) {
+      shiftIds.add(id);
+    }else{
+      shiftIds.remove(id);
+    }
+    notifyListeners();
+  }
 
   AvailableShiftsForDcModel? _availableShiftsForDcModel;
 

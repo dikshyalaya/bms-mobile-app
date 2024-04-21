@@ -24,7 +24,6 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   late LookingForShiftProvider _lookingForShiftProvider;
   String schedulePeriod = "";
   bool initialState = true;
-  List<int> lookForShiftIds = [];
 
   @override
   void initState() {
@@ -164,9 +163,7 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                                     .lookForShiftResponseModel
                                                     ?.data?[index],
                                             onSwitchEnabled: (isEnabled, id) {
-                                              isEnabled
-                                                  ? lookForShiftIds.add(id)
-                                                  : lookForShiftIds.remove(id);
+                                             _lookingForShiftProvider.addRemoveShiftIds(isEnabled, id);
                                             },
                                           ),
                                       padding:
@@ -195,27 +192,29 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                           child: SizedBox(
                             height: 40,
                             width: 163,
-                            child: Selector<LookingForShiftProvider, bool>(
+                            child: Selector<LookingForShiftProvider, List<int>>(
                               selector: (context, provider) =>
-                                  provider.isDataPosting,
-                              builder: (BuildContext context, bool isDataPosting,
+                                  provider.lookForShiftIds,
+                              builder: (BuildContext context, lookForShiftIds,
                                       Widget? child) =>
                                   IfElseBuilder(
-                                      condition: isDataPosting,
+                                      condition: Provider.of<LookingForShiftProvider>(context,listen: true).isDataPosting,
                                       ifBuilder: (context) =>
                                           const Center(child: CircularProgressIndicator()),
                                       elseBulider: (context) {
                                         return ElevatedButton(
                                             onPressed: () {
-                                              _lookingForShiftProvider
-                                                  .postAvailableForShift(
-                                                      lookForShiftIds, () {
-                                                DialogueUtils
-                                                    .successMessageDialogue(
-                                                        context: context,
-                                                        successMessage:
-                                                            "Availability Saved Successfully.");
-                                              });
+                                             if(lookForShiftIds.isNotEmpty){
+                                               _lookingForShiftProvider
+                                                   .postAvailableForShift(
+                                                   lookForShiftIds, () {
+                                                 DialogueUtils
+                                                     .successMessageDialogue(
+                                                     context: context,
+                                                     successMessage:
+                                                     "Availability Saved Successfully.");
+                                               });
+                                             }
                                             },
                                             style: ButtonStyle(
                                                 padding: MaterialStateProperty.all(
@@ -225,8 +224,8 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                                         4),
                                                 backgroundColor:
                                                     MaterialStateProperty.all(
-                                                        const Color(
-                                                            0xff1870FF)),
+                                                      lookForShiftIds.isNotEmpty?  const Color(
+                                                            0xff1870FF):Colors.grey),
                                                 shape: MaterialStateProperty.all(
                                                     const RoundedRectangleBorder(
                                                         borderRadius:

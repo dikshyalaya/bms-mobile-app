@@ -38,10 +38,10 @@ class DashBoardScreen extends StatelessWidget {
               ],
             ),
           ),
-          child: const Column(
+          child:  Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              const Expanded(
                 child: DashBoardGrid(),
               ),
               DashBoardNavigatorCard(),

@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DashBoardNavigatorCard extends StatelessWidget {
-  const DashBoardNavigatorCard({Key? key}) : super(key: key);
+  bool isFromPopUp;
+   DashBoardNavigatorCard({Key? key,this.isFromPopUp=false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +51,12 @@ class DashBoardNavigatorCard extends StatelessWidget {
                         const EdgeInsetsDirectional.symmetric(vertical: 30),
                     decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomLeft: Radius.zero,
-                            bottomRight: Radius.zero),
-                        boxShadow: const [
+                        borderRadius:  BorderRadius.only(
+                            topLeft: const Radius.circular(12),
+                            topRight:const Radius.circular(12),
+                            bottomLeft: isFromPopUp? const Radius.circular(12):Radius.zero,
+                            bottomRight:isFromPopUp? const Radius.circular(12): Radius.zero),
+                        boxShadow:isFromPopUp?const[]: const [
                           BoxShadow(
                               color: Colors.grey,
                               offset: Offset(-3, -3),
@@ -66,6 +67,7 @@ class DashBoardNavigatorCard extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) => BottomCard(
                         cardProvider: cardProvider,
+                        isFromPopUp: isFromPopUp,
                         index: index,
                         cardModel: navigatorCards[index],
                       ),

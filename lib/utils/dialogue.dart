@@ -919,7 +919,7 @@ class DialogueUtils {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
-                child: const DashBoardNavigatorCard(),
+                child:  DashBoardNavigatorCard(isFromPopUp: true,),
               ),
             ));
   }
