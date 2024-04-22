@@ -2,27 +2,35 @@ import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_card.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
-
 
 import 'package:beacon_flutter/features/my_schedule/widget/My_schedule_header_card.dart';
 import 'package:provider/provider.dart';
 
 class MySchedulecard extends StatelessWidget {
   final ScheduleCardModel scheduleCardModel;
+  final Function onFinished;
   final int index;
-  const MySchedulecard({Key? key,required this.scheduleCardModel,required this.index}) : super(key: key);
+
+  const MySchedulecard(
+      {Key? key,
+      required this.scheduleCardModel,
+      required this.index,
+      required this.onFinished})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final availableShiftProvider = Provider.of<MyScheduleProvider>(context,listen: true);
+    final availableShiftProvider =
+        Provider.of<MyScheduleProvider>(context, listen: true);
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyScheduleCardHeader(scheduleCardModel:scheduleCardModel),
+          MyScheduleCardHeader(scheduleCardModel: scheduleCardModel),
           const SizedBox(
             height: 11,
           ),
@@ -31,8 +39,8 @@ class MySchedulecard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Text(
-                  scheduleCardModel.accountName??'',
+                Text(
+                  scheduleCardModel.accountName ?? '',
                   style: const TextStyle(
                       color: Color(0xff1B1B1B),
                       fontSize: 13,
@@ -41,7 +49,7 @@ class MySchedulecard extends StatelessWidget {
                 const SizedBox(
                   height: 6,
                 ),
-                 Text(
+                Text(
                   "${scheduleCardModel.houseName},${scheduleCardModel.houseAddress}",
                   style: const TextStyle(
                       color: Color(0xff1B1B1B),
@@ -56,39 +64,54 @@ class MySchedulecard extends StatelessWidget {
             ),
           ),
           Align(
-
             alignment: Alignment.center,
             child: SizedBox(
               height: 30.7,
               width: 125.47,
               child: IfElseBuilder(
-                condition: availableShiftProvider.isDataPosting&&index==availableShiftProvider.selectedIndex,
-                ifBuilder:(context)=>const Center(child:  CircularProgressIndicator()) ,
-                elseBulider: (context) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        availableShiftProvider.selectedIndex = availableShiftProvider.availableShiftsForDcModel.data!.indexOf(scheduleCardModel);
-                       availableShiftProvider.cancelShift(scheduleCardModel.id??-1);
-                      },
-                      style: ButtonStyle(
-                          padding:
-                              MaterialStateProperty.all(EdgeInsetsDirectional.zero),
-                          elevation: MaterialStateProperty.all(4),
-                          backgroundColor:
-                              MaterialStateProperty.all(const Color(0xff3B85FF)),
-                          shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20))))),
-                      child: Text(
-                        "Cancel Shift",
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ));
-                }
-              ),
+                  condition: availableShiftProvider.isDataPosting &&
+                      index == availableShiftProvider.selectedIndex,
+                  ifBuilder: (context) =>
+                      const Center(child: CircularProgressIndicator()),
+                  elseBulider: (context) {
+                    return ElevatedButton(
+                        onPressed: () async {
+                          final isYes =
+                              await DialogueUtils.confirmMessageDialogue(
+                                  context: context);
+
+                          if (isYes) {
+                            availableShiftProvider.selectedIndex =
+                                availableShiftProvider
+                                    .availableShiftsForDcModel.data!
+                                    .indexOf(scheduleCardModel);
+                            availableShiftProvider
+                                .cancelShift(scheduleCardModel.id ?? -1, () {
+                              onFinished.call();
+                            });
+                          }
+                        },
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                EdgeInsetsDirectional.zero),
+                            elevation: MaterialStateProperty.all(4),
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color(0xff3B85FF)),
+                            shape: MaterialStateProperty.all(
+                                const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20))))),
+                        child: Text(
+                          "Cancel Shift",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                        ));
+                  }),
             ),
           ),
           const SizedBox(

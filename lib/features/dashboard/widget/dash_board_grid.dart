@@ -98,16 +98,16 @@ class GridCard extends StatelessWidget {
             }
             break;
           case 4:
-            // if (systemSettingsProvider
-            //         .systemSettingsModel?.siteSetting.lookingForShift.enable ??
-            //     false) {
-            //   onSystemSettingsDialogue(context);
-            // } else {
+            if (systemSettingsProvider
+                    .systemSettingsModel?.siteSetting.lookingForShift.enable ??
+                false) {
+              onSystemSettingsDialogue(context);
+            } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const LookingForShiftHomeScreen()));
-            // }
+            }
             break;
         }
       },

@@ -76,7 +76,7 @@ class MyScheduleProvider extends ChangeNotifier {
     return BMSResponse(body: availableShiftsForDcModel);
   }
 
-  void cancelShift(int shiftId) async {
+  void cancelShift(int shiftId,Function onFinished) async {
     setDataPosting(true);
 
     final CancelShiftRepo cancelShiftRepo = CancelShiftRepo(shiftId);
@@ -85,6 +85,7 @@ class MyScheduleProvider extends ChangeNotifier {
         networkState: networkState,
         onLoadedState: (loadedState) {
           Fluttertoast.showToast(msg: "Successfully cancelled the shift");
+          onFinished.call();
         },
         onErrorState: (errorState) {
           shoErrorToast(errorState.message);
@@ -94,6 +95,8 @@ class MyScheduleProvider extends ChangeNotifier {
     });
     setDataPosting(false);
   }
+
+
 
   Future<BMSResponse<ListHouseForDcAddShiftModel>>
       getListHouseForDCAddShift() async {
@@ -174,5 +177,9 @@ class MyScheduleProvider extends ChangeNotifier {
 
     setDataPosting(false);
 
+  }
+
+  void notify(){
+    futureNotifyListeners();
   }
 }

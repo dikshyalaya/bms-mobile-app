@@ -740,6 +740,105 @@ class DialogueUtils {
             )));
   }
 
+  static Future<bool> confirmMessageDialogue(
+      {required BuildContext context}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          content: Container(
+            width: DimensionUtils.isTab(context)
+                ? _width()
+                : MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 18),
+            decoration: BoxDecoration(
+                 color: Colors.white,
+                borderRadius: BorderRadius.circular(5)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Are you sure want to cancel?",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context,false);
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsetsDirectional.zero),
+                                elevation: MaterialStateProperty.all(4),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xff3B85FF)),
+                                shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))))),
+                            child: Text(
+                              "No",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                            )),
+                      ),
+                    ),
+                    const SizedBox(width: 20,),
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        width: 163,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context,true);
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsetsDirectional.zero),
+                                elevation: MaterialStateProperty.all(4),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xff3B85FF)),
+                                shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))))),
+                            child: Text(
+                              "Yes",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
   static Future<void> showProgressDialogue(
       BuildContext context, String message) async {
     showDialog(

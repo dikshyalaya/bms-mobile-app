@@ -10,9 +10,14 @@ import 'package:provider/provider.dart';
 
 import '../../auth/domain/auth_provider.dart';
 
-class MyScheduleHomeScreen extends StatelessWidget {
+class MyScheduleHomeScreen extends StatefulWidget {
   const MyScheduleHomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MyScheduleHomeScreen> createState() => _MyScheduleHomeScreenState();
+}
+
+class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProxyProvider<AuthProvider, MyScheduleProvider>(
@@ -77,6 +82,11 @@ class MyScheduleHomeScreen extends StatelessWidget {
                                   scheduleCardModel:
                                       availableShiftsForDcModel.data![index],
                                   index: index,
+                                  onFinished: (){
+                                    setState(() {
+
+                                    });
+                                  },
                                 ),
                                 itemCount:
                                     availableShiftsForDcModel.data!.length,

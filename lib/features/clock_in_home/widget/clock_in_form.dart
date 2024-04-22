@@ -180,25 +180,28 @@ class _ClockInFormState extends State<ClockInForm> {
                                 setState(() {
                                   isSaving =true;
                                 });
-                                if((startTime!=null&&endTime!=null&&mealTime!=null)){
-                                  if(mealTime=="None"&&noMealReason==null){
-                                    shoErrorToast("Enter valid input");
+                                if((startTime!=null&&endTime!=null)&&((mealTime=="None"||mealTime==null)&&noMealReason==null)){
+                                  shoErrorToast("Enter valid input");
+                                }else{
+                                  if((startTime!=null)){
+                                    if((mealTime=="None"&&noMealReason==null)){
+                                      shoErrorToast("Enter valid input");
+                                    }else{
+                                      await  widget.cLockInProvider.punchIn(widget.clockInResponse?.id??-1, startTime??'', endTime??'', mealTime??'', noMealReason??'',(val){
+                                        if(val){
+                                          Navigator.pop(context, "save");
+                                        }
+                                      });
+                                    }
+
                                   }else{
-                                 await  widget.cLockInProvider.punchIn(widget.clockInResponse?.id??-1, startTime??'', endTime??'', mealTime??'', noMealReason??'',(val){
-                                   if(val){
-                                     Navigator.pop(context, "save");
-                                   }
-                                 });
+                                    shoErrorToast("Enter valid input");
                                   }
 
-                                }else{
-                                  shoErrorToast("Enter valid input");
                                 }
                                 setState(() {
                                   isSaving =false;
                                 });
-
-
                               },
                               child: const Text(
                                 "Save",
