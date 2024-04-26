@@ -2,20 +2,20 @@ import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/domain/manager_permission_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/widget/manager_dashboard_grid.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../common/widgets/beacon_app_bar.dart';
+import '../../../../common/widgets/beacon_app_bar.dart';
 
 class ManagerDashBoardScreen extends StatelessWidget {
   const ManagerDashBoardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false)
-      ..getUserDetail();
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false)
+    //   ..getUserDetail();
     return ScaffoldBackGroundWrapper(
       child: Scaffold(
         backgroundColor: Colors.transparent,

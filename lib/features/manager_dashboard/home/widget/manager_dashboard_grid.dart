@@ -12,20 +12,21 @@ class ManagerDashBoardGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsetsDirectional.all(14),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 22.0,
-            crossAxisSpacing: 12.0,
-            childAspectRatio: 1 / 1.3),
-        itemCount: newGridCardProviders.length,
-        itemBuilder: (BuildContext ctx, index) {
-          return GridCard(
-            cardModel: newGridCardProviders[index],
-            index: index,
-          );
-        });
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsetsDirectional.all(14),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 22.0,
+          crossAxisSpacing: 12.0,
+          childAspectRatio: 1 / 1.3),
+      itemCount: newGridCardProviders.length,
+      itemBuilder: (BuildContext ctx, index) {
+        return GridCard(
+          cardModel: newGridCardProviders[index],
+          index: index,
+        );
+      },
+    );
   }
 }
 
@@ -50,22 +51,31 @@ class GridCard extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const HouseShiftHomeScreen()));
+                    builder: (context) => const ManageShiftHomeScreen()));
             break;
           case 2:
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>const ShiftAvailavilityHomeScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HouseEmployeeHomeScreen()));
             break;
           case 3:
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ManageShiftHomeScreen()));
+                    builder: (context) => const HouseShiftHomeScreen()));
             break;
           case 4:
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const HouseEmployeeHomeScreen()));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const HouseEmployeeHomeScreen()));
+            break;
+          case 5:
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const HouseEmployeeHomeScreen()));
             break;
         }
       },
@@ -103,8 +113,9 @@ class GridCard extends StatelessWidget {
 
 List<CardModel> newGridCardProviders = [
   CardModel(title: "Manager Approval", asset: "clock-in".pngImage()),
-  CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
-  CardModel(title: "Approval History", asset: "shift-availiability".pngImage()),
   CardModel(title: "Manage Shifts", asset: "prior-clock-in".pngImage()),
   CardModel(title: "House Employees", asset: "add-shift".pngImage()),
+  CardModel(title: "House Shifts", asset: "house-shift".pngImage()),
+  CardModel(title: "Approval History", asset: "shift-availiability".pngImage()),
+  CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
 ];

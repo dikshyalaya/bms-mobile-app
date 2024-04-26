@@ -12,9 +12,9 @@ abstract class BaseApiRepository<T> {
 
   Future<void> fetch(
       {Map<String, String>? params,
-        String? pathVariable,
-        required ApiCallback<T> apiCallback,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      String? pathVariable,
+      required ApiCallback<T> apiCallback,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     apiCallback(NetworkState.loading());
     try {
       String urlPath = path(params, pathVariable);
@@ -122,10 +122,10 @@ abstract class BaseApiRepository<T> {
 
   void put(
       {Map<String, String>? params,
-        String? pathVariable,
-        required Map<String, dynamic> body,
-        required ApiCallback<T> apiCallback,
-        BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
+      String? pathVariable,
+      required Map<String, dynamic> body,
+      required ApiCallback<T> apiCallback,
+      BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
     try {
       apiCallback(NetworkState.loading());
       String urlPath = path(params, pathVariable);

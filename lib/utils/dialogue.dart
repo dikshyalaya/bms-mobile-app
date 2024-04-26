@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
+import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/password_change_field.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
@@ -8,6 +9,7 @@ import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
@@ -270,158 +272,154 @@ class DialogueUtils {
     String? startTime;
     String? endTime;
     return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              content: StatefulBuilder(
-                builder: (context, setState) => Container(
-                  height: 358,
-                  width: DimensionUtils.isTab(context)
-                      ? _width()
-                      : MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: Color(0xffD7ECFF),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 15.0,
-                                  offset: Offset(0.0, 0.75))
-                            ],
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15))),
-                        height: 41,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        child: const Text(
-                          "Add a Shift",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 14.37,
-                      ),
-                      Padding(
-                          padding: const EdgeInsetsDirectional.symmetric(
-                              horizontal: 16),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Was this shift given to you by manager?",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                        color: Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  IfElseBuilder(
-                                      condition: DimensionUtils.isTab(context),
-                                      ifBuilder: (context) => BMSDropDownForm(
-                                            options: const ["Yes", "No"],
-                                            onChooseOptions: (String val) {
-                                              setState(() {
-                                                shiftGivenByManager = val;
-                                              });
-                                            },
-                                            hint: shiftGivenByManager,
-                                          ),
-                                      elseBulider: (context) {
-                                        return Expanded(
-                                            child: BMSDropDownForm(
-                                          options: const ["Yes", "No"],
-                                          onChooseOptions: (String val) {
-                                            setState(() {
-                                              shiftGivenByManager = val;
-                                            });
-                                          },
-                                          hint: shiftGivenByManager,
-                                        ));
-                                      })
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 7.25,
-                              ),
-                              rowBuilder("House", const ["Select", "No"]),
-                              const SizedBox(
-                                height: 7.25,
-                              ),
-                              rowBuilder(
-                                  "Schedule Date", const ["Select", "No"]),
-                              const SizedBox(
-                                height: 7.25,
-                              ),
-                              rowBuilder("Start Time", timeOptions,
-                                  hint: startTime,
-                                  onChooseOption: (String val) {
-                                setState(() {
-                                  startTime = val;
-                                });
-                              }),
-                              const SizedBox(
-                                height: 7.25,
-                              ),
-                              rowBuilder("End Time", timeOptions, hint: endTime,
-                                  onChooseOption: (String val) {
-                                setState(() {
-                                  endTime = val;
-                                });
-                              }),
-                              const SizedBox(
-                                height: 16.25,
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: SizedBox(
-                                    height: 38.33,
-                                    width: 108.05,
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    const Color(0xff3B85FF)),
-                                            shape: MaterialStateProperty.all(
-                                                const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20))))),
-                                        onPressed: () {
-                                          onSaveSchedule.call();
-                                        },
-                                        child: const Text(
-                                          "Save",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ))),
-                              )
-                            ],
-                          ))
-                    ],
+      context: context,
+      builder: (context) => AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        content: StatefulBuilder(
+          builder: (context, setState) => Container(
+            height: 358,
+            width: DimensionUtils.isTab(context)
+                ? _width()
+                : MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      color: Color(0xffD7ECFF),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 15.0,
+                            offset: Offset(0.0, 0.75))
+                      ],
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15))),
+                  height: 41,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "Add a Shift",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
-            ));
+                const SizedBox(
+                  height: 14.37,
+                ),
+                Padding(
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Was this shift given to you by manager?",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Colors.black),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            IfElseBuilder(
+                                condition: DimensionUtils.isTab(context),
+                                ifBuilder: (context) => BMSDropDownForm(
+                                      options: const ["Yes", "No"],
+                                      onChooseOptions: (String val) {
+                                        setState(() {
+                                          shiftGivenByManager = val;
+                                        });
+                                      },
+                                      hint: shiftGivenByManager,
+                                    ),
+                                elseBulider: (context) {
+                                  return Expanded(
+                                      child: BMSDropDownForm(
+                                    options: const ["Yes", "No"],
+                                    onChooseOptions: (String val) {
+                                      setState(() {
+                                        shiftGivenByManager = val;
+                                      });
+                                    },
+                                    hint: shiftGivenByManager,
+                                  ));
+                                })
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 7.25,
+                        ),
+                        rowBuilder("House", const ["Select", "No"]),
+                        const SizedBox(
+                          height: 7.25,
+                        ),
+                        rowBuilder("Schedule Date", const ["Select", "No"]),
+                        const SizedBox(
+                          height: 7.25,
+                        ),
+                        rowBuilder("Start Time", timeOptions, hint: startTime,
+                            onChooseOption: (String val) {
+                          setState(() {
+                            startTime = val;
+                          });
+                        }),
+                        const SizedBox(
+                          height: 7.25,
+                        ),
+                        rowBuilder("End Time", timeOptions, hint: endTime,
+                            onChooseOption: (String val) {
+                          setState(() {
+                            endTime = val;
+                          });
+                        }),
+                        const SizedBox(
+                          height: 16.25,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: SizedBox(
+                            height: 38.33,
+                            width: 108.05,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xff3B85FF)),
+                                  shape: MaterialStateProperty.all(
+                                      const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))))),
+                              onPressed: () {
+                                onSaveSchedule.call();
+                              },
+                              child: const Text(
+                                "Save",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   ///Manager Approval Filter Dialogue
@@ -432,67 +430,153 @@ class DialogueUtils {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-          content: StatefulBuilder(
+        return Dialog(
+          backgroundColor: const Color(0xFF000000).withOpacity(0.25),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 15),
+          child: StatefulBuilder(
             builder: (context, setState) {
-              return Container(
-                width: DimensionUtils.isTab(context)
-                    ? _width()
-                    : MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 14.37),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.symmetric(horizontal: 16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(height: 17),
-                          rowBuilder("Account", const ["Select Account", "No"]),
-                          const SizedBox(height: 7.25),
-                          rowBuilder("House", const ["Select House", "No"]),
-                          const SizedBox(height: 7.25),
-                          const SizedBox(height: 16.25),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: SizedBox(
-                              height: 38.33,
-                              width: 108.05,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color(0xff3B85FF)),
-                                    shape: MaterialStateProperty.all(
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))))),
-                                onPressed: () {
-                                  onSaveSchedule.call();
-                                },
-                                child: const Text(
-                                  "Save",
-                                  style: TextStyle(
+              ManagerApprovalProvider managerApprovalProvider =
+                  Provider.of<ManagerApprovalProvider>(context, listen: false);
+              managerApprovalProvider.getAccountHouses();
+              return Consumer(
+                builder: (context, value, child) => Container(
+                  margin: const EdgeInsets.all(14),
+                  // height: 300,
+                  constraints: const BoxConstraints(
+                    minHeight: 100,
+                    maxHeight: 250,
+                  ),
+                  child: Selector<ManagerApprovalProvider, bool>(
+                    selector: (context, provider) =>
+                        provider.isAccountHousesLoading,
+                    builder: (context, isDataFetching, child) {
+                      final accountHousesData =
+                          Provider.of<ManagerApprovalProvider>(context,
+                                  listen: true)
+                              .accountHousesResponseModel;
+                      return ServerResponseBuilder(
+                        builder: (context) {
+                          return ListView.builder(
+                            itemCount: managerApprovalProvider
+                                    .accountHousesResponseModel?.data?.length ??
+                                0,
+                            itemBuilder: (context, index) {
+                              final currentData =
+                                  accountHousesData?.data?[index];
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    height: 46,
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                    decoration: const BoxDecoration(
                                       color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    )
-                  ],
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '${currentData?.accountNumber}',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                      itemCount:
+                                          currentData?.houses?.length ?? 0,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        final currentHouseData =
+                                            currentData?.houses?[index];
+                                        return Container(
+                                          height: 46,
+                                          margin:
+                                              const EdgeInsets.only(top: 0.3),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFEAEAEA),
+                                            borderRadius: index ==
+                                                    (currentData?.houses
+                                                                ?.length ??
+                                                            0) -
+                                                        1
+                                                ? const BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  )
+                                                : null,
+                                          ),
+                                          child: ListTile(
+                                            leading: Container(
+                                              height: 32,
+                                              width: 32,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              // child: Image.asset('edit'.iconImage()),
+                                              child: const Icon(
+                                                Icons.home,
+                                                color: Color(0xFF325CA1),
+                                              ),
+                                            ),
+                                            title: Text(
+                                              '${currentHouseData?.accountNumber}',
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            trailing: Container(
+                                              height: 32,
+                                              width: 32,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              // child: Image.asset('edit'.iconImage()),
+                                              child: const Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                color: Color(0xFF325CA1),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              managerApprovalProvider
+                                                  .getListShiftForApproval(
+                                                      houseId: (currentHouseData
+                                                                  ?.id ??
+                                                              0)
+                                                          .toString());
+                                              managerApprovalProvider
+                                                  .selectedShifts
+                                                  .clear();
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        isDataFetching: isDataFetching,
+                        isNullData: accountHousesData?.data == null,
+                      );
+                    },
+                  ),
                 ),
               );
             },

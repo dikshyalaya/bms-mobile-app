@@ -1,9 +1,14 @@
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/shift_for_approval_response_model.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/widget/manager_approval_header_card.dart';
 import 'package:beacon_flutter/utils/bottom_modal_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ManagerApprovalCard extends StatefulWidget {
-  const ManagerApprovalCard({Key? key}) : super(key: key);
+  final Datum shiftData;
+  const ManagerApprovalCard({Key? key, required this.shiftData})
+      : super(key: key);
 
   @override
   State<ManagerApprovalCard> createState() => _ManagerApprovalCardState();
@@ -13,21 +18,25 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
   bool isTrue = false;
   @override
   Widget build(BuildContext context) {
+    final managerApprovalProvider =
+        Provider.of<ManagerApprovalProvider>(context, listen: true);
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ManagerApprovalHeaderCard(),
+          ManagerApprovalHeaderCard(
+            title: widget.shiftData.directCare ?? "N/A",
+          ),
           const SizedBox(
             height: 11,
           ),
-          const Padding(
-            padding: EdgeInsetsDirectional.symmetric(horizontal: 19),
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
             child: Row(
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -67,40 +76,40 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                     ),
                   ],
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "2/10/2024",
-                      style: TextStyle(
+                      "${widget.shiftData.scheduleDate}",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "08:00 AM - 04:00 PM",
-                      style: TextStyle(
+                      "${widget.shiftData.startTime} - ${widget.shiftData.endTime}",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "30 Min",
-                      style: TextStyle(
+                      "${widget.shiftData.lunchTime} Min",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "8 Hrs",
-                      style: TextStyle(
+                      "${widget.shiftData.totalTime?.toDouble()} Hrs",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -165,6 +174,11 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                             onChanged: (bool val) {
                               setState(() {
                                 isTrue = val;
+                                managerApprovalProvider
+                                    .addOrRemoveSelectedShift(
+                                  widget.shiftData.id ?? 0,
+                                  val,
+                                );
                               });
                             }),
                       ),

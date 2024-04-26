@@ -13,7 +13,8 @@ const managerPermission = "Authentication/GetPermissions";
 const systemSettings = "SystemSettings/DSPSwitchBoardPageSettings";
 
 //Manager Dashboard Urls
-const accountHouses = "Manager/ShiftManagement/LoadAccounts/";
+const accountHouses = "Manager/ShiftManagement/LoadAccounts";
+const listShiftsForApproval = "Manager/ShiftManagement/ListShiftsForApproval";
 
 
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ManagerApprovalHeaderCard extends StatelessWidget {
-  const ManagerApprovalHeaderCard({Key? key}) : super(key: key);
+  final String title;
+  const ManagerApprovalHeaderCard({Key? key, required this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,9 @@ class ManagerApprovalHeaderCard extends StatelessWidget {
         ),
       ),
       alignment: Alignment.center,
-      child: const Text(
-        "Nakeem Berry",
-        style: TextStyle(
+      child: Text(
+        title,
+        style: const TextStyle(
           color: Color(0xff1B1B1B),
           fontSize: 15,
           fontWeight: FontWeight.w500,
