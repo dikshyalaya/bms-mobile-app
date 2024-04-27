@@ -1,5 +1,6 @@
-const baseUrl = "https://api-beacon.byterays.com/api/";
-// const baseUrl = "http://100.25.49.138/BeaconMobile/api/";
+const baseUrl =
+//"http://100.25.49.138/BeaconMobile/api/";
+    "https://api-beacon.byterays.com/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
 const clockInUrl = "PunchCard/ListPunchCardShifts";
@@ -19,8 +20,10 @@ const lookingForShift = "ShiftManagement/UpdateLookForShift";
 const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
 const myScheduleList = "ShiftManagement/GetMySchedules";
 
+//Manager Dashboard Urls
+const accountHouses = "Manager/ShiftManagement/LoadAccounts";
+const listShiftsForApproval = "Manager/ShiftManagement/ListShiftsForApproval";
 
-const bool isProduction = false;
 
 // pending invitations =>Shift availibility
 

@@ -4,7 +4,7 @@ import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
-import 'package:beacon_flutter/features/manager_dashboard/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/utils/constants.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';

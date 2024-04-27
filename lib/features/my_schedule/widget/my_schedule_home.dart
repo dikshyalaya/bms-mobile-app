@@ -74,24 +74,26 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
                             .availableShiftsForDcModel;
 
                     return ServerResponseBuilder(
-                        builder: (context) => Padding(
-                              padding: const EdgeInsetsDirectional.symmetric(
-                                  horizontal: 12, vertical: 22),
-                              child: ListView.builder(
-                                itemBuilder: (context, index) => MySchedulecard(
-                                  scheduleCardModel:
-                                      availableShiftsForDcModel.data![index],
-                                  index: index,
-                                  onFinished: (){
-                                    setState(() {
-
-                                    });
-                                  },
-                                ),
-                                itemCount:
-                                    availableShiftsForDcModel.data!.length,
-                              ),
-                            ),
+                        builder: (context) => availableShiftsForDcModel.data!.isEmpty? Padding(
+                          padding: const EdgeInsets.only(top: 22),
+                          child: Align(alignment: Alignment.topCenter,child: Text('No Record Found',style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),)),
+                        ) : ListView.builder(
+                             itemBuilder: (context, index) => Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                               child: MySchedulecard(
+                                 scheduleCardModel:
+                                     availableShiftsForDcModel.data![index],
+                                 index: index,
+                                 onFinished: (){
+                                   setState(() {
+                               
+                                   });
+                                 },
+                               ),
+                             ),
+                             itemCount:
+                                 availableShiftsForDcModel.data!.length,
+                           ),
                         isDataFetching: isDataFetching,
                         isNullData: availableShiftsForDcModel?.data == null);
                   },

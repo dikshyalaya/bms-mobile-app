@@ -9,8 +9,9 @@ import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/domain/manager_permission_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -122,9 +123,6 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   LocalNotificationService.initialize();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
   runApp(MyApp(
     isLoggedIn: isLoggedIn,
   ));
@@ -132,7 +130,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
+  const MyApp({key, required this.isLoggedIn});
   @override
   Widget build(BuildContext context) {
     // FlutterNativeSplash.remove();
@@ -154,6 +152,8 @@ class MyApp extends StatelessWidget {
             create: (_) => LookingForShiftProvider(0)..getAllSchedulePeriods()),
         ChangeNotifierProvider<NavigationHandler>(
             create: (_) => NavigationHandler()),
+        ChangeNotifierProvider<ManagerApprovalProvider>(
+            create: (_) => ManagerApprovalProvider()),
       ],
       child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
