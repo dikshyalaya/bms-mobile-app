@@ -1,6 +1,6 @@
 const baseUrl =
 //"http://100.25.49.138/BeaconMobile/api/";
-    "http://api-beacon.byterays.com/api/";
+    "https://api-beacon.byterays.com/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
 const clockInUrl = "ShiftInfo/ListPunchCardShifts";
