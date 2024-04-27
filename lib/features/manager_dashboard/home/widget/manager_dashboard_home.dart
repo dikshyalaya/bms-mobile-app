@@ -2,12 +2,12 @@ import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/domain/manager_permission_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/widget/manager_dashboard_grid.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../common/widgets/beacon_app_bar.dart';
+import '../../../../common/widgets/beacon_app_bar.dart';
 
 class ManagerDashBoardScreen extends StatelessWidget {
   const ManagerDashBoardScreen({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class ManagerDashBoardScreen extends StatelessWidget {
               selector: (context, provider) => provider.bmsUserModel,
               builder: (context, bmsUserModel, child) => BeaconAppBar(
                 title:
-                "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+                    "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
               ),
             )),
         body: Container(
@@ -39,19 +39,17 @@ class ManagerDashBoardScreen extends StatelessWidget {
               ],
             ),
           ),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Selector<ManagePermissionProvider, bool?>(
-              selector: (context, provider) => provider.isManagerPermitted,
-          builder: (context, isManagerPermitted, child) => IfBuilder(
-            condition: isManagerPermitted??false,
-            builder: (context) {
-              return const Expanded(child: ManagerDashBoardGrid());
-            }
-          ),
-        )
+                selector: (context, provider) => provider.isManagerPermitted,
+                builder: (context, isManagerPermitted, child) => IfBuilder(
+                    condition: isManagerPermitted ?? false,
+                    builder: (context) {
+                      return const Expanded(child: ManagerDashBoardGrid());
+                    }),
+              )
 
               // DashBoardNavigatorCard(),
             ],

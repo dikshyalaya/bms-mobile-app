@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
+import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/password_change_field.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
@@ -8,6 +9,7 @@ import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
@@ -17,7 +19,6 @@ import 'package:provider/provider.dart';
 
 class DialogueUtils {
   DialogueUtils._();
-
   static Future<void> showErrorDialogue({
     required BuildContext context,
     required String message,
@@ -78,6 +79,104 @@ class DialogueUtils {
                 ),
               ),
             ));
+  }
+   static Future<bool> confirmMessageDialogue(
+      {required BuildContext context}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          content: Container(
+            width: DimensionUtils.isTab(context)
+                ? _width()
+                : MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 18),
+            decoration: BoxDecoration(
+                 color: Colors.white,
+                borderRadius: BorderRadius.circular(5)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Are you sure want to cancel?",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 20,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context,false);
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsetsDirectional.zero),
+                                elevation: MaterialStateProperty.all(4),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xff3B85FF)),
+                                shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))))),
+                            child: Text(
+                              "No",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                            )),
+                      ),
+                    ),
+                    const SizedBox(width: 20,),
+                    Expanded(
+                      child: SizedBox(
+                        height: 40,
+                        width: 163,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context,true);
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsetsDirectional.zero),
+                                elevation: MaterialStateProperty.all(4),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xff3B85FF)),
+                                shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))))),
+                            child: Text(
+                              "Yes",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   static Future<bool> resetLinkDialogue({required BuildContext context}) async {
@@ -265,8 +364,7 @@ class DialogueUtils {
               ),
             ));
   }
-
-  static Future<void> onPressedMyScheduleDialogue(
+   static Future<void> onPressedMyScheduleDialogue(
       {required BuildContext context,
       required VoidCallback onSaveSchedule,
       ListHouseForDcAddShiftModel? listHouseForDcAddShiftModel}) async {
@@ -560,7 +658,350 @@ class DialogueUtils {
 
   }
 
+  // static Future<void> onPressedMyScheduleDialogue(
+  //     {required BuildContext context,
+  //     required VoidCallback onSaveSchedule}) async {
+  //   String? shiftGivenByManager;
+  //   String? startTime;
+  //   String? endTime;
+  //   return await showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       insetPadding: EdgeInsets.zero,
+  //       backgroundColor: Colors.transparent,
+  //       content: StatefulBuilder(
+  //         builder: (context, setState) => Container(
+  //           height: 358,
+  //           width: DimensionUtils.isTab(context)
+  //               ? _width()
+  //               : MediaQuery.of(context).size.width,
+  //           decoration: BoxDecoration(
+  //               color: Colors.white, borderRadius: BorderRadius.circular(20)),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             mainAxisAlignment: MainAxisAlignment.start,
+  //             children: [
+  //               Container(
+  //                 decoration: const BoxDecoration(
+  //                     color: Color(0xffD7ECFF),
+  //                     boxShadow: [
+  //                       BoxShadow(
+  //                           color: Colors.grey,
+  //                           blurRadius: 15.0,
+  //                           offset: Offset(0.0, 0.75))
+  //                     ],
+  //                     borderRadius: BorderRadius.only(
+  //                         topLeft: Radius.circular(15),
+  //                         topRight: Radius.circular(15))),
+  //                 height: 41,
+  //                 width: double.infinity,
+  //                 alignment: Alignment.center,
+  //                 child: const Text(
+  //                   "Add a Shift",
+  //                   style: TextStyle(
+  //                       color: Colors.black,
+  //                       fontSize: 15,
+  //                       fontWeight: FontWeight.bold),
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 14.37,
+  //               ),
+  //               Padding(
+  //                   padding:
+  //                       const EdgeInsetsDirectional.symmetric(horizontal: 16),
+  //                   child: Column(
+  //                     children: [
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                         children: [
+  //                           const Text(
+  //                             "Was this shift given to you by manager?",
+  //                             style: TextStyle(
+  //                                 fontWeight: FontWeight.bold,
+  //                                 fontSize: 13,
+  //                                 color: Colors.black),
+  //                           ),
+  //                           const SizedBox(
+  //                             width: 8,
+  //                           ),
+  //                           IfElseBuilder(
+  //                               condition: DimensionUtils.isTab(context),
+  //                               ifBuilder: (context) => BMSDropDownForm(
+  //                                     options: const ["Yes", "No"],
+  //                                     onChooseOptions: (String val) {
+  //                                       setState(() {
+  //                                         shiftGivenByManager = val;
+  //                                       });
+  //                                     },
+  //                                     hint: shiftGivenByManager,
+  //                                   ),
+  //                               elseBulider: (context) {
+  //                                 return Expanded(
+  //                                     child: BMSDropDownForm(
+  //                                   options: const ["Yes", "No"],
+  //                                   onChooseOptions: (String val) {
+  //                                     setState(() {
+  //                                       shiftGivenByManager = val;
+  //                                     });
+  //                                   },
+  //                                   hint: shiftGivenByManager,
+  //                                 ));
+  //                               })
+  //                         ],
+  //                       ),
+  //                       const SizedBox(
+  //                         height: 7.25,
+  //                       ),
+  //                       rowBuilder("House", const ["Select", "No"]),
+  //                       const SizedBox(
+  //                         height: 7.25,
+  //                       ),
+  //                       rowBuilder("Schedule Date", const ["Select", "No"]),
+  //                       const SizedBox(
+  //                         height: 7.25,
+  //                       ),
+  //                       rowBuilder("Start Time", timeOptions, hint: startTime,
+  //                           onChooseOption: (String val) {
+  //                         setState(() {
+  //                           startTime = val;
+  //                         });
+  //                       }),
+  //                       const SizedBox(
+  //                         height: 7.25,
+  //                       ),
+  //                       rowBuilder("End Time", timeOptions, hint: endTime,
+  //                           onChooseOption: (String val) {
+  //                         setState(() {
+  //                           endTime = val;
+  //                         });
+  //                       }),
+  //                       const SizedBox(
+  //                         height: 16.25,
+  //                       ),
+  //                       Align(
+  //                         alignment: Alignment.centerRight,
+  //                         child: SizedBox(
+  //                           height: 38.33,
+  //                           width: 108.05,
+  //                           child: ElevatedButton(
+  //                             style: ButtonStyle(
+  //                                 backgroundColor: MaterialStateProperty.all(
+  //                                     const Color(0xff3B85FF)),
+  //                                 shape: MaterialStateProperty.all(
+  //                                     const RoundedRectangleBorder(
+  //                                         borderRadius: BorderRadius.all(
+  //                                             Radius.circular(20))))),
+  //                             onPressed: () {
+  //                               onSaveSchedule.call();
+  //                             },
+  //                             child: const Text(
+  //                               "Save",
+  //                               style: TextStyle(
+  //                                   color: Colors.white,
+  //                                   fontSize: 15,
+  //                                   fontWeight: FontWeight.bold),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       )
+  //                     ],
+  //                   ))
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
+  ///Manager Approval Filter Dialogue
+  static Future<void> managerApprovalFilterDialogue(
+      {required BuildContext context,
+      required VoidCallback onSaveSchedule}) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: const Color(0xFF000000).withOpacity(0.25),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 15),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              ManagerApprovalProvider managerApprovalProvider =
+                  Provider.of<ManagerApprovalProvider>(context, listen: false);
+              managerApprovalProvider.getAccountHouses();
+              return Consumer(
+                builder: (context, value, child) => Container(
+                  margin: const EdgeInsets.all(14),
+                  // height: 300,
+                  constraints: const BoxConstraints(
+                    minHeight: 100,
+                    maxHeight: 250,
+                  ),
+                  child: Selector<ManagerApprovalProvider, bool>(
+                    selector: (context, provider) =>
+                        provider.isAccountHousesLoading,
+                    builder: (context, isDataFetching, child) {
+                      final accountHousesData =
+                          Provider.of<ManagerApprovalProvider>(context,
+                                  listen: true)
+                              .accountHousesResponseModel;
+                      return ServerResponseBuilder(
+                        builder: (context) {
+                          return ListView.builder(
+                            itemCount: managerApprovalProvider
+                                    .accountHousesResponseModel?.data?.length ??
+                                0,
+                            itemBuilder: (context, index) {
+                              final currentData =
+                                  accountHousesData?.data?[index];
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    height: 46,
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '${currentData?.accountNumber}',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                      itemCount:
+                                          currentData?.houses?.length ?? 0,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        final currentHouseData =
+                                            currentData?.houses?[index];
+                                        return Container(
+                                          height: 46,
+                                          margin:
+                                              const EdgeInsets.only(top: 0.3),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFEAEAEA),
+                                            borderRadius: index ==
+                                                    (currentData?.houses
+                                                                ?.length ??
+                                                            0) -
+                                                        1
+                                                ? const BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  )
+                                                : null,
+                                          ),
+                                          child: ListTile(
+                                            leading: Container(
+                                              height: 32,
+                                              width: 32,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              // child: Image.asset('edit'.iconImage()),
+                                              child: const Icon(
+                                                Icons.home,
+                                                color: Color(0xFF325CA1),
+                                              ),
+                                            ),
+                                            title: Text(
+                                              '${currentHouseData?.accountNumber}',
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            trailing: Container(
+                                              height: 32,
+                                              width: 32,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              // child: Image.asset('edit'.iconImage()),
+                                              child: const Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                color: Color(0xFF325CA1),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              managerApprovalProvider
+                                                  .getListShiftForApproval(
+                                                      houseId: (currentHouseData
+                                                                  ?.id ??
+                                                              0)
+                                                          .toString());
+                                              managerApprovalProvider
+                                                  .selectedShifts
+                                                  .clear();
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        isDataFetching: isDataFetching,
+                        isNullData: accountHousesData?.data == null,
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  static Row rowBuilder(String text, List<String> options,
+      {String? hint, Function(String)? onChooseOption}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          text,
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black),
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        BMSDropDownForm(
+          options: options,
+          onChooseOptions: (String val) {
+            onChooseOption?.call(val);
+          },
+          hint: hint,
+        )
+      ],
+    );
+  }
 
   static Future<String?> selectSchedulePeriodDialogue(
       {required BuildContext context,
@@ -740,105 +1181,6 @@ class DialogueUtils {
             )));
   }
 
-  static Future<bool> confirmMessageDialogue(
-      {required BuildContext context}) async {
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-          content: Container(
-            width: DimensionUtils.isTab(context)
-                ? _width()
-                : MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 18),
-            decoration: BoxDecoration(
-                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Are you sure want to cancel?",
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context,false);
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                    EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))))),
-                            child: Text(
-                              "No",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400),
-                            )),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        width: 163,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context,true);
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                    EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))))),
-                            child: Text(
-                              "Yes",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ));
-  }
-
   static Future<void> showProgressDialogue(
       BuildContext context, String message) async {
     showDialog(
@@ -867,6 +1209,7 @@ class DialogueUtils {
                 width: DimensionUtils.isTab(context)
                     ? _width()
                     : MediaQuery.of(context).size.width,
+                // padding: const EdgeInsets.symmetric(horizontal: 6),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
@@ -888,111 +1231,102 @@ class DialogueUtils {
                     const SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          buildText('New Password       '),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: SizedBox(
-                              child: PWChangeTextFormField(
-                                onChangedInput: (String val) {
-                                  newPassword = val;
-                                },
-                              ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        buildText('New Password       '),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            child: PWChangeTextFormField(
+                              onChangedInput: (String val) {
+                                newPassword = val;
+                              },
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 14,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          buildText('Confirm Password'),
-                          const SizedBox(
-                            width: 15,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        buildText('Confirm Password'),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: PWChangeTextFormField(
+                            onChangedInput: (String val) {
+                              confirmPassword = val;
+                            },
                           ),
-                          Expanded(
-                            child: PWChangeTextFormField(
-                              onChangedInput: (String val) {
-                                confirmPassword = val;
-                              },
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          height: 40,
-                          width: 163,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                if (newPassword.isEmpty ||
-                                    confirmPassword.isEmpty) {
-                                  shoErrorToast(
-                                      "Password field must not be empty");
-                                } else if (newPassword != confirmPassword) {
-                                  shoErrorToast("Password is not match");
-                                } else {
-                                  FocusScope.of(context).unfocus();
-                                  showProgressDialogue(
-                                      context, "Signing in, Please wait...");
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SizedBox(
+                        height: 40,
+                        width: 163,
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              if (newPassword.isEmpty ||
+                                  confirmPassword.isEmpty) {
+                                shoErrorToast(
+                                    "Password field must not be empty");
+                              } else if (newPassword != confirmPassword) {
+                                shoErrorToast("Password is not match");
+                              } else {
+                                FocusScope.of(context).unfocus();
+                                showProgressDialogue(
+                                    context, "Signing in, Please wait...");
 
-                                  await authProvider.changePassword(
-                                      confirmPassword, onErrorState: (val) {
-                                    Navigator.pop(context);
-                                    shoErrorToast(
-                                        val.response?.exception?.message ?? "");
-                                  }, onLoadedState: (val) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    successMessageDialogue(
-                                        context: context,
-                                        successMessage:
-                                            "Password changed successfully.");
-                                  });
-                                }
-                              },
-                              style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsetsDirectional.zero),
-                                  elevation: MaterialStateProperty.all(4),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      const Color(0xff3B85FF)),
-                                  shape: MaterialStateProperty.all(
-                                      const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20))))),
-                              child: Text(
-                                "Change Password",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        fontSize: 13,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400),
-                              )),
-                        ),
+                                await authProvider.changePassword(
+                                    confirmPassword, onErrorState: (val) {
+                                  Navigator.pop(context);
+                                  shoErrorToast(
+                                      val.response?.exception?.message ?? "");
+                                }, onLoadedState: (val) {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  successMessageDialogue(
+                                      context: context,
+                                      successMessage:
+                                          "Password changed successfully.");
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsetsDirectional.zero),
+                                elevation: MaterialStateProperty.all(4),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xff3B85FF)),
+                                shape: MaterialStateProperty.all(
+                                    const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))))),
+                            child: Text(
+                              "Change Password",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      fontSize: 13,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400),
+                            )),
                       ),
                     ),
                   ],
@@ -1003,7 +1337,7 @@ class DialogueUtils {
 
   static Future<void> onSystemSettingsDialogue(
       {required BuildContext context}) async {
-    // final authProvider = Provider.of<AuthProvider>(context,listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -1018,7 +1352,7 @@ class DialogueUtils {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
-                child:  DashBoardNavigatorCard(isFromPopUp: true,),
+                child:  DashBoardNavigatorCard(),
               ),
             ));
   }

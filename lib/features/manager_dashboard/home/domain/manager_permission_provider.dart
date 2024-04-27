@@ -1,6 +1,5 @@
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_repo.dart';
-// import 'package:beacon_flutter/features/manager_dashboard/domain/manager_permission_repo.dart';
 import 'package:flutter/cupertino.dart';
 
 class ManagePermissionProvider extends ChangeNotifier {
@@ -14,9 +13,9 @@ class ManagePermissionProvider extends ChangeNotifier {
           networkState: networkState,
           onLoadedState: (loadedState) {
             onFutureNotifyListeners(() {
-              final Map<String, dynamic> map = loadedState.response?.body;
+              final Map<String, dynamic> _map = loadedState.response?.body;
               isManagerPermitted =
-                  map['response']["data"]["allowManagerApproval"] == 1;
+                  _map['response']["data"]["allowManagerApproval"] == 1;
             });
           },
           onErrorState: (errorState) {
