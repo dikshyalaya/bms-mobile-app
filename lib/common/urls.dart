@@ -1,4 +1,4 @@
-const baseUrl = "http://api-beacon.byterays.com/api/";
+const baseUrl = "https://api-beacon.byterays.com/api/";
 // const baseUrl = "http://100.25.49.138/BeaconMobile/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
