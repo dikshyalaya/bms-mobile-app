@@ -19,11 +19,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:splash_view/source/source.dart';
 
 Future<bool> handleLocationPermission() async {
   bool serviceEnabled;
@@ -158,27 +160,37 @@ class MyApp extends StatelessWidget {
       child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        return MaterialApp(
-          title: 'Beacon',
-          debugShowCheckedModeBanner: false,
-          theme: defaultLightTheme,
-          home: isLoggedIn
-              ? IfElseBuilder(
-                  condition: authProvider.bmsUserModel?.userTypeId == 1,
-                  ifBuilder: (context) => const DashBoardScreen(),
-                  elseBulider: (context) {
-                    return IfElseBuilder(
-                        condition: authProvider.bmsUserModel?.userTypeId == 4,
-                        ifBuilder: (context) => const ManagerDashBoardScreen(),
-                        elseBulider: (context) {
-                          return EmptyDashBoard(
-                            key: key,
-                          );
-                        });
-                  })
-              : LoginScreen(
-                  key: key,
-                ),
+        return ScreenUtilInit(
+            splitScreenMode: true,
+              designSize: const Size(390, 844),
+              minTextAdapt: true,
+          builder: (context,child) {
+            return MaterialApp(
+              title: 'Beacon',
+              debugShowCheckedModeBanner: false,
+              theme: defaultLightTheme,
+              home: SplashView(
+                logo: Image.asset("assets/images/app-logo.png"),
+                done: Done(isLoggedIn
+                  ? IfElseBuilder(
+                      condition: authProvider.bmsUserModel?.userTypeId == 1,
+                      ifBuilder: (context) => const DashBoardScreen(),
+                      elseBulider: (context) {
+                        return IfElseBuilder(
+                            condition: authProvider.bmsUserModel?.userTypeId == 4,
+                            ifBuilder: (context) => const ManagerDashBoardScreen(),
+                            elseBulider: (context) {
+                              return EmptyDashBoard(
+                                key: key,
+                              );
+                            });
+                      })
+                  : LoginScreen(
+                      key: key,
+                    ),),
+              )
+            );
+          }
         );
       }),
     );

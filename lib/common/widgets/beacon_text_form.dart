@@ -1,21 +1,68 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
+import 'package:beacon_flutter/constants/app_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class BeaconTextFormField extends StatefulWidget {
-  final IconData iconData;
-  final String hintText;
-  final Function(String) onChangedInput;
-  bool? obscureText;
-  final double? height;
-  final double? textStyleSize;
+   final Color? backgroundColor;
+  final Color? textColor;
+  final TextEditingController? controller;
+  final String? hintText;
+  final bool? readOnly;
+  final VoidCallback? onTap;
+  final String? Function(String?)? validator;
+  final Widget? prefixIcon;
+  final TextInputType? textInputType;
+  final Widget? suffixIcon;
+  final bool isPassword;
+  final int? maxLines;
+  final TextStyle? hintStyle;
+  final double? radius;
+  final double? verticalPadding;
+  final double? horizontalPadding;
+  final BorderSide? borderSide;
+  final GlobalKey<FormState>? formKey;
+  final TextInputAction? inputAction;
+  final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
+  final String? initialValue;
+  final int? maxLength;
+  final String? labelText;
+  final bool? isError;
+  final TextStyle? labelStyle;
+  final TextStyle? floatingStyle;
   BeaconTextFormField(
       {Key? key,
-      required this.iconData,
-      required this.hintText,
-        this.textStyleSize,
-      this.obscureText = false,
-      this.height,
-      required this.onChangedInput})
+      this.controller,
+      this.validator,
+      this.hintText,
+      this.onTap,
+      this.readOnly = false,
+      this.suffixIcon,
+      this.maxLines,
+      this.isPassword = false,
+      this.textInputType,
+      this.prefixIcon,
+      this.backgroundColor,
+      this.textColor,
+      this.hintStyle,
+      this.radius,
+      this.verticalPadding,
+      this.horizontalPadding,
+      this.borderSide,
+      this.formKey,
+      this.inputAction,
+      this.onChanged,
+      this.onFieldSubmitted,
+      this.maxLength,
+      this.initialValue,
+      this.labelText,
+      this.isError,
+      this.labelStyle,
+      this.floatingStyle})
       : super(key: key);
 
   @override
@@ -23,82 +70,98 @@ class BeaconTextFormField extends StatefulWidget {
 }
 
 class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
+    late bool isPassword;
+
   @override
-  Widget build(BuildContext context) {
-    const iconColor = Color(0xffA5A5A5);
-    const textColor = Color(0xffC1C1C1);
-    return SizedBox(
-      height: widget.height ?? 40,
-      child: TextFormField(
-        textAlign: TextAlign.start,
-        textAlignVertical: TextAlignVertical.center,
-
-        obscureText: widget.obscureText ?? false,
-
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(fontSize: 13, letterSpacing: 1.2),
-        onChanged: (String val) {
-          widget.onChangedInput.call(val);
-        },
-        decoration: InputDecoration(
-          contentPadding:
-           EdgeInsets.zero,
-          disabledBorder: outlineImputBorder(),
-          enabledBorder: outlineImputBorder(),
-          focusedBorder:outlineImputBorder(),
-          border:  outlineImputBorder(),
-          fillColor: Colors.white,
-          labelStyle:
-              Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12),
-          filled: true,
-          hintText: widget.hintText,
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(fontSize:widget.textStyleSize??13, color: textColor,fontWeight: FontWeight.w500),
-          prefixIcon: Icon(
-            widget.iconData,
-            size: 20,
-            color: iconColor,
-          ),
-          suffixIcon: IfBuilder(
-            condition: widget.hintText.toLowerCase() == "password",
-            builder: (context) => IconButton(
-              constraints: const BoxConstraints(),
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                setState(() {
-                  widget.obscureText!
-                      ? widget.obscureText = false
-                      : widget.obscureText = true;
-                });
-              },
-              icon: Icon(
-                (widget.obscureText ?? false)
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: iconColor,
-                size: 20,
-              ),
-            ),
-          ),
-
-          // border: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(5.0),
-          // ),
-        ),
-      ),
-    );
+  void initState() {
+    isPassword = widget.isPassword;
+    super.initState();
   }
 
-  OutlineInputBorder outlineImputBorder() {
-    return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(25),
-  borderSide: const BorderSide(
-  color: Colors.transparent,
-
-  ),);
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      // enableSuggestions: false,
+      // maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      // autofocus: true,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      maxLength: widget.maxLength,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      initialValue: widget.initialValue,
+      onChanged: widget.onChanged,
+      textInputAction: widget.inputAction,
+      key: widget.formKey,
+      style: TextStyle(color: widget.textColor),
+      onTap: widget.onTap,
+      readOnly: widget.readOnly ?? false,
+      controller: widget.controller,
+      obscureText: isPassword,
+      validator: widget.validator,
+      maxLines: widget.maxLines ?? 1,
+      keyboardType: widget.textInputType,
+      decoration: InputDecoration(
+        // focusColor: Colors.red,
+        focusedBorder: OutlineInputBorder(
+          borderSide: widget.borderSide ??
+              const BorderSide(color: Color(0xFFFFFFFF)),
+          borderRadius: BorderRadius.all(Radius.circular(widget.radius ?? 7.r)),
+        ),
+        // counterStyle: TextStyle(height: double.minPositive,),
+        //  counterText: "",
+        counterStyle: TextStyle(color: Theme.of(context).colorScheme.background),
+        labelStyle: widget.labelStyle,
+        // Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 15.sp),
+        floatingLabelStyle: widget.floatingStyle,
+        // Theme.of(context)
+        //     .textTheme
+        //     .bodyText2!
+        //     .copyWith(fontSize: 18.sp, color: Colors.teal),
+        labelText: widget.labelText,
+        fillColor: widget.backgroundColor ?? Theme.of(context).colorScheme.background,
+        filled: true,
+        prefixIcon: widget.prefixIcon,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: widget.horizontalPadding ?? 12.w,
+          vertical: widget.verticalPadding ?? 16.h,
+        ),
+        border: OutlineInputBorder(
+          borderSide: widget.borderSide ??
+              const BorderSide(color: Color(0xFF3C85FF)),
+          borderRadius: BorderRadius.all(Radius.circular(widget.radius ?? 7.r)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: widget.borderSide ??
+              const BorderSide(color: Color(0xFF3C85FF)),
+          borderRadius: BorderRadius.all(Radius.circular(widget.radius ?? 7.r)),
+        ),
+        hintText: widget.hintText,
+        hintStyle: widget.hintStyle ??
+            Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15.sp,
+                  color: Colors.black54,
+                ),
+        suffixIcon: widget.suffixIcon ??
+            (widget.isPassword
+                ? InkWell(
+                    onTap: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 25.w),
+                      child: SvgPicture.asset(
+                          isPassword ? AppIcons.eyeShow : AppIcons.eyeHide,
+                          // ignore: deprecated_member_use
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.grey
+                                  : Colors.grey),
+                    ),
+                  )
+                : null),
+      ),
+    );
   }
 }

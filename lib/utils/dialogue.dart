@@ -209,10 +209,11 @@ class DialogueUtils {
                       height: 4,
                     ),
                     BeaconTextFormField(
-                        textStyleSize: 15,
-                        iconData: Icons.email_outlined,
-                        hintText: "Enter your email",
-                        onChangedInput: (emailAddress) {}),
+                        // textStyleSize: 15,
+                        // iconData: Icons.email_outlined,
+                        // hintText: "Enter your email",
+                        // onChangedInput: (emailAddress) {}
+                        ),
                     const SizedBox(
                       height: 20,
                     ),
