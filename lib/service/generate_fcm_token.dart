@@ -18,7 +18,7 @@ Future<String> generateFCMToken() async {
 
     // Return the FCM device token.
     print(token);
-    log("FCM TOKEN: ${token}");
+    log("FCM TOKEN: $token");
     if (token != null) {
       return token;
     } else {

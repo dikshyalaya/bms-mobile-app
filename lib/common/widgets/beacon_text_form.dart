@@ -1,6 +1,5 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, deprecated_member_use
 
-import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/constants/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +33,7 @@ class BeaconTextFormField extends StatefulWidget {
   final bool? isError;
   final TextStyle? labelStyle;
   final TextStyle? floatingStyle;
-  BeaconTextFormField(
+  const BeaconTextFormField(
       {Key? key,
       this.controller,
       this.validator,
@@ -153,7 +152,8 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
                       padding: EdgeInsets.only(right: 25.w),
                       child: SvgPicture.asset(
                           isPassword ? AppIcons.eyeShow : AppIcons.eyeHide,
-                          // ignore: deprecated_member_use
+                          height: 15.h,
+                          width: 15.w,
                           color:
                               Theme.of(context).brightness == Brightness.light
                                   ? Colors.grey

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';

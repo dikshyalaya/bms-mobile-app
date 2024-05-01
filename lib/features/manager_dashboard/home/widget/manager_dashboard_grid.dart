@@ -1,5 +1,4 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
-import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator-card.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/manager_dashboard/house_employees/widget/house_employees_home.dart';
 import 'package:beacon_flutter/features/manager_dashboard/house_shift/widget/house_shift_home.dart';

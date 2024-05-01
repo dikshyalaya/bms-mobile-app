@@ -48,7 +48,7 @@ class _HouseShiftCardState extends State<HouseShiftCard> {
                     ),
                   ],
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

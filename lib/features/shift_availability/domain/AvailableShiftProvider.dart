@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
+import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
-import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
 import 'package:beacon_flutter/features/shift_availability/domain/available_shift_repo.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class AvailableShiftProvider extends ChangeNotifier {
   final int dcId;
@@ -66,7 +64,7 @@ class AvailableShiftProvider extends ChangeNotifier {
               });
             },
             onErrorState: (errorState) {
-              availableShiftsForDcModel?.data = null;
+              availableShiftsForDcModel.data = null;
               onFutureNotifyListeners(() {
                 // loadedPostModel = errorState.response?.body;
               });

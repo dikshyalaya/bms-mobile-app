@@ -1,12 +1,11 @@
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
-import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
+import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ClockInForm extends StatefulWidget {
   final List<NoMealResponseModel> niMealResonList;

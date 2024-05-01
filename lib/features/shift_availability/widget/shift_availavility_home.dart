@@ -174,7 +174,7 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                               ),
                             ),
                         isDataFetching: isDataFetching,
-                        isNullData: availableShiftsForDcModel?.data == null);
+                        isNullData: availableShiftsForDcModel.data == null);
                   },
                   selector: (context, provider) => provider.isDataFetching))),
     );

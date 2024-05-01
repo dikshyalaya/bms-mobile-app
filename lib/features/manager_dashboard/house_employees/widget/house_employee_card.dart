@@ -23,10 +23,10 @@ class _HouseEmployeetCardState extends State<HouseEmployeeCard> {
             height: 11,
           ),
           Padding(
-            padding: EdgeInsetsDirectional.symmetric(horizontal: 19),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
             child: Row(
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -57,11 +57,11 @@ class _HouseEmployeetCardState extends State<HouseEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "(456) 789-4564",
                       style: TextStyle(
                         color: Color(0xff1B1B1B),
@@ -69,8 +69,8 @@ class _HouseEmployeetCardState extends State<HouseEmployeeCard> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
-                    Text(
+                    const SizedBox(height: 6),
+                    const Text(
                       "sandip@gharero.com",
                       style: TextStyle(
                         color: Color(0xff1B1B1B),
@@ -78,7 +78,7 @@ class _HouseEmployeetCardState extends State<HouseEmployeeCard> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     SizedBox(
                       height: 19,
                       width: 60,

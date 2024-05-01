@@ -74,8 +74,8 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
                             .availableShiftsForDcModel;
 
                     return ServerResponseBuilder(
-                        builder: (context) => availableShiftsForDcModel.data!.isEmpty? Padding(
-                          padding: const EdgeInsets.only(top: 22),
+                        builder: (context) => availableShiftsForDcModel.data!.isEmpty? const Padding(
+                          padding: EdgeInsets.only(top: 22),
                           child: Align(alignment: Alignment.topCenter,child: Text('No Record Found',style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),)),
                         ) : ListView.builder(
                              itemBuilder: (context, index) => Padding(
@@ -95,7 +95,7 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
                                  availableShiftsForDcModel.data!.length,
                            ),
                         isDataFetching: isDataFetching,
-                        isNullData: availableShiftsForDcModel?.data == null);
+                        isNullData: availableShiftsForDcModel.data == null);
                   },
                   selector: (context, provider) => provider.isDataFetching))),
     );

@@ -27,7 +27,7 @@ class ShiftAvailabilityCardHeader extends StatelessWidget {
       child:   Column(
         children: [
           Text(
-            "${scheduleCardModel?.schedulePeriod}",
+            "${scheduleCardModel.schedulePeriod}",
             style: const TextStyle(
                 color: Color(0xff373737),
                 fontSize: 13,

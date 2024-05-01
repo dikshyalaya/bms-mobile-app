@@ -265,7 +265,7 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
 
     if (res != null) {
       setState(() {
-        schedulePeriod = res ?? "";
+        schedulePeriod = res;
       });
 
       _lookingForShiftProvider.getAllLookingForShift(schedulePeriod);

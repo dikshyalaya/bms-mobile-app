@@ -13,9 +13,9 @@ class ManagePermissionProvider extends ChangeNotifier {
           networkState: networkState,
           onLoadedState: (loadedState) {
             onFutureNotifyListeners(() {
-              final Map<String, dynamic> _map = loadedState.response?.body;
+              final Map<String, dynamic> map = loadedState.response?.body;
               isManagerPermitted =
-                  _map['response']["data"]["allowManagerApproval"] == 1;
+                  map['response']["data"]["allowManagerApproval"] == 1;
             });
           },
           onErrorState: (errorState) {

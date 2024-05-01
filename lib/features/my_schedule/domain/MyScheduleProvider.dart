@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
+import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_repo.dart';
@@ -64,7 +64,7 @@ class MyScheduleProvider extends ChangeNotifier {
               });
             },
             onErrorState: (errorState) {
-              availableShiftsForDcModel?.data = null;
+              availableShiftsForDcModel.data = null;
               onFutureNotifyListeners(() {
                 // loadedPostModel = errorState.response?.body;
               });
@@ -131,12 +131,12 @@ class MyScheduleProvider extends ChangeNotifier {
     CreateShiftRepo createShiftRepo = CreateShiftRepo();
     setDataPosting(true);
 
-    DateTime _tempSceduleDate = DateTime.parse(scheduledDate);
+    DateTime tempSceduleDate = DateTime.parse(scheduledDate);
     if(startDate.contains("PM")){
       int tempStartTime = int.parse(startDate.split(":").first);
       tempStartTime= 12+tempStartTime;
       startDate = "$tempStartTime:${startDate.split(":").last}";
-      _tempSceduleDate= _tempSceduleDate.add(const Duration(days: 1));
+      tempSceduleDate= tempSceduleDate.add(const Duration(days: 1));
     }
 
     if(endDate.contains("PM")){
@@ -170,7 +170,7 @@ class MyScheduleProvider extends ChangeNotifier {
           "dcId": dcId,
           "scheduleDate": scheduledDate.substring(0,10),
           "startDateTime": '${scheduledDate.substring(0,10)}T${startDate.split(" ").first}',
-          "endDateTime": '${_tempSceduleDate.toString().substring(0,10)}T${endDate.split(" ").first}'
+          "endDateTime": '${tempSceduleDate.toString().substring(0,10)}T${endDate.split(" ").first}'
 
         });
     isCreated.call(false);

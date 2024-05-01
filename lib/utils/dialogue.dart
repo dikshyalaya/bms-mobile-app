@@ -5,7 +5,7 @@ import 'package:beacon_flutter/common/widgets/builder/server_response_builder.da
 import 'package:beacon_flutter/common/widgets/password_change_field.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
-import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
+import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
@@ -208,7 +208,7 @@ class DialogueUtils {
                     const SizedBox(
                       height: 4,
                     ),
-                    BeaconTextFormField(
+                    const BeaconTextFormField(
                         // textStyleSize: 15,
                         // iconData: Icons.email_outlined,
                         // hintText: "Enter your email",
