@@ -85,14 +85,16 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
             if (userTypeId == 1) {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const DashBoardScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const DashBoardScreen()),
                 (route) => false,
               );
               generateFCMToken();
             } else if (userTypeId == 4) {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const ManagerDashBoardScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const ManagerDashBoardScreen()),
                 (route) => false,
               );
             } else {
@@ -118,7 +120,10 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? const Center(child: CircularProgressIndicator())
+        ? const Center(
+            child: CircularProgressIndicator(
+            color: Colors.white,
+          ))
         : Align(
             alignment: Alignment.centerRight,
             child: SizedBox(

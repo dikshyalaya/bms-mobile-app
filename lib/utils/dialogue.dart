@@ -15,6 +15,7 @@ import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.da
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class DialogueUtils {
@@ -184,7 +185,7 @@ class DialogueUtils {
         context: context,
         builder: (context) => AlertDialog(
               insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.black.withOpacity(0.5),
               content: Container(
                 height: 211,
                 width: DimensionUtils.isTab(context)
@@ -251,8 +252,36 @@ class DialogueUtils {
                   ],
                 ),
               ),
-            ));
+            ))
+            ;
   }
+  Future<void> showMyDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('AlertDialog Title'),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('This is a demo alert dialog.'),
+              Text('Would you like to approve of this message?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Approve'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
   static Text buildText(String text) {
     return Text(

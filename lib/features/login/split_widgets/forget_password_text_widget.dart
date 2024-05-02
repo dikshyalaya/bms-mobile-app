@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/features/login/split_widgets/alert_dialouge_forget_password.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,12 @@ class ForgetPasswordText extends StatelessWidget {
               TextSpan(
                 text: 'HERE',
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => DialogueUtils.resetLinkDialogue(context: context),
+                  ..onTap = () 
+                  {
+                    DialougeBoxShowingWidget(context);
+
+                  },
+                  // => DialogueUtils.confirmMessageDialogue(context: context),
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
