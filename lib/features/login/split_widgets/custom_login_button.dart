@@ -52,9 +52,11 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
 
     try {
       FocusScope.of(context).unfocus();
+    var fcm = await generateFCMToken();
       await authProvider.logIn(
         widget.userName.text,
         widget.password.text,
+        fcm,
         onErrorState: (errorState) {
           print("has Error");
           setState(() {
@@ -89,7 +91,6 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
                     builder: (context) => const DashBoardScreen()),
                 (route) => false,
               );
-              generateFCMToken();
             } else if (userTypeId == 4) {
               Navigator.pushAndRemoveUntil(
                 context,
@@ -98,7 +99,6 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
                 (route) => false,
               );
             } else {
-              generateFCMToken();
             }
           } else {
             print("has error");

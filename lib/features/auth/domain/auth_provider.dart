@@ -21,7 +21,7 @@ class AuthProvider extends ChangeNotifier{
 
   final LoginRepo _loginRepo =LoginRepo();
   final ChangePasswordRepo _changePasswordRepo =ChangePasswordRepo();
-  Future<void> logIn(String name, String password,
+  Future<void> logIn(String name, String password,String fcm,
       {LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
         ErrorStateCallback<Map<String, dynamic>>? onErrorState,
         LoadedStateCallback<Map<String, dynamic>>? onLoadedState,ValueChanged<Map<String, dynamic>>? onAccessToken,}) async {
@@ -34,6 +34,7 @@ class AuthProvider extends ChangeNotifier{
       body: {
         "password": password,
         "loginName": name,
+        "fcmToken": fcm,
         "location": {
           "latitude": position.latitude,
           "longitude": position.longitude
