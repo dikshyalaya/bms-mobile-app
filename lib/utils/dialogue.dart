@@ -81,103 +81,109 @@ class DialogueUtils {
               ),
             ));
   }
-   static Future<bool> confirmMessageDialogue(
+
+  static Future<bool> confirmMessageDialogue(
       {required BuildContext context}) async {
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-          content: Container(
-            width: DimensionUtils.isTab(context)
-                ? _width()
-                : MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 18),
-            decoration: BoxDecoration(
-                 color: Colors.white,
-                borderRadius: BorderRadius.circular(5)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Are you sure want to cancel?",
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: Container(
+                width: DimensionUtils.isTab(context)
+                    ? _width()
+                    : MediaQuery.of(context).size.width,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context,false);
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                    EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))))),
-                            child: Text(
-                              "No",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400),
-                            )),
-                      ),
+                    Text(
+                      "Are you sure want to cancel?",
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
                     ),
-                    const SizedBox(width: 20,),
-                    Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        width: 163,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context,true);
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                    EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))))),
-                            child: Text(
-                              "Yes",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400),
-                            )),
-                      ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 40,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                                style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsetsDirectional.zero),
+                                    elevation: MaterialStateProperty.all(4),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff3B85FF)),
+                                    shape: MaterialStateProperty.all(
+                                        const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))))),
+                                child: Text(
+                                  "No",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            height: 40,
+                            width: 163,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsetsDirectional.zero),
+                                    elevation: MaterialStateProperty.all(4),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color(0xff3B85FF)),
+                                    shape: MaterialStateProperty.all(
+                                        const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))))),
+                                child: Text(
+                                  "Yes",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400),
+                                )),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        ));
+              ),
+            ));
   }
 
   static Future<bool> resetLinkDialogue({required BuildContext context}) async {
@@ -252,36 +258,36 @@ class DialogueUtils {
                   ],
                 ),
               ),
-            ))
-            ;
+            ));
   }
+
   Future<void> showMyDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('AlertDialog Title'),
-        content: const SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('This is a demo alert dialog.'),
-              Text('Would you like to approve of this message?'),
-            ],
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Approve'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   static Text buildText(String text) {
     return Text(
@@ -394,7 +400,8 @@ class DialogueUtils {
               ),
             ));
   }
-   static Future<void> onPressedMyScheduleDialogue(
+
+  static Future<void> onPressedMyScheduleDialogue(
       {required BuildContext context,
       required VoidCallback onSaveSchedule,
       ListHouseForDcAddShiftModel? listHouseForDcAddShiftModel}) async {
@@ -405,7 +412,7 @@ class DialogueUtils {
             .toList() ??
         [""];
 
-     // listHouse.insert(0, "");
+    // listHouse.insert(0, "");
     bool isPosting = false;
     String selectedDate = "";
     String? selectedHouseNumber;
@@ -413,9 +420,10 @@ class DialogueUtils {
     String? startTime;
     String? endTime;
     String? scheduledDate;
-     Row rowBuilder(String text, List<String> options,
-        {String? hint, Function(String)? onChooseOption,bool ignoring=false}) {
-
+    Row rowBuilder(String text, List<String> options,
+        {String? hint,
+        Function(String)? onChooseOption,
+        bool ignoring = false}) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -437,10 +445,11 @@ class DialogueUtils {
                             context: context,
                             firstDate: DateTime.now(),
                             lastDate:
-                            DateTime.now().add(const Duration(days: 30)));
+                                DateTime.now().add(const Duration(days: 30)));
                         setState(() {
                           if (returnDate != null) {
-                            selectedDate = returnDate.toString().substring(0, 10);
+                            selectedDate =
+                                returnDate.toString().substring(0, 10);
                             onChooseOption?.call(returnDate.toString());
                           }
                         });
@@ -453,7 +462,7 @@ class DialogueUtils {
                             color: Colors.white,
                             border: Border.all(color: const Color(0xffA9A9A9))),
                         padding:
-                        const EdgeInsetsDirectional.only(start: 8, end: 8),
+                            const EdgeInsetsDirectional.only(start: 8, end: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -477,6 +486,7 @@ class DialogueUtils {
         ],
       );
     }
+
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -596,15 +606,16 @@ class DialogueUtils {
                               rowBuilder("End Time", timeOptions, hint: endTime,
                                   onChooseOption: (String val) {
                                 setState(() {
-                                  if((startTime?.contains("PM")??false)&&(val.contains("PM"))){
-                                    shoErrorToast("Start time and end time must be valid");
+                                  if ((startTime?.contains("PM") ?? false) &&
+                                      (val.contains("PM"))) {
+                                    shoErrorToast(
+                                        "Start time and end time must be valid");
                                     endTime = null;
-                                  }else{
+                                  } else {
                                     endTime = val;
                                   }
-
                                 });
-                              },ignoring: startTime==null),
+                              }, ignoring: startTime == null),
                               const SizedBox(
                                 height: 16.25,
                               ),
@@ -615,8 +626,8 @@ class DialogueUtils {
                                     width: 108.05,
                                     child: IfElseBuilder(
                                         condition: isPosting,
-                                        ifBuilder: (context) =>
-                                        const  Center(child:  CircularProgressIndicator()),
+                                        ifBuilder: (context) => const Center(
+                                            child: CircularProgressIndicator()),
                                         elseBulider: (context) {
                                           return ElevatedButton(
                                               style: ButtonStyle(
@@ -631,8 +642,10 @@ class DialogueUtils {
                                                                   Radius.circular(
                                                                       20))))),
                                               onPressed: () async {
-                                                selectedHouseNumber ??= listHouse[0];
-                                                if (selectedHouseNumber != null &&
+                                                selectedHouseNumber ??=
+                                                    listHouse[0];
+                                                if (selectedHouseNumber !=
+                                                        null &&
                                                     startTime != null &&
                                                     endTime != null &&
                                                     scheduledDate != null) {
@@ -683,9 +696,6 @@ class DialogueUtils {
                 ),
               ),
             ));
-
-
-
   }
 
   // static Future<void> onPressedMyScheduleDialogue(
@@ -1250,35 +1260,49 @@ class DialogueUtils {
                     Container(
                       height: 50,
                       width: double.infinity,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)),
-                          color: Color(0xffD9D9D9)),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        color: const Color(0xffD9D9D9),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF7D7B7B).withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(
+                                0, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
                       alignment: Alignment.center,
                       child: buildText("Change Password"),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        buildText('New Password       '),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            child: PWChangeTextFormField(
-                              onChangedInput: (String val) {
-                                newPassword = val;
-                              },
-                            ),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          buildText('New Password       '),
+                          const SizedBox(
+                            width: 15,
                           ),
-                        )
-                      ],
+                          Expanded(
+                            child: SizedBox(
+                              child: PWChangeTextFormField(
+                                onChangedInput: (String val) {
+                                  newPassword = val;
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 14,
@@ -1382,7 +1406,7 @@ class DialogueUtils {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20)),
-                child:  DashBoardNavigatorCard(),
+                child: DashBoardNavigatorCard(),
               ),
             ));
   }
