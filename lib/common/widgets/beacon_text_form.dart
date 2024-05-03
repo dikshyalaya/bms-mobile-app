@@ -90,7 +90,7 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
       onChanged: widget.onChanged,
       textInputAction: widget.inputAction,
       key: widget.formKey,
-      style: TextStyle(color: widget.textColor),
+      style: TextStyle(color: widget.textColor,fontSize: 15.sp),
       onTap: widget.onTap,
       readOnly: widget.readOnly ?? false,
       controller: widget.controller,

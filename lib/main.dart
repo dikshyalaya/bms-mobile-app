@@ -169,9 +169,7 @@ class MyApp extends StatelessWidget {
               title: 'Beacon',
               debugShowCheckedModeBanner: false,
               theme: defaultLightTheme,
-              home: SplashView(
-                logo: Image.asset("assets/images/app-logo.png"),
-                done: Done(isLoggedIn
+              home: isLoggedIn
                   ? IfElseBuilder(
                       condition: authProvider.bmsUserModel?.userTypeId == 1,
                       ifBuilder: (context) => const DashBoardScreen(),
@@ -187,8 +185,7 @@ class MyApp extends StatelessWidget {
                       })
                   : LoginScreen(
                       key: key,
-                    ),),
-              )
+                    ),
             );
           }
         );
