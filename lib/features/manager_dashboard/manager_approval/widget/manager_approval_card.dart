@@ -91,6 +91,7 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                     const SizedBox(height: 6),
                     Text(
                       "${widget.shiftData.startTime} - ${widget.shiftData.endTime}",
+                      // "${widget.shiftData.actualStartDateTime} - ${widget.shiftData.actualEndDateTime}",
                       style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,

@@ -122,17 +122,22 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
                                   managerApprovalProvider.selectedShifts.isEmpty
                                       ? null
                                       : () {
-                                          DialogueUtils.successMessageDialogue(
-                                              context: context,
-                                              successMessage:
-                                                  "Approval Saved Successfully.");
+                                          ManagerApprovalProvider;
+                                          // DialogueUtils.successMessageDialogue(
+                                          //     context: context,
+                                          //     successMessage:
+                                          //         "Approval Saved Successfully.");
                                         },
                               style: ButtonStyle(
                                   padding: MaterialStateProperty.all(
                                       EdgeInsetsDirectional.zero),
                                   elevation: MaterialStateProperty.all(4),
                                   backgroundColor: MaterialStateProperty.all(
-                                      const Color(0xff1870FF)),
+                                      managerApprovalProvider
+                                              .selectedShifts.isEmpty
+                                          ? const Color.fromARGB(
+                                              255, 156, 156, 156)
+                                          : const Color(0xff1870FF)),
                                   shape: MaterialStateProperty.all(
                                       const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(

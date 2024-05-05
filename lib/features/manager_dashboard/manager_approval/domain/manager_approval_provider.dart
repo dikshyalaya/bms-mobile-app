@@ -101,41 +101,39 @@ class ManagerApprovalProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Post Approval Shift Data
-  // Future<BMSResponse<AccountHousesResponseModel>>
-  //     postListShiftForApproval() async {
-  //   final ShiftForApprovalRepo shiftForApprovalRepo = ShiftForApprovalRepo();
-  //   isShiftApprovalPosting = true;
-  //   notifyListeners();
-  //   await shiftForApprovalRepo.post(
-  //     params: {},
-  //     body: {"shfitsToApprove": selectedShifts},
-  //     apiCallback: (networkState) {
-  //       onApiCallback<dynamic>(
-  //         networkState: networkState,
-  //         onLoadedState: (loadedState) {
-  //           onFutureNotifyListeners(() {
-  //             final Map<String, dynamic> map = loadedState.response?.body;
-  //             shiftForApprovalResponseModel =
-  //                 shiftForApprovalResponseModelFromJson(
-  //                     jsonEncode(map['response']));
-  //             log("Account List For Approval: ${shiftForApprovalResponseModel?.data?.first.id}");
-  //             log("Account List Length: ${shiftForApprovalResponseModel?.data?.length}");
-  //           });
-  //         },
-  //         onErrorState: (errorState) {
-  //           accountHousesResponseModel?.data = null;
-  //           onFutureNotifyListeners(() {
-  //             // loadedPostModel = errorState.response?.body;
-  //           });
-  //         },
-  //         onLoadingState: (loadingState) {},
-  //       );
-  //     },
-  //   );
-  //   notifyListeners();
-  //   log("Account Response: ${accountHousesResponseModel?.data?.length}");
-  //   isShiftApprovalPosting = false;
-  //   return BMSResponse(body: accountHousesResponseModel);
-  // }
+  // Post Approval Shift Data
+  Future<BMSResponse<AccountHousesResponseModel>>
+      postListShiftForApproval() async {
+    final ShiftForApprovalRepo shiftForApprovalRepo = ShiftForApprovalRepo();
+    isShiftApprovalPosting = true;
+    notifyListeners();
+    await shiftForApprovalRepo.post(
+      params: {},
+      body: {"shfitsToApprove": selectedShifts},
+      apiCallback: (networkState) {
+        onApiCallback<dynamic>(
+          networkState: networkState,
+          onLoadedState: (loadedState) {
+            onFutureNotifyListeners(() {
+              final Map<String, dynamic> map = loadedState.response?.body;
+              shiftForApprovalResponseModel =
+                  shiftForApprovalResponseModelFromJson(
+                      jsonEncode(map['response']));
+            });
+          },
+          onErrorState: (errorState) {
+            accountHousesResponseModel?.data = null;
+            onFutureNotifyListeners(() {
+              // loadedPostModel = errorState.response?.body;
+            });
+          },
+          onLoadingState: (loadingState) {},
+        );
+      },
+    );
+    notifyListeners();
+    log("Account Response: ${accountHousesResponseModel?.data?.length}");
+    isShiftApprovalPosting = false;
+    return BMSResponse(body: accountHousesResponseModel);
+  }
 }
