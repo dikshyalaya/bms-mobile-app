@@ -12,6 +12,6 @@ bool isTablet(BuildContext context) {
     (screenSize.height * screenSize.height),
   );
 
-  // Checking if the diagonal screen size is greater than 7 inches
-  return diagonalSize > 7.0;
+  // Typical threshold for tablet devices
+  return diagonalSize >= 7.0 && (screenSize.shortestSide >= 600);
 }
