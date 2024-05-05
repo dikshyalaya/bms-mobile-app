@@ -1,12 +1,13 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
 import 'package:beacon_flutter/constants/app_icons.dart';
+import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BeaconTextFormField extends StatefulWidget {
-   final Color? backgroundColor;
+  final Color? backgroundColor;
   final Color? textColor;
   final TextEditingController? controller;
   final String? hintText;
@@ -69,16 +70,24 @@ class BeaconTextFormField extends StatefulWidget {
 }
 
 class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
-    late bool isPassword;
+  late bool isPassword;
 
   @override
   void initState() {
     isPassword = widget.isPassword;
     super.initState();
+    isTablet();
   }
-
+isTablet(){
+  setState(() {
+   isTabletDevice =  getBool("isTablet");
+  });
+  
+}
+bool? isTabletDevice;
   @override
   Widget build(BuildContext context) {
+
     return TextFormField(
       // enableSuggestions: false,
       // maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -90,7 +99,7 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
       onChanged: widget.onChanged,
       textInputAction: widget.inputAction,
       key: widget.formKey,
-      style: TextStyle(color: widget.textColor,fontSize: 15.sp),
+      style: TextStyle(color: widget.textColor,fontWeight:isTabletDevice == true?FontWeight.normal: FontWeight.bold ,fontSize: isTabletDevice == true?12.sp:15.sp),
       onTap: widget.onTap,
       readOnly: widget.readOnly ?? false,
       controller: widget.controller,
@@ -101,13 +110,14 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
       decoration: InputDecoration(
         // focusColor: Colors.red,
         focusedBorder: OutlineInputBorder(
-          borderSide: widget.borderSide ??
-              const BorderSide(color: Color(0xFFFFFFFF)),
+          borderSide:
+              widget.borderSide ?? const BorderSide(color: Color(0xFFFFFFFF)),
           borderRadius: BorderRadius.all(Radius.circular(widget.radius ?? 7.r)),
         ),
         // counterStyle: TextStyle(height: double.minPositive,),
         //  counterText: "",
-        counterStyle: TextStyle(color: Theme.of(context).colorScheme.background),
+        counterStyle:
+            TextStyle(color: Theme.of(context).colorScheme.background),
         labelStyle: widget.labelStyle,
         // Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 15.sp),
         floatingLabelStyle: widget.floatingStyle,
@@ -116,7 +126,8 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
         //     .bodyText2!
         //     .copyWith(fontSize: 18.sp, color: Colors.teal),
         labelText: widget.labelText,
-        fillColor: widget.backgroundColor ?? Theme.of(context).colorScheme.background,
+        fillColor:
+            widget.backgroundColor ?? Theme.of(context).colorScheme.background,
         filled: true,
         prefixIcon: widget.prefixIcon,
         contentPadding: EdgeInsets.symmetric(
@@ -124,13 +135,13 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
           vertical: widget.verticalPadding ?? 16.h,
         ),
         border: OutlineInputBorder(
-          borderSide: widget.borderSide ??
-              const BorderSide(color: Color(0xFF3C85FF)),
+          borderSide:
+              widget.borderSide ?? const BorderSide(color: Color(0xFF3C85FF)),
           borderRadius: BorderRadius.all(Radius.circular(widget.radius ?? 7.r)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: widget.borderSide ??
-              const BorderSide(color: Color(0xFF3C85FF)),
+          borderSide:
+              widget.borderSide ?? const BorderSide(color: Color(0xFF3C85FF)),
           borderRadius: BorderRadius.all(Radius.circular(widget.radius ?? 7.r)),
         ),
         hintText: widget.hintText,
@@ -148,18 +159,33 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
                         isPassword = !isPassword;
                       });
                     },
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 25.w),
-                      child: SvgPicture.asset(
-                          isPassword ? AppIcons.eyeShow : AppIcons.eyeHide,
-                          height: 15.h,
-                          width: 15.w,
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Colors.grey
-                                  : Colors.grey),
-                    ),
-                  )
+                    child: isPassword
+                        ? Padding(
+                          padding:  EdgeInsets.only(right:8.w),
+                          child: Icon(Icons.visibility,
+                              size: 20.sp,
+                              color:
+                                  Theme.of(context).brightness == Brightness.light
+                                      ? Colors.grey
+                                      : Colors.grey),
+                        )
+                        : Padding(
+                          padding:  EdgeInsets.only(right:8.w),
+                          child: Icon(Icons.visibility_off,
+                              size: 20.sp,
+                              color:
+                                  Theme.of(context).brightness == Brightness.light
+                                      ? Colors.grey
+                                      : Colors.grey),
+                        )
+                    // SvgPicture.asset(
+                    //     isPassword ? AppIcons.eyeShow : AppIcons.eyeHide,
+                    //     height: 20.h,
+                    //     width: 20.w,
+                    //     color: Theme.of(context).brightness == Brightness.light
+                    //         ? Colors.grey
+                    //         : Colors.grey),
+                    )
                 : null),
       ),
     );

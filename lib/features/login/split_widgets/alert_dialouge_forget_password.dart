@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../shared_preference/share_preference.dart';
+
 Future<dynamic> DialougeBoxShowingWidget(BuildContext context) {
+ bool? isTablet = getBool("isTablet");
+
   return showDialog(
     context: context,
     builder: ((context) {
@@ -40,16 +44,23 @@ Future<dynamic> DialougeBoxShowingWidget(BuildContext context) {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: SizedBox(
-                    height: 40.h,
-                    child: 
-                    BeaconTextFormField(
+                    height: 50.h,
+                    child: BeaconTextFormField(
                       hintText: 'Email your email',
-                      radius: 20.r,
-                      prefixIcon: const Icon(Icons.mail,color: Color(0xFFC1C1C1),),
-                      hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: const Color(0xFFC1C1C1)),
+                      radius: 50.r,
+                      prefixIcon: Padding(
+                        padding:  EdgeInsets.only(left:8.w),
+                        child: Icon(
+                          Icons.mail,
+                          color: const Color(0xFFC1C1C1),
+                          size: 20.sp,
+                        ),
+                      ),
+                      hintStyle:
+                          Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color:  Color(0xFFC1C1C1),
+                                fontSize: isTablet == true?12.sp: 15.sp,
+                              ),
                     ),
                   ),
                 ),
@@ -58,7 +69,7 @@ Future<dynamic> DialougeBoxShowingWidget(BuildContext context) {
                   padding: EdgeInsets.symmetric(horizontal: 60.w),
                   child: CustomElevatedButton(
                     onPressed: () {
-                   Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     bdRadius: 20.r,
                     text1: 'Reset Password',

@@ -52,7 +52,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
 
     try {
       FocusScope.of(context).unfocus();
-    var fcm = await generateFCMToken();
+      var fcm = await generateFCMToken();
       await authProvider.logIn(
         widget.userName.text,
         widget.password.text,
@@ -98,8 +98,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
                     builder: (context) => const ManagerDashBoardScreen()),
                 (route) => false,
               );
-            } else {
-            }
+            } else {}
           } else {
             print("has error");
             shoErrorToast(onData['message']);
@@ -127,7 +126,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
         : Align(
             alignment: Alignment.centerRight,
             child: SizedBox(
-              width: 104,
+              width: 104.w,
               child: CustomElevatedButton(
                 onPressed: () => _login(context),
                 gradient: const LinearGradient(

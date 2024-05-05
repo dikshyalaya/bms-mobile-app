@@ -1,7 +1,9 @@
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/features/login/split_widgets/custom_login_button.dart';
 import 'package:beacon_flutter/features/login/split_widgets/forget_password_text_widget.dart';
+import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginFormWidget extends StatelessWidget {
@@ -9,6 +11,8 @@ class LoginFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+ bool? isTablet = getBool("isTablet");
+
     final TextEditingController username = TextEditingController();
     final TextEditingController password = TextEditingController();
     return Padding(
@@ -16,7 +20,7 @@ class LoginFormWidget extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 350.h,
+            // height: MediaQuery.of(context).size.height / 2,
             width: double.infinity,
             decoration: BoxDecoration(
               boxShadow: [
@@ -39,41 +43,58 @@ class LoginFormWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 20.sp,
                         ),
                   ),
                   SizedBox(height: 22.h),
-                  BeaconTextFormField(
-                    controller: username,
-                    verticalPadding: 0,
-                    horizontalPadding: 0,
-                    prefixIcon: const Icon(
-                      Icons.account_circle_rounded,
-                      color: Color(0xFFC1C1C1),
+                  SizedBox(
+                    height: 50.h,
+                    child: BeaconTextFormField(
+                      controller: username,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      prefixIcon: Padding(
+                        padding:  EdgeInsets.only(left:8.w),
+                        child: Icon(
+                          Icons.account_circle_rounded,
+                          size: 20.sp,
+                          color: const Color(0xFFC1C1C1),
+                        ),
+                      ),
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      hintText: 'Username',
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                            fontWeight:  FontWeight.normal,
+                              color: const Color(0xFFC1C1C1), fontSize: isTablet == true? 12.sp:15.sp),
                     ),
-                    radius: 25.r,
-                    backgroundColor: const Color(0xFFFFFFFF),
-                    hintText: 'Username',
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: const Color(0xFFC1C1C1)),
                   ),
                   SizedBox(height: 14.h),
-                  BeaconTextFormField(
-                    controller: password,
-                    isPassword: true,
-                    verticalPadding: 0,
-                    horizontalPadding: 0,
-                    prefixIcon:
-                        const Icon(Icons.lock, color: Color(0xFFC1C1C1)),
-                    radius: 25.r,
-                    backgroundColor: Colors.white,
-                    hintText: 'Password',
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: const Color(0xFFC1C1C1)),
+                  SizedBox(
+                    height: 50.h,
+                    child: BeaconTextFormField(
+                      controller: password,
+                      isPassword: true,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.h,
+                      prefixIcon: Padding(
+                        padding:  EdgeInsets.only(left:8.w),
+                        child: Icon(Icons.lock,
+                            size: 20.sp, color: const Color(0xFFC1C1C1)),
+                      ),
+                      radius: 25.r,
+                      backgroundColor: Colors.white,
+                      hintText: 'Password',
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                            fontWeight: FontWeight.normal,
+                              fontSize: isTablet == true?12.sp: 15.sp, color: const Color(0xFFC1C1C1)),
+                    ),
                   ),
                   SizedBox(height: 15.95.h),
                   CustomLoginButton(
@@ -92,7 +113,7 @@ class LoginFormWidget extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
-                .copyWith(color: Colors.white),
+                .copyWith(color: Colors.white, fontSize: 13.sp),
           ),
         ],
       ),

@@ -7,11 +7,13 @@ import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
 import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
+import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -83,7 +85,7 @@ void main() async {
   bool isLoggedIn = false;
   // await handleLocationPermission();
   WidgetsFlutterBinding.ensureInitialized();
-
+  await setupLocator();
   await Hive.initFlutter();
   await BMSHiveModel.init();
   final accessToken = await BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);

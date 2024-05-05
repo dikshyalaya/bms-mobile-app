@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   CustomElevatedButton({
@@ -37,22 +38,22 @@ class CustomElevatedButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: gradient,
-          borderRadius: BorderRadius.circular(bdRadius ?? 2),
+          borderRadius: BorderRadius.circular(bdRadius ?? 2.r),
         ),
-        padding: const EdgeInsets.all(12), // Adjust padding as needed
+        padding: EdgeInsets.all(12.r), // Adjust padding as needed
         child: Center(
           child: (isLoadingPart == true)
               ? Padding(
-                  padding: const EdgeInsets.only(left: 100.0),
+                  padding: EdgeInsets.only(left: 100.w),
                   child: Row(
                     children: [
                       Text('Loading',
                           style: TextStyle(
-                              fontSize: ftSize ?? 12,
+                              fontSize: ftSize ?? 12.sp,
                               color: txtColor ?? Colors.white)),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(),
+                      Padding(
+                        padding: EdgeInsets.all(8.sp),
+                        child: const CircularProgressIndicator(),
                       )
                     ],
                   ),
@@ -60,7 +61,7 @@ class CustomElevatedButton extends StatelessWidget {
               : Text(
                   "$text1",
                   style: TextStyle(
-                      fontSize: ftSize ?? 12,
+                      fontSize: ftSize ?? 12.sp,
                       fontWeight: FontWeight.bold,
                       color: txtColor ?? Colors.white),
                 ),

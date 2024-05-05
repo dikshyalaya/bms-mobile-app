@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:beacon_flutter/constants/app_images.dart';
+import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
 import 'package:beacon_flutter/features/login/split_widgets/login_form_widget.dart';
+import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,13 +16,30 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // checkDevice();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+    checkDevice();
+    });
+  }
 
+  checkDevice() {
+    bool value = isTablet(context);
+    storeBool('isTablet', value);
+    setState(() {
+      isTabletDevice = value;
+    });
+  }
+
+  late bool isTabletDevice;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.grey,
+          // color: Colors.grey,
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -32,8 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: Center(
           child: SizedBox(
-            height: 530.h,
-            width: 381.w,
+            height: MediaQuery.sizeOf(context).height / 1.5,
+            width: isTabletDevice? (300.w ):null,
             child: Stack(
               children: [
                 const LoginFormWidget(),

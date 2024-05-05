@@ -50,6 +50,8 @@ dependencies:
   splash_view: ^2.0.1
   flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.10+1
+  get_it: ^7.7.0
+  shared_preferences: ^2.2.3
 #  flutter_launcher_icons: ^0.13.1
 
 
