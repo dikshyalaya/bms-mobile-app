@@ -40,7 +40,7 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
     return Dialog(
       insetPadding: EdgeInsets.zero,
       backgroundColor: Colors.transparent, // Making the background transparent
-      child: isResetPasswordScreen == true
+      child: isResetPasswordScreen == false
           ? Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -193,6 +193,9 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                         onErrorState: (errorState) {
                                           log("has error");
                                           shoErrorToast(errorState.message);
+                                          setState(() {
+                                            isLoading = false;
+                                          });
                                         },
                                         onLoadingState: (loadingState) {
                                           log("IS Loading");
