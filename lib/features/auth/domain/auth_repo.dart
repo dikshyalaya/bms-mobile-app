@@ -22,3 +22,21 @@ class ChangePasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
     return changePasswordUrl;
   }
 }
+class SendOtpByEmailRepo extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+    return sendOtpByEmail;
+  }
+}
+class ResetPasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+    return sendOtpByEmail;
+  }
+}
