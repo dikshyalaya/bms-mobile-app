@@ -1289,65 +1289,113 @@ class DialogueUtils {
                     ),
                 SizedBox(height: 20.h),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: isTablet == true ? 10.w : 24.w),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          // child:   Text("New Password"),
-                          child: buildText("New Password"),
-                        ),
-                      ),
-                      SizedBox(width: 15.w),
-                      Expanded(
-                        flex: 3,
-                        child: BeaconTextFormField(
-                          controller: newPassword,
-                          verticalPadding: 10.h,
-                          horizontalPadding: 25.w,
-                          radius: 25.r,
-                          backgroundColor: const Color(0xFFFFFFFF),
-                          borderSide: const BorderSide(
-                              width: 1, color: Color(0xFFA9A9A9)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet == true ? 10.w : 24.w),
+                    child: BeaconTextFormField(
+                      labelText: "New Password",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                      floatingStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                      controller: newPassword,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      borderSide:
+                          const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
+                    )
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 2,
+                    //       child: Align(
+                    //         alignment: Alignment.centerRight,
+                    //         // child:   Text("New Password"),
+                    //         child: buildText("New Password"),
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 15.w),
+                    //     Expanded(
+                    //       flex: 3,
+                    //       child: BeaconTextFormField(
+                    //         controller: newPassword,
+                    //         verticalPadding: 10.h,
+                    //         horizontalPadding: 25.w,
+                    //         radius: 25.r,
+                    //         backgroundColor: const Color(0xFFFFFFFF),
+                    //         borderSide: const BorderSide(
+                    //             width: 1, color: Color(0xFFA9A9A9)),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    ),
                 SizedBox(height: 13.h),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: isTablet == true ? 10.w : 24.w),
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Align(
-                              alignment: Alignment.centerRight,
-                              child: buildText("Confirm Password"))),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Expanded(
-                          flex: 3,
-                          child: BeaconTextFormField(
-                            controller: confirmPassword,
-                            verticalPadding: 10.h,
-                            horizontalPadding: 25.w,
-                            radius: 25.r,
-                            borderSide: const BorderSide(
-                                width: 1, color: Color(0xFFA9A9A9)),
-                            backgroundColor: const Color(0xFFFFFFFF),
-                          ))
-                    ],
-                  ),
-                ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet == true ? 10.w : 24.w),
+                    child: BeaconTextFormField(
+                      labelText: "Confirm Password",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                      floatingStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                      controller: confirmPassword,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      borderSide:
+                          const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
+                    )
+                    // Row(
+                    //   // mainAxisAlignment: MainAxisAlignment.start,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     Expanded(
+                    //         flex: 2,
+                    //         child: Align(
+                    //             alignment: Alignment.centerRight,
+                    //             child: buildText("Confirm Password"))),
+                    //     SizedBox(
+                    //       width: 15.w,
+                    //     ),
+                    //     Expanded(
+                    //         flex: 3,
+                    //         child: BeaconTextFormField(
+                    //           controller: confirmPassword,
+                    //           verticalPadding: 10.h,
+                    //           horizontalPadding: 25.w,
+                    //           radius: 25.r,
+                    //           borderSide: const BorderSide(
+                    //               width: 1, color: Color(0xFFA9A9A9)),
+                    //           backgroundColor: const Color(0xFFFFFFFF),
+                    //         ))
+                    //   ],
+                    // ),
+                    ),
                 SizedBox(
                   height: 13.h,
                 ),
