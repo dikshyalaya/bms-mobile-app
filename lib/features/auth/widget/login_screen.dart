@@ -168,18 +168,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         onData['data']
                                                                 ['employee']
                                                             ['empLastName'];
+                                                    final isPasswordUpdateRequired =
+                                                        onData['data'][
+                                                            'isPasswordUpdateRequired'];
                                                     authProvider.savedLoginInfo(
-                                                        accessToken,
-                                                        BmsUserModel(
-                                                            email: email,
-                                                            isActive: isActive,
-                                                            userTypeId:
-                                                                userTypeId,
-                                                            empFirstName:
-                                                                empFirstName,
-                                                            empLastName:
-                                                                empLastName,
-                                                            empId: empId));
+                                                      accessToken,
+                                                      BmsUserModel(
+                                                        email: email,
+                                                        isActive: isActive,
+                                                        userTypeId: userTypeId,
+                                                        empFirstName:
+                                                            empFirstName,
+                                                        empLastName:
+                                                            empLastName,
+                                                        empId: empId,
+                                                        isPasswordUpdateRequired:
+                                                            isPasswordUpdateRequired,
+                                                      ),
+                                                    );
 
                                                     if (userTypeId == 1) {
                                                       Navigator.pushAndRemoveUntil(

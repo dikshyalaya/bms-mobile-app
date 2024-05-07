@@ -15,7 +15,6 @@ class ManagerApprovalCard extends StatefulWidget {
 }
 
 class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
-  bool isTrue = false;
   @override
   Widget build(BuildContext context) {
     final managerApprovalProvider =
@@ -36,10 +35,10 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
             padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
             child: Row(
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Schedule Date:",
                       style: TextStyle(
                         color: Color(0xff8A8181),
@@ -47,8 +46,8 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
-                    Text(
+                    const SizedBox(height: 6),
+                    const Text(
                       "Shift Time:",
                       style: TextStyle(
                         color: Color(0xff8A8181),
@@ -56,17 +55,19 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "Meal Time:",
-                      style: TextStyle(
+                      (widget.shiftData.lunchTime ?? "").isEmpty
+                          ? "No Meal Reason:"
+                          : "Meal Time:",
+                      style: const TextStyle(
                         color: Color(0xff8A8181),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
-                    Text(
+                    const SizedBox(height: 6),
+                    const Text(
                       "Total Hours:",
                       style: TextStyle(
                         color: Color(0xff8A8181),
@@ -100,7 +101,9 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "${widget.shiftData.lunchTime} Min",
+                      (widget.shiftData.lunchTime ?? "").isEmpty
+                          ? widget.shiftData.noBreakReason ?? 'N/A'
+                          : "${widget.shiftData.lunchTime} Min",
                       style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
@@ -141,7 +144,7 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                   child: ElevatedButton(
                     onPressed: () {
                       BottomModalSheetUtils.openBottomModalSheetForDispute(
-                          context);
+                          context, widget.shiftData);
                     },
                     style: ButtonStyle(
                         padding: MaterialStateProperty.all(
@@ -171,10 +174,10 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                         child: Switch(
                             activeColor: Colors.blue,
                             key: UniqueKey(),
-                            value: isTrue,
+                            value: managerApprovalProvider.selectedShifts
+                                .contains(widget.shiftData.id),
                             onChanged: (bool val) {
                               setState(() {
-                                isTrue = val;
                                 managerApprovalProvider
                                     .addOrRemoveSelectedShift(
                                   widget.shiftData.id ?? 0,

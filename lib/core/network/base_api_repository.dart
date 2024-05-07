@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:beacon_flutter/core/network/dio_manager.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
@@ -61,6 +63,7 @@ abstract class BaseApiRepository<T> {
         jsonBody: body,
         baseUrlType: baseUrlType,
       );
+      log("Shift Approval Posting Response: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (path(params, pathVariable).contains(logInUrl)) {

@@ -86,7 +86,7 @@ await  BMSHiveModel.hive.put(BMSHiveModel.ACCESS_TOKEN, accessToken);
     }
   notifyListeners();
 
-  return _bmsUserModel??BmsUserModel(email: "", empLastName: "", empFirstName: "", empId: 0, userTypeId: 0, isActive: false);
+  return _bmsUserModel??BmsUserModel(email: "", empLastName: "", empFirstName: "", empId: 0, userTypeId: 0, isActive: false,isPasswordUpdateRequired: false);
   }
 
   void logOut()async{
