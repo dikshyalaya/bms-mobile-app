@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:beacon_flutter/core/network/dio_manager.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
@@ -49,13 +51,12 @@ abstract class BaseApiRepository<T> {
   }) async {
     try {
       apiCallback(NetworkState.loading());
-      // final urlPath = path(params, pathVariable);
-
       String urlPath = path(params, pathVariable);
 
       if (pathVariable?.isNotEmpty ?? false) {
         urlPath += '/${pathVariable!}';
       }
+
       final response = await DioManager.instance.post(
         path: urlPath,
         jsonBody: body,
@@ -63,25 +64,42 @@ abstract class BaseApiRepository<T> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (path(params, pathVariable).contains(logInUrl)) {
-          onAccessToken?.call(response.data);
-        }
+        // Check if the request was successful and data field exists
+        if ((response.data["data"] != false) &&
+            response.data["success"] == true) {
+          // Call onAccessToken if logging in
+          log("--response data------${response.data["data"]}-------");
+          log("--response sucess------${response.data["success"]}-------");
 
-        apiCallback(NetworkState.loaded(
-            BMSResponse.response(body: parseJson(response))));
+          if (path(params, pathVariable).contains(logInUrl)) {
+            onAccessToken?.call(response.data);
+          }
+
+          // Request was successful and contains valid data
+          apiCallback(NetworkState.loaded(
+              BMSResponse.response(body: parseJson(response))));
+        } else {
+          // Request was successful but response indicates an error
+          final errorMessage =
+              response.data["message"] ?? 'Unknown error occurred';
+          apiCallback(NetworkState.error(
+              BMSResponse.error(exception: BMSException(errorMessage))));
+        }
       } else {
+        // Request failed
         apiCallback(NetworkState.error(BMSResponse.error(
             exception: BMSException(response.data.toString()))));
       }
       return response.data;
     } on DioException catch (error) {
+      // DioException occurred
       apiCallback(NetworkState.error(
           BMSResponse.error(exception: BMSException(error.toString()))));
-
       return error.response?.data;
     }
   }
 
+  
   Dio dio = Dio();
 
   Future<dynamic> logIn({

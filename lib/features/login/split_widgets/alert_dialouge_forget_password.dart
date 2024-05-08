@@ -71,36 +71,8 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                         ],
                       ),
                       alignment: Alignment.center,
-                      child: buildText("Reset Your Password")),
-                  SizedBox(height: 20.h),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: isTablet == true ? 10.w : 24.w),
-                      child: BeaconTextFormField(
-                        labelText: "Enter the OTP",
-                        labelStyle: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black45),
-                        floatingStyle: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                        controller: otpValue,
-                        verticalPadding: 10.h,
-                        horizontalPadding: 25.w,
-                        radius: 25.r,
-                        backgroundColor: const Color(0xFFFFFFFF),
-                        borderSide: const BorderSide(
-                            width: 1, color: Color(0xFFA9A9A9)),
-                      )),
-                  SizedBox(height: 13.h),
+                      child: buildText("Reset Password", isTablet ?? false)),
+                  SizedBox(height: isTablet == true ? 30.h : 20.h),
                   Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: isTablet == true ? 10.w : 24.w),
@@ -110,14 +82,14 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                             .textTheme
                             .bodyMedium!
                             .copyWith(
-                                fontSize: 15.sp,
+                                fontSize: isTablet == true ? 12.sp : 15.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black45),
                         floatingStyle: Theme.of(context)
                             .textTheme
                             .bodyMedium!
                             .copyWith(
-                                fontSize: 17.sp,
+                                fontSize: isTablet == true ? 15.sp : 17.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                         controller: newPassword,
@@ -128,7 +100,7 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                         borderSide: const BorderSide(
                             width: 1, color: Color(0xFFA9A9A9)),
                       )),
-                  SizedBox(height: 13.h),
+                  SizedBox(height: isTablet == true ? 20.h : 13.h),
                   Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: isTablet == true ? 10.w : 24.w),
@@ -138,14 +110,14 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                             .textTheme
                             .bodyMedium!
                             .copyWith(
-                                fontSize: 15.sp,
+                                fontSize: isTablet == true ? 12.sp : 15.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black45),
                         floatingStyle: Theme.of(context)
                             .textTheme
                             .bodyMedium!
                             .copyWith(
-                                fontSize: 17.sp,
+                                fontSize: isTablet == true ? 15.sp : 17.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                         controller: confirmPassword,
@@ -156,14 +128,40 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                         borderSide: const BorderSide(
                             width: 1, color: Color(0xFFA9A9A9)),
                       )),
-                  SizedBox(
-                    height: 13.h,
-                  ),
+                  SizedBox(height: isTablet == true ? 20.h : 13.h),
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: isTablet == true ? 10.w : 24.w),
+                      child: BeaconTextFormField(
+                        labelText: "Enter Password Reset Code",
+                        labelStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(
+                                fontSize: isTablet == true ? 12.sp : 15.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black45),
+                        floatingStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(
+                                fontSize: isTablet == true ? 15.sp : 17.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                        controller: otpValue,
+                        verticalPadding: 10.h,
+                        horizontalPadding: 25.w,
+                        radius: 25.r,
+                        backgroundColor: const Color(0xFFFFFFFF),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFA9A9A9)),
+                      )),
+                  SizedBox(height: isTablet == true ? 20.h : 13.h),
                   Padding(
                     padding: EdgeInsets.only(
-                        right: isTablet == true ? 10.w : 24.w,
+                        right: isTablet == true ? 40.w : 90.w,
                         bottom: 24.h,
-                        left: isTablet == true ? 120.w : 150.w),
+                        left: isTablet == true ? 50.w : 90.w),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox(
@@ -209,10 +207,10 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                             isLoading = false;
                                             Navigator.pop(context);
                                             successMessageDialogue(
-                                              context: context,
-                                              successMessage:
-                                                  "Password reset successfully.",
-                                            );
+                                                context: context,
+                                                successMessage:
+                                                    "Password reset successfully.",
+                                                isTablet: isTablet ?? false);
                                           });
                                         },
                                       );
@@ -226,8 +224,8 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                       Color(0xFF2E5698), // End color
                                     ],
                                   ),
-                                  text1: 'Reset Password',
-                                  ftSize: isTablet == true ? 8.sp : 12.sp,
+                                  text1: 'Set New Password',
+                                  ftSize: isTablet == true ? 10.sp : 12.sp,
                                   bdRadius: 20.r,
                                 ),
                               ),
@@ -306,6 +304,9 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                   authProvider.sendOtpByEmail(
                                     email.text,
                                     onErrorState: (errorState) {
+                                      setState(() {
+                                        isSendingOtp = false;
+                                      });
                                       log("has error");
                                       shoErrorToast(errorState.message);
                                     },
@@ -321,6 +322,8 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                         isResetPasswordScreen = true;
                                         isSendingOtp = false;
                                       });
+                                      shoErrorToast(
+                                          "Password reset code sent to email successfully");
                                     },
                                   );
                                 }
@@ -345,11 +348,13 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
   }
 }
 
-Text buildText(String text) {
+Text buildText(String text, bool isTablet) {
   return Text(
     text,
-    style: const TextStyle(
-        color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+    style: TextStyle(
+        color: Colors.black,
+        fontSize: isTablet == true ? 12.sp : 15.sp,
+        fontWeight: FontWeight.bold),
   );
 }
 
@@ -365,7 +370,9 @@ bool isEmailValid(String email) {
 }
 
 Future<void> successMessageDialogue(
-    {required BuildContext context, required String successMessage}) async {
+    {required BuildContext context,
+    required String successMessage,
+    required bool isTablet}) async {
   return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -378,52 +385,64 @@ Future<void> successMessageDialogue(
               color: Colors.white,
             ),
             width: DimensionUtils.isTab(context)
-                ? 560
+                ? 560.w
                 : MediaQuery.of(context).size.width,
-            padding: const EdgeInsetsDirectional.symmetric(
-                horizontal: 27, vertical: 20),
+            padding: EdgeInsetsDirectional.symmetric(
+                horizontal: 27.h, vertical: 20.h),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   children: [
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Card(
-                        margin: EdgeInsets.zero,
-                        color: const Color(0xff079D28),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                        ),
+                    Container(
+                      height: 40.h,
+                      width: 40.w,
+                      decoration: const BoxDecoration(
+                        color: Color(0xff079D28),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(
-                      width: 11,
+                    // SizedBox(
+                    //   height: 40.h,
+                    //   width: 40.w,
+                    //   child: Card(
+                    //     margin: EdgeInsets.zero,
+                    //     color: const Color(0xff079D28),
+                    //     // shape: RoundedRectangleBorder(
+                    //     //   borderRadius: BorderRadius.circular(40.r),
+                    //     // ),
+                    // child: const Icon(
+                    //   Icons.check,
+                    //   color: Colors.white,
+                    // ),
+                    //   ),
+                    // ),
+                    SizedBox(
+                      width: 11.w,
                     ),
                     Expanded(
                       child: Text(
                         successMessage,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: isTablet == true ? 12.sp : 15.sp,
                             color: Colors.black),
                       ),
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 4,
+                SizedBox(
+                  height: 4.h,
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: SizedBox(
-                    height: 40,
-                    width: 94.11,
+                    height: 40.h,
+                    width: (94.11).w,
                     child: ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -444,7 +463,7 @@ Future<void> successMessageDialogue(
                               .textTheme
                               .bodyLarge!
                               .copyWith(
-                                  fontSize: 15,
+                                  fontSize: isTablet == true ? 12.sp : 15.sp,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
                         )),

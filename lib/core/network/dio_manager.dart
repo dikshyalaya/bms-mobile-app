@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, prefer_typing_uninitialized_variables
 
+import 'dart:convert';
+
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -120,14 +122,33 @@ class ErrorInterceptor extends Interceptor {
     if ((err.response?.statusCode ?? 0) >= 500) {
       return handler.next(ServerException(
           err.requestOptions,
-          // err.response?.data['message'] != null
-          //     ? err.response?.data['message']
-          //     :
           err.response?.statusMessage ?? '',
           err.response?.statusCode ?? 0));
     }
 
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {}
+     if (err.response?.statusCode == 400 ||
+        err.response?.statusCode == 401 ||
+        err.response?.statusCode == 403) {
+      String errorMessage = '';
+      final errorResponse = err.response?.data;
+      if (errorResponse != null && errorResponse['errors'] != null) {
+        final errors = errorResponse['errors'] as Map<String, dynamic>;
+        // Check if the error message key is empty
+        if (errors.containsKey("message")) {
+          final List<dynamic> messageList = errors["message"];
+          if (messageList.isNotEmpty) {
+            errorMessage = messageList.first;
+          }
+        }
+      }
+      return handler.next(ServerException(
+          err.requestOptions,
+          errorMessage.isNotEmpty
+              ? errorMessage
+              : err.response?.statusMessage ?? 'Something went wrong',
+          err.response?.statusCode ?? 0));
+    }
+
 
     if (err.response?.data != null) {
       return handler.next(ServerException(

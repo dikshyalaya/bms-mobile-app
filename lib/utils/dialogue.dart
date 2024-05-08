@@ -293,11 +293,13 @@ class DialogueUtils {
     );
   }
 
-  static Text buildText(String text) {
+  static Text buildText(String text, bool isTablet) {
     return Text(
       text,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          color: Colors.black,
+          fontSize: isTablet ? 12.sp : 15.sp,
+          fontWeight: FontWeight.bold),
     );
   }
 
@@ -1284,7 +1286,7 @@ class DialogueUtils {
                       ],
                     ),
                     alignment: Alignment.center,
-                    child: buildText("Change Password")
+                    child: buildText("Change Password", isTablet ?? false)
                     // Text("Change Password"),
                     ),
                 SizedBox(height: 20.h),
@@ -1297,14 +1299,14 @@ class DialogueUtils {
                           .textTheme
                           .bodyMedium!
                           .copyWith(
-                              fontSize: 15.sp,
+                              fontSize: isTablet == true ? 12.sp : 15.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.black45),
                       floatingStyle: Theme.of(context)
                           .textTheme
                           .bodyMedium!
                           .copyWith(
-                              fontSize: 17.sp,
+                              fontSize: isTablet == true ? 15.sp : 17.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                       controller: newPassword,
@@ -1314,34 +1316,7 @@ class DialogueUtils {
                       backgroundColor: const Color(0xFFFFFFFF),
                       borderSide:
                           const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
-                    )
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     Expanded(
-                    //       flex: 2,
-                    //       child: Align(
-                    //         alignment: Alignment.centerRight,
-                    //         // child:   Text("New Password"),
-                    //         child: buildText("New Password"),
-                    //       ),
-                    //     ),
-                    //     SizedBox(width: 15.w),
-                    //     Expanded(
-                    //       flex: 3,
-                    //       child: BeaconTextFormField(
-                    //         controller: newPassword,
-                    //         verticalPadding: 10.h,
-                    //         horizontalPadding: 25.w,
-                    //         radius: 25.r,
-                    //         backgroundColor: const Color(0xFFFFFFFF),
-                    //         borderSide: const BorderSide(
-                    //             width: 1, color: Color(0xFFA9A9A9)),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    ),
+                    )),
                 SizedBox(height: 13.h),
                 Padding(
                     padding: EdgeInsets.symmetric(
@@ -1352,14 +1327,14 @@ class DialogueUtils {
                           .textTheme
                           .bodyMedium!
                           .copyWith(
-                              fontSize: 15.sp,
+                              fontSize: isTablet == true ? 12.sp : 15.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.black45),
                       floatingStyle: Theme.of(context)
                           .textTheme
                           .bodyMedium!
                           .copyWith(
-                              fontSize: 17.sp,
+                              fontSize: isTablet == true ? 15.sp : 17.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                       controller: confirmPassword,
@@ -1369,41 +1344,15 @@ class DialogueUtils {
                       backgroundColor: const Color(0xFFFFFFFF),
                       borderSide:
                           const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
-                    )
-                    // Row(
-                    //   // mainAxisAlignment: MainAxisAlignment.start,
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     Expanded(
-                    //         flex: 2,
-                    //         child: Align(
-                    //             alignment: Alignment.centerRight,
-                    //             child: buildText("Confirm Password"))),
-                    //     SizedBox(
-                    //       width: 15.w,
-                    //     ),
-                    //     Expanded(
-                    //         flex: 3,
-                    //         child: BeaconTextFormField(
-                    //           controller: confirmPassword,
-                    //           verticalPadding: 10.h,
-                    //           horizontalPadding: 25.w,
-                    //           radius: 25.r,
-                    //           borderSide: const BorderSide(
-                    //               width: 1, color: Color(0xFFA9A9A9)),
-                    //           backgroundColor: const Color(0xFFFFFFFF),
-                    //         ))
-                    //   ],
-                    // ),
-                    ),
+                    )),
                 SizedBox(
                   height: 13.h,
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      right: isTablet == true ? 10.w : 24.w,
+                      right: isTablet == true ? 60.w : 90.w,
                       bottom: 24.h,
-                      left: isTablet == true ? 120.w : 170.w),
+                      left: isTablet == true ? 60.w : 90.w),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: SizedBox(

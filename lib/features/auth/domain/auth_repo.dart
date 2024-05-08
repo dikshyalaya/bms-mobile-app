@@ -37,6 +37,6 @@ class ResetPasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
 
   @override
   String path(Map<String, String>? params, String? pathVariable) {
-    return sendOtpByEmail;
+    return resetPassword;
   }
 }
