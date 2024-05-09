@@ -15,24 +15,21 @@ class DashBoardGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardProvider = CardProvider();
-    return Wrap(
-
-        alignment: WrapAlignment.start,
-        children: [
-
-    ...cardProvider.gridCardProviders.map((e) {
-      final index= cardProvider.gridCardProviders.indexOf(e);
-      return Container(
-        height: 134,
-        margin: const EdgeInsetsDirectional.only(top: 14,start: 7,end: 7),
-        width: 110,
-        child: GridCard(
-          cardModel: cardProvider.gridCardProviders[index],
-          index: index,
-        ),
-      );
-    })]);
-
+    return Wrap(alignment: WrapAlignment.start, children: [
+      ...cardProvider.gridCardProviders.map((e) {
+        final index = cardProvider.gridCardProviders.indexOf(e);
+        return 
+        Container(
+          height: 134,
+          margin: const EdgeInsetsDirectional.only(top: 14, start: 7, end: 7),
+          width: 110,
+          child: GridCard(
+            cardModel: cardProvider.gridCardProviders[index],
+            index: index,
+          ),
+        );
+      })
+    ]);
   }
 }
 
@@ -138,8 +135,7 @@ class GridCard extends StatelessWidget {
                 maxLines: 1,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: Colors.white,
-              
-                      fontSize: 13,
+                      fontSize: 39,
                     ),
               ),
             ),
