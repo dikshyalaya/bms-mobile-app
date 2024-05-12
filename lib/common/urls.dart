@@ -3,6 +3,7 @@ const baseUrl =
     "https://api-beacon.byterays.com/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
+
 const clockInUrl = "PunchCard/ListPunchCardShifts";
 const punchInUrl = "PunchCard/PunchIn";
 const incompleteActivitiesUrl = "ShiftManagement/CheckIncompleteActivities";
@@ -19,6 +20,9 @@ const availableForShift = "ShiftManagement/AvailableForShift";
 const lookingForShift = "ShiftManagement/UpdateLookForShift";
 const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
 const myScheduleList = "ShiftManagement/GetMySchedules";
+const sendOtpByEmail ="Account/RequestResetPassword";
+const resetPassword ="Account/SetPasswordWithOTP";
+
 
 //Manager Dashboard Urls
 const accountHouses = "Manager/ShiftManagement/LoadAccounts";

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
@@ -34,19 +36,24 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget {
           builder: (context) => leadingIcon!,
         ),
         centerTitle: true,
-        title: Align(
-          alignment:
-              leadingIcon == null ? Alignment.centerLeft : Alignment.center,
-          child: Padding(
-            padding: leadingIcon == null
-                ? const EdgeInsetsDirectional.only(top: 17, start: 14)
-                : EdgeInsets.zero,
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: Colors.white),
+        title: InkWell(
+          onTap: (){
+            log("Is Tite");
+          },
+          child: Align(
+            alignment:
+                leadingIcon == null ? Alignment.centerLeft : Alignment.center,
+            child: Padding(
+              padding: leadingIcon == null
+                  ? const EdgeInsetsDirectional.only(top: 17, start: 14)
+                  : EdgeInsets.zero,
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -72,6 +79,10 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget {
                     context: context,
                     userName:
                         "${auth.bmsUserModel?.empFirstName} ${auth.bmsUserModel?.empLastName}");
+
+                         log("is pressed");
+                // launchUrl(Uri.parse(
+                //     'sms:9846776715${Platform.isAndroid ? '?' : '&'}body=Message from Me'));
               },
               child: Image.asset(
                 "profile".pngImage(),

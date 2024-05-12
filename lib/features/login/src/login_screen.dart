@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late bool isTabletDevice = false; // Initialize with a default value
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  late bool isTabletDevice;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

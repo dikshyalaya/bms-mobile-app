@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
+import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
 import 'package:beacon_flutter/common/widgets/password_change_field.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
@@ -12,6 +15,7 @@ import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_r
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
+import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
@@ -289,11 +293,13 @@ class DialogueUtils {
     );
   }
 
-  static Text buildText(String text) {
+  static Text buildText(String text, bool isTablet) {
     return Text(
       text,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          color: Colors.black,
+          fontSize: isTablet ? 12.sp : 15.sp,
+          fontWeight: FontWeight.bold),
     );
   }
 
@@ -1236,157 +1242,194 @@ class DialogueUtils {
   static Future<void> changePasswordDialogue(
       {required BuildContext context}) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    String newPassword = "";
-    String confirmPassword = "";
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              content: Container(
-                height: 240,
-                width: DimensionUtils.isTab(context)
-                    ? _width()
-                    : MediaQuery.of(context).size.width,
-                // padding: const EdgeInsets.symmetric(horizontal: 6),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        color: const Color(0xffD9D9D9),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF7D7B7B).withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 2), // changes position of shadow
-                          ),
-                        ],
+    final TextEditingController newPassword = TextEditingController();
+    final TextEditingController confirmPassword = TextEditingController();
+    bool isLoading = false;
+    bool? isTablet = getBool("isTablet");
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
+          content: Container(
+            width: DimensionUtils.isTab(context)
+                ? _width()
+                : MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                    height: 50.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.r),
+                        topRight: Radius.circular(20.r),
                       ),
-                      alignment: Alignment.center,
-                      child: buildText("Change Password"),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          buildText('New Password       '),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: SizedBox(
-                              child: PWChangeTextFormField(
-                                onChangedInput: (String val) {
-                                  newPassword = val;
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        buildText('Confirm Password'),
-                        const SizedBox(
-                          width: 15,
+                      color: const Color(0xffD9D9D9),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF7D7B7B).withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
                         ),
-                        Expanded(
-                          child: PWChangeTextFormField(
-                            onChangedInput: (String val) {
-                              confirmPassword = val;
-                            },
-                          ),
-                        )
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
+                    alignment: Alignment.center,
+                    child: buildText("Change Password", isTablet ?? false)
+                    // Text("Change Password"),
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        height: 40,
-                        width: 163,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (newPassword.isEmpty ||
-                                  confirmPassword.isEmpty) {
-                                shoErrorToast(
-                                    "Password field must not be empty");
-                              } else if (newPassword != confirmPassword) {
-                                shoErrorToast("Password is not match");
-                              } else {
-                                FocusScope.of(context).unfocus();
-                                showProgressDialogue(
-                                    context, "Signing in, Please wait...");
-
-                                await authProvider.changePassword(
-                                    confirmPassword, onErrorState: (val) {
-                                  Navigator.pop(context);
-                                  shoErrorToast(
-                                      val.response?.exception?.message ?? "");
-                                }, onLoadedState: (val) {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  successMessageDialogue(
-                                      context: context,
-                                      successMessage:
-                                          "Password changed successfully.");
-                                });
-                              }
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                    EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))))),
-                            child: Text(
-                              "Change Password",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                            )),
-                      ),
-                    ),
-                  ],
+                SizedBox(height: 20.h),
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet == true ? 10.w : 24.w),
+                    child: BeaconTextFormField(
+                      labelText: "New Password",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 12.sp : 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                      floatingStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 15.sp : 17.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                      controller: newPassword,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      borderSide:
+                          const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
+                    )),
+                SizedBox(height: 13.h),
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet == true ? 10.w : 24.w),
+                    child: BeaconTextFormField(
+                      labelText: "Confirm Password",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 12.sp : 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                      floatingStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 15.sp : 17.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                      controller: confirmPassword,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      borderSide:
+                          const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
+                    )),
+                SizedBox(
+                  height: 13.h,
                 ),
-              ),
-            ));
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: isTablet == true ? 60.w : 90.w,
+                      bottom: 24.h,
+                      left: isTablet == true ? 60.w : 90.w),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      child: isLoading
+                          ? SizedBox(
+                              width: 230.w,
+                              height: 40.h,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                    color: Color(0xFF1870FF)),
+                              ),
+                            )
+                          : SizedBox(
+                              child: CustomElevatedButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  FocusScope.of(context).unfocus();
+                                  if (newPassword.text.isEmpty ||
+                                      confirmPassword.text.isEmpty) {
+                                    shoErrorToast(
+                                        "Password fields must not be empty");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  } else if (newPassword.text !=
+                                      confirmPassword.text) {
+                                    shoErrorToast("Password is not match");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  } else {
+                                    await authProvider.changePassword(
+                                      confirmPassword.text,
+                                      onErrorState: (val) {
+                                        shoErrorToast(
+                                            val.response?.exception?.message ??
+                                                "");
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
+                                      onLoadedState: (val) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        successMessageDialogue(
+                                          context: context,
+                                          successMessage:
+                                              "Password changed successfully.",
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xFF1870FF), // Start color
+                                    Color(0xFF2E5698), // End color
+                                  ],
+                                ),
+                                text1: 'Change Password',
+                                ftSize: isTablet == true ? 8.sp : 15.sp,
+                                bdRadius: 20.r,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   static Future<void> onSystemSettingsDialogue(

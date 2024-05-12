@@ -1,0 +1,70 @@
+mport 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class MessageScreen extends StatelessWidget {
+  final String phoneNumber;
+  final String message;
+
+  MessageScreen({required this.phoneNumber, required this.message});
+
+  void _sendMessage(BuildContext context) async {
+    // Constructing the message URL
+    String url = 'sms:$phoneNumber?body=${Uri.encodeComponent(message)}';
+
+    // Launching the default messaging app
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      // Handle error, for example, show a dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Could not launch messaging app.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Message'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Recipient: $phoneNumber',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Message: $message',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _sendMessage(context);
+              },
+              child: Text('Send Message'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
