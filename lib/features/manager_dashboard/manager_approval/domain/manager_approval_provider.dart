@@ -7,6 +7,7 @@ import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/shift_for_approval_response_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/account_houses_repo.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/shift_for_approval_repo.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -107,10 +108,12 @@ class ManagerApprovalProvider extends ChangeNotifier {
 
   // Post Approval Shift Data
   Future<BMSResponse<AccountHousesResponseModel>> postListShiftForApproval(
-      List<int> selectedShift) async {
+      BuildContext context, List<int> selectedShift) async {
     final ApproveShiftRepo approveShiftRepo = ApproveShiftRepo();
     isShiftApprovalPosting = true;
     notifyListeners();
+    log("Is Approved Shift: $isShiftApprovalPosting");
+
     await approveShiftRepo.post(
       params: {},
       body: {"shfitsToApprove": selectedShift},
@@ -119,10 +122,20 @@ class ManagerApprovalProvider extends ChangeNotifier {
           networkState: networkState,
           onLoadedState: (loadedState) {
             onFutureNotifyListeners(() {
-              final Map<String, dynamic> map = loadedState.response?.body;
-              shiftForApprovalResponseModel =
-                  shiftForApprovalResponseModelFromJson(
-                      jsonEncode(map['response']));
+              DialogueUtils.successMessageDialogue(
+                  context: context, successMessage: "Saved Successfully.");
+              for (var data in selectedShift) {
+                shiftForApprovalResponseModel?.data
+                    ?.removeWhere((element) => element.id == data);
+              }
+              selectedShifts.clear();
+              log("Selected Shifts: $selectedShifts");
+              notifyListeners();
+
+              // final Map<String, dynamic> map = loadedState.response?.body;
+              // shiftForApprovalResponseModel =
+              //     shiftForApprovalResponseModelFromJson(
+              //         jsonEncode(map['response']));
             });
           },
           onErrorState: (errorState) {
@@ -138,6 +151,7 @@ class ManagerApprovalProvider extends ChangeNotifier {
     notifyListeners();
     log("Account Response: ${accountHousesResponseModel?.data?.length}");
     isShiftApprovalPosting = false;
+    log("Is Approved Shift: $isShiftApprovalPosting");
     return BMSResponse(body: accountHousesResponseModel);
   }
 

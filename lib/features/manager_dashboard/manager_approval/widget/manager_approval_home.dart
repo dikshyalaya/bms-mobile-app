@@ -19,8 +19,12 @@ class ManagerApprovalHomeScreen extends StatefulWidget {
 class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
   @override
   void initState() {
+    final managerApprovalProvider =
+        Provider.of<ManagerApprovalProvider>(context, listen: false);
     showFilterPopUp();
-    ManagerApprovalProvider().selectedShifts.clear();
+    managerApprovalProvider.shiftForApprovalResponseModel = null;
+    managerApprovalProvider.selectedShifts.clear();
+    managerApprovalProvider.accountHousesResponseModel = null;
     super.initState();
   }
 
@@ -82,9 +86,10 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
               builder: (context, isListLoading, child) {
                 return ServerResponseBuilder(
                   isDataFetching: isListLoading,
-                  isNullData:
-                      managerApprovalProvider.shiftForApprovalResponseModel ==
-                          null,
+                  isNullData: (managerApprovalProvider
+                              .shiftForApprovalResponseModel?.data ??
+                          [])
+                      .isEmpty,
                   builder: (context) {
                     return Column(
                       children: [
@@ -114,10 +119,9 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Consumer(
+                        Consumer<ManagerApprovalProvider>(
                           builder: (context, value, child) =>
-                              managerApprovalProvider.isShiftApprovalPosting ==
-                                      true
+                              value.isShiftApprovalPosting == true
                                   ? const CircularProgressIndicator(
                                       color: Colors.white,
                                     )
@@ -129,14 +133,11 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
                                                 .selectedShifts.isEmpty
                                             ? null
                                             : () {
-                                                ManagerApprovalProvider()
+                                                managerApprovalProvider
                                                     .postListShiftForApproval(
+                                                        context,
                                                         managerApprovalProvider
                                                             .selectedShifts);
-                                                // DialogueUtils.successMessageDialogue(
-                                                //     context: context,
-                                                //     successMessage:
-                                                //         "Approval Saved Successfully.");
                                               },
                                         style: ButtonStyle(
                                             padding: MaterialStateProperty.all(

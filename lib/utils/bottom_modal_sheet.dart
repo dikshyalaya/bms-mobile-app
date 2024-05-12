@@ -214,11 +214,16 @@ class BottomModalSheetUtils {
                           minLines: 3,
                           maxLines: 3,
                           textInputAction: TextInputAction.done,
+                          style: const TextStyle(
+                            color: Color(0xff1B1B1B),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
                           decoration: const InputDecoration(
                             hintStyle: TextStyle(
                               color: Color(0xff8A8181),
                               fontSize: 15,
-                              fontWeight: FontWeight.w500,
+                              // fontWeight: FontWeight.w500,
                             ),
                             border: InputBorder.none,
                             enabledBorder: InputBorder.none,
