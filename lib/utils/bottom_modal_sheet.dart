@@ -63,7 +63,7 @@ class BottomModalSheetUtils {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 40,
+                height: 65,
                 padding:
                     const EdgeInsets.symmetric(vertical: 7.55, horizontal: 19),
                 decoration: BoxDecoration(
@@ -74,13 +74,26 @@ class BottomModalSheetUtils {
                   ),
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  "Dispute Information",
-                  style: TextStyle(
-                    color: Color(0xff1B1B1B),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Dispute Information",
+                      style: TextStyle(
+                        color: Color(0xff1B1B1B),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      "${shiftData.directCare}",
+                      style: const TextStyle(
+                        color: Color(0xff1B1B1B),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
