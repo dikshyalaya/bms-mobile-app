@@ -59,6 +59,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
         fcm,
         onErrorState: (errorState) {
           print("has Error");
+          shoErrorToast(errorState.message);
           setState(() {
             _isLoading = false;
           });
