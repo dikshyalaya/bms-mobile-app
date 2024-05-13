@@ -73,6 +73,9 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
             final empId = onData['data']['empId'];
             final empFirstName = onData['data']['employee']['empFirstName'];
             final empLastName = onData['data']['employee']['empLastName'];
+             final isPasswordUpdateRequired =
+                                                        onData['data'][
+                                                            'isPasswordUpdateRequired'];
             authProvider.savedLoginInfo(
               accessToken,
               BmsUserModel(
@@ -82,6 +85,8 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
                 empFirstName: empFirstName,
                 empLastName: empLastName,
                 empId: empId,
+                isPasswordUpdateRequired:
+                                                            isPasswordUpdateRequired,
               ),
             );
 

@@ -62,6 +62,7 @@ abstract class BaseApiRepository<T> {
         jsonBody: body,
         baseUrlType: baseUrlType,
       );
+      log("Shift Approval Posting Response: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Check if the request was successful and data field exists

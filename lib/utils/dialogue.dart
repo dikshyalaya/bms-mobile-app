@@ -870,7 +870,7 @@ class DialogueUtils {
       barrierDismissible: false,
       builder: (context) {
         return Dialog(
-          backgroundColor: const Color(0xFF000000).withOpacity(0.25),
+          backgroundColor: const Color(0xFFBCBCBC),
           insetPadding: const EdgeInsets.symmetric(horizontal: 15),
           child: StatefulBuilder(
             builder: (context, setState) {
