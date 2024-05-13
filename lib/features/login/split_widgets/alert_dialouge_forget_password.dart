@@ -40,7 +40,7 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
     return Dialog(
       insetPadding: EdgeInsets.zero,
       backgroundColor: Colors.transparent, // Making the background transparent
-      child: isResetPasswordScreen == false
+      child: isResetPasswordScreen == true
           ? Container(
               width: double.infinity,
               decoration: BoxDecoration(

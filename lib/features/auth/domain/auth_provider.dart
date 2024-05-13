@@ -140,7 +140,7 @@ class AuthProvider extends ChangeNotifier {
             empFirstName: "",
             empId: 0,
             userTypeId: 0,
-            isActive: false);
+            isActive: false,isPasswordUpdateRequired: false);
   }
 
   void logOut() async {

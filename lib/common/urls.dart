@@ -27,6 +27,8 @@ const resetPassword ="Account/SetPasswordWithOTP";
 //Manager Dashboard Urls
 const accountHouses = "Manager/ShiftManagement/LoadAccounts";
 const listShiftsForApproval = "Manager/ShiftManagement/ListShiftsForApproval";
+const approveShifts = "Manager/ShiftManagement/ApproveShifts";
+const raiseDispute = "Manager/ShiftManagement/RaiseDispute";
 
 
 // pending invitations =>Shift availibility

@@ -19,7 +19,12 @@ class ManagerApprovalHomeScreen extends StatefulWidget {
 class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
   @override
   void initState() {
+    final managerApprovalProvider =
+        Provider.of<ManagerApprovalProvider>(context, listen: false);
     showFilterPopUp();
+    managerApprovalProvider.shiftForApprovalResponseModel = null;
+    managerApprovalProvider.selectedShifts.clear();
+    managerApprovalProvider.accountHousesResponseModel = null;
     super.initState();
   }
 
@@ -81,15 +86,16 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
               builder: (context, isListLoading, child) {
                 return ServerResponseBuilder(
                   isDataFetching: isListLoading,
-                  isNullData:
-                      managerApprovalProvider.shiftForApprovalResponseModel ==
-                          null,
+                  isNullData: (managerApprovalProvider
+                              .shiftForApprovalResponseModel?.data ??
+                          [])
+                      .isEmpty,
                   builder: (context) {
                     return Column(
                       children: [
-                        const Text(
-                          'Adapt - 1780 Stillwell Ave (DP)',
-                          style: TextStyle(
+                        Text(
+                          '${managerApprovalProvider.shiftForApprovalResponseModel?.data?[0].accountName ?? ""} - ${managerApprovalProvider.shiftForApprovalResponseModel?.data?[0].houseName ?? ""}',
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -113,42 +119,53 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Consumer(
-                          builder: (context, value, child) => SizedBox(
-                            height: 40,
-                            width: 163.47,
-                            child: ElevatedButton(
-                              onPressed:
-                                  managerApprovalProvider.selectedShifts.isEmpty
-                                      ? null
-                                      : () {
-                                          DialogueUtils.successMessageDialogue(
-                                              context: context,
-                                              successMessage:
-                                                  "Approval Saved Successfully.");
-                                        },
-                              style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsetsDirectional.zero),
-                                  elevation: MaterialStateProperty.all(4),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      const Color(0xff1870FF)),
-                                  shape: MaterialStateProperty.all(
-                                      const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20))))),
-                              child: Text(
-                                "Save",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
+                        Consumer<ManagerApprovalProvider>(
+                          builder: (context, value, child) =>
+                              value.isShiftApprovalPosting == true
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : SizedBox(
+                                      height: 40,
+                                      width: 163.47,
+                                      child: ElevatedButton(
+                                        onPressed: managerApprovalProvider
+                                                .selectedShifts.isEmpty
+                                            ? null
+                                            : () {
+                                                managerApprovalProvider
+                                                    .postListShiftForApproval(
+                                                        context,
+                                                        managerApprovalProvider
+                                                            .selectedShifts);
+                                              },
+                                        style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                EdgeInsetsDirectional.zero),
+                                            elevation:
+                                                MaterialStateProperty.all(4),
+                                            backgroundColor: MaterialStateProperty.all(
+                                                managerApprovalProvider
+                                                        .selectedShifts.isEmpty
+                                                    ? const Color.fromARGB(
+                                                        255, 156, 156, 156)
+                                                    : const Color(0xff1870FF)),
+                                            shape: MaterialStateProperty.all(
+                                                const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(20))))),
+                                        child: Text(
+                                          "Save",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontSize: 15,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
                         ),
                       ],
                     );
