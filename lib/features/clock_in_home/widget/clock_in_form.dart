@@ -37,6 +37,7 @@ class _ClockInFormState extends State<ClockInForm> {
   String? noMealReason;
   bool isSaving = false;
   double? differenceInHours;
+  bool? isEarlyOrExceeded;
 
   @override
   void initState() {
@@ -56,15 +57,21 @@ class _ClockInFormState extends State<ClockInForm> {
 
     DateTime currentDate = DateTime.now();
 
-    // Calculate the difference
-    Duration difference = currentDate.difference(scheduledDateTime);
+    // // Calculate the difference
+    // Duration difference = scheduledDateTime.difference(currentDate);
 
-    // Convert difference to hours
+    // // Convert difference to hours
+    // setState(() {
+    //   differenceInHours = difference.inHours.toDouble();
+    // });
+
+    // log(differenceInHours.toString());
+    // Check if the current time is 2 hours early or has already exceeded the scheduled time
     setState(() {
-      differenceInHours = difference.inHours.toDouble();
+      isEarlyOrExceeded = currentDate
+              .isBefore(scheduledDateTime.subtract(const Duration(hours: 2))) ||
+          currentDate.isAfter(scheduledDateTime);
     });
-
-    log(differenceInHours.toString().replaceAll('-', ''));
   }
 
   @override
@@ -108,7 +115,8 @@ class _ClockInFormState extends State<ClockInForm> {
               ],
             ),
           ),
-          (differenceInHours! >= -2 && differenceInHours! <= 1)
+          // (differenceInHours! >= -2 && differenceInHours! <= 1)
+          isEarlyOrExceeded == true
               ? Padding(
                   padding: EdgeInsetsDirectional.symmetric(
                       horizontal: 20.w, vertical: 10.h),
@@ -171,20 +179,28 @@ class _ClockInFormState extends State<ClockInForm> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      buildTitleText("No Meal Reason"),
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      CustomDropdownButton(
-                        hintText: 'Select your no meal reason',
-                        items: mealTimeOption,
-                        selectedItem: '',
-                        onChanged: (value) {
-                          setState(() {
-                            noMealReason = value;
-                          });
-                        },
-                      ),
+                      mealTime == 'None'
+                          ? buildTitleText("No Meal Reason")
+                          : const SizedBox(),
+                      mealTime == 'None'
+                          ? SizedBox(
+                              height: 5.h,
+                            )
+                          : const SizedBox(),
+                      mealTime == 'None'
+                          ? CustomDropdownButton(
+                              hintText: 'Select your no meal reason',
+                              items: widget.niMealResonList
+                                  .map((e) => e.name)
+                                  .toList(),
+                              selectedItem: '',
+                              onChanged: (value) {
+                                setState(() {
+                                  noMealReason = value;
+                                });
+                              },
+                            )
+                          : const SizedBox(),
                       const SizedBox(
                         height: 18,
                       ),
@@ -263,10 +279,11 @@ class _ClockInFormState extends State<ClockInForm> {
                     ],
                   ),
                 )
-              : Container(
+              : SizedBox(
+                  height: 200.h,
                   child: const Column(
-                  children: [Text('No Data')],
-                ))
+                    children: [Icon(Icons.abc), Text('You are Too Early')],
+                  ))
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
@@ -18,6 +19,7 @@ import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.da
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -1432,24 +1434,38 @@ class DialogueUtils {
     );
   }
 
-  static Future<void> onSystemSettingsDialogue(
-      {required BuildContext context}) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  static Future<void> onSystemSettingsDialogue({
+    required BuildContext context,
+  }) async {
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return await showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              content: Container(
-                // height: 403,
-                width: DimensionUtils.isTab(context)
-                    ? _width()
-                    : MediaQuery.of(context).size.width,
-                // padding: const EdgeInsets.symmetric(vertical: 23),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: DashBoardNavigatorCard(),
+        builder: (context) => Dialog(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Stack(
+                  children: [
+                  
+                    BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                      child: Container(
+                        width: DimensionUtils.isTab(context)
+                            ? _width()
+                            : MediaQuery.of(context).size.width,
+                        // padding: const EdgeInsets.symmetric(vertical: 23), // Adjust if needed
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: DashBoardNavigatorCard(
+                          isFromPopUp: true,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ));
   }

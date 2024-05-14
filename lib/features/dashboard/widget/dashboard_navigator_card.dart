@@ -6,11 +6,13 @@ import 'package:beacon_flutter/common/widgets/builder/server_response_builder.da
 import 'package:beacon_flutter/features/dashboard/domain/incomplete_activities_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/bottom_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class DashBoardNavigatorCard extends StatelessWidget {
   bool isFromPopUp;
-   DashBoardNavigatorCard({Key? key,this.isFromPopUp=false}) : super(key: key);
+  DashBoardNavigatorCard({Key? key, this.isFromPopUp = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class DashBoardNavigatorCard extends StatelessWidget {
               Provider.of<IncompleteActivitiesProvider>(context, listen: false)
                   .incompleteActivitiesModel;
 
-          List<CardModel> navigatorCards = [
+          List<dynamic> navigatorCards = [
             if ((incompleteActivities?.data?.pendingClockIns.count ?? 0) > 0)
               CardModel(
                   title:
@@ -52,18 +54,26 @@ class DashBoardNavigatorCard extends StatelessWidget {
                     padding:
                         const EdgeInsetsDirectional.symmetric(vertical: 30),
                     decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius:  BorderRadius.only(
+                        color: isFromPopUp
+                            ? Colors.white
+                            : Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.only(
                             topLeft: const Radius.circular(12),
-                            topRight:const Radius.circular(12),
-                            bottomLeft: isFromPopUp? const Radius.circular(12):Radius.zero,
-                            bottomRight:isFromPopUp? const Radius.circular(12): Radius.zero),
-                        boxShadow:isFromPopUp?const[]: const [
-                          BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(-3, -3),
-                              blurRadius: 4),
-                        ]),
+                            topRight: const Radius.circular(12),
+                            bottomLeft: isFromPopUp
+                                ? const Radius.circular(12)
+                                : Radius.zero,
+                            bottomRight: isFromPopUp
+                                ? const Radius.circular(12)
+                                : Radius.zero),
+                        boxShadow: isFromPopUp
+                            ? const []
+                            : const [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    offset: Offset(-3, -3),
+                                    blurRadius: 4),
+                              ]),
                     child: ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
