@@ -14,14 +14,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class ClockInForm extends StatefulWidget {
-  final List<NoMealResponseModel> niMealResonList;
+  final List<NoMealResponseModel> noMealResonList;
 
   final ClockInResponse? clockInResponse;
 
   final CLockInProvider cLockInProvider;
   const ClockInForm(
       {Key? key,
-      required this.niMealResonList,
+      required this.noMealResonList,
       this.clockInResponse,
       required this.cLockInProvider})
       : super(key: key);
@@ -41,10 +41,11 @@ class _ClockInFormState extends State<ClockInForm> {
 
   @override
   void initState() {
-    widget.niMealResonList.insert(0,
-        NoMealResponseModel(name: '', description: '', masterFor: '', id: 0));
+    log("No Meal Reason Contains: ${widget.noMealResonList.length}");
+    // widget.noMealResonList.insert(0,
+    //     NoMealResponseModel(name: '', description: '', masterFor: '', id: 0));
     startTime = widget.clockInResponse?.startTime ?? "";
-    // endTime =widget.clockInResponse?.endTime??"";
+    endTime = widget.clockInResponse?.endTime ?? "";
     super.initState();
     calculate();
   }
@@ -96,7 +97,8 @@ class _ClockInFormState extends State<ClockInForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "${widget.clockInResponse?.accountName} - ${widget.clockInResponse?.houseName}",
+                  "${widget.clockInResponse?.accountName} \n${widget.clockInResponse?.houseName}",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 15.sp,
@@ -130,7 +132,7 @@ class _ClockInFormState extends State<ClockInForm> {
                       CustomDropdownButton(
                         hintText: 'Select Start Time',
                         items: timeOptions,
-                        selectedItem: startTime!,
+                        selectedItem: startTime ?? '',
                         onChanged: (value) {
                           setState(() {
                             startTime = value;
@@ -179,7 +181,7 @@ class _ClockInFormState extends State<ClockInForm> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      mealTime == 'None'
+                      mealTime == 'No Meal'
                           ? buildTitleText("No Meal Reason")
                           : const SizedBox(),
                       mealTime == 'None'
@@ -187,13 +189,14 @@ class _ClockInFormState extends State<ClockInForm> {
                               height: 5.h,
                             )
                           : const SizedBox(),
-                      mealTime == 'None'
+                      mealTime == 'No Meal'
                           ? CustomDropdownButton(
                               hintText: 'Select your no meal reason',
-                              items: widget.niMealResonList
+                              items: widget.noMealResonList
                                   .map((e) => e.name)
                                   .toList(),
-                              selectedItem: '',
+                              selectedItem: widget.noMealResonList.first.name,
+                              // selectedItem: noMealReason ?? '',
                               onChanged: (value) {
                                 setState(() {
                                   noMealReason = value;
@@ -301,7 +304,7 @@ class _ClockInFormState extends State<ClockInForm> {
   }
 }
 
-class CustomDropdownButton extends StatefulWidget {
+class CustomDropdownButton extends StatelessWidget {
   const CustomDropdownButton(
       {Key? key,
       required this.items,
@@ -314,14 +317,9 @@ class CustomDropdownButton extends StatefulWidget {
   final String hintText;
   final ValueChanged<String> onChanged;
   @override
-  State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
-}
-
-class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-  @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField2<String>(
-      value: widget.selectedItem,
+      value: selectedItem,
       isExpanded: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
@@ -331,10 +329,10 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         // Add more decoration..
       ),
       hint: Text(
-        widget.hintText,
+        hintText,
         style: const TextStyle(fontSize: 14),
       ),
-      items: widget.items
+      items: items
           .map((item) => DropdownMenuItem<String>(
                 value: item,
                 child: Text(
@@ -354,7 +352,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
       onChanged: (value) {
         //Do something when selected item is changed.
         log("Ischanged");
-        widget.onChanged(value!);
+        onChanged(value!);
       },
       onSaved: (value) {
         log("IsSaved");

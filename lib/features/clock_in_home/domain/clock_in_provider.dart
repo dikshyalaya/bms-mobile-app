@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
@@ -46,6 +47,7 @@ class CLockInProvider extends ChangeNotifier {
                   clockInResponseModelFromJson(jsonEncode(map['response']));
             });
             await getNoMealReasonList();
+            log("No Meal Reasons API Called");
           },
           onErrorState: (errorState) {
             clockInResponseModel?.data = null;
@@ -67,6 +69,7 @@ class CLockInProvider extends ChangeNotifier {
 
   Future<BMSResponse<NoMealReasonResponseModel>> getNoMealReasonList() async {
     setLoading(true);
+    noMealReasonResponseModel = null;
     await _noMealReasonRepo.fetch(
       apiCallback: (networkState) {
         onApiCallback<dynamic>(
@@ -91,8 +94,10 @@ class CLockInProvider extends ChangeNotifier {
     return BMSResponse(body: noMealReasonResponseModel);
   }
 
-  Future<void> punchIn(int shiftId,String startTime,String endTime, String mealTime,String noMealReason,Function(bool)isCompleted) async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  Future<void> punchIn(int shiftId, String startTime, String endTime,
+      String mealTime, String noMealReason, Function(bool) isCompleted) async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     await _punchInRepo.post(
       body: {
@@ -103,10 +108,10 @@ class CLockInProvider extends ChangeNotifier {
         "mealTime": mealTime,
         "noMealReason": noMealReason,
         "location": {
-        "latitude": position.latitude,
-        "longitude": position.longitude
+          "latitude": position.latitude,
+          "longitude": position.longitude
         }
-        },
+      },
       apiCallback: (networkState) {
         onApiCallback<dynamic>(
           networkState: networkState,

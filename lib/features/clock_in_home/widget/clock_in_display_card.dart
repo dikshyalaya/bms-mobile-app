@@ -18,7 +18,8 @@ class ClockInDisplayCard extends StatelessWidget {
         BottomModalSheetUtils.onOpenBottomModalSheet(
           context,
           ClockInForm(
-            niMealResonList:
+            
+            noMealResonList:
                 clockInProvider.noMealReasonResponseModel?.data ?? [],
             clockInResponse: clockInResponse,
             cLockInProvider: clockInProvider,

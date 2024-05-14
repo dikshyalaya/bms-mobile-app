@@ -10,8 +10,8 @@ class ShiftAvailabilityCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 68,
-      padding: const EdgeInsets.symmetric(vertical: 7.55, horizontal: 7.55),
+      height: 70,
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 7.55),
       decoration: const BoxDecoration(
           color: Color(0xffD7ECFF),
           boxShadow: [
@@ -20,29 +20,28 @@ class ShiftAvailabilityCardHeader extends StatelessWidget {
           ],
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "${scheduleCardModel.schedulePeriod}",
-            style: const TextStyle(
-                color: Color(0xff373737),
-                fontSize: 13,
-                fontWeight: FontWeight.w500),
-          ),
-          Text(
-            "${scheduleCardModel.accountName ?? ''} ${scheduleCardModel.houseName}",
-            style: const TextStyle(
-                color: Color(0xff1B1B1B),
-                fontSize: 15,
-                fontWeight: FontWeight.bold),
-          ),
-          // SizedBox(
-          //   height: 3,
-          // ),
-          Expanded(
-            child: Text(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "${scheduleCardModel.schedulePeriod}",
+              style: const TextStyle(
+                  color: Color(0xff373737),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500),
+            ),
+            Text(
+              "${scheduleCardModel.accountName ?? ''} ${scheduleCardModel.houseName}",
+              style: const TextStyle(
+                  color: Color(0xff1B1B1B),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+            // SizedBox(
+            //   height: 3,
+            // ),
+            Text(
               scheduleCardModel.houseAddress ?? '',
               maxLines: 1,
               style: const TextStyle(
@@ -50,8 +49,8 @@ class ShiftAvailabilityCardHeader extends StatelessWidget {
                 fontSize: 13,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
