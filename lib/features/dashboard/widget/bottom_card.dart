@@ -23,6 +23,7 @@ class BottomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Navigator.pop(context);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const ClockInHomeScreen()));
       },
