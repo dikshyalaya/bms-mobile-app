@@ -36,7 +36,7 @@ class BottomModalSheetUtils {
     ManagerApprovalProvider managerApprovalProvider =
         Provider.of<ManagerApprovalProvider>(context, listen: false);
     managerApprovalProvider.disputeCommentController.text =
-        shiftData.hasDisputed ?? "";
+        shiftData.overTimeComment ?? "";
     await showModalBottomSheet(
       context: context,
       isDismissible: true,
@@ -161,7 +161,7 @@ class BottomModalSheetUtils {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "${shiftData.startTime} - ${shiftData.endDateTime}",
+                              "${shiftData.actualStartTime ?? ""} - ${shiftData.actualEndTime ?? ''}",
                               style: const TextStyle(
                                 color: Color(0xff1B1B1B),
                                 fontSize: 15,

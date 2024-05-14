@@ -27,6 +27,9 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
         children: [
           ManagerApprovalHeaderCard(
             title: widget.shiftData.directCare ?? "N/A",
+            hasDispute: widget.shiftData.hasDisputed ?? '',
+            startTime: widget.shiftData.startTime ?? '',
+            endTime: widget.shiftData.endTime ?? '',
           ),
           const SizedBox(
             height: 11,
@@ -91,8 +94,7 @@ class _ManagerApprovalCardState extends State<ManagerApprovalCard> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "${widget.shiftData.startTime} - ${widget.shiftData.endTime}",
-                      // "${widget.shiftData.actualStartDateTime} - ${widget.shiftData.actualEndDateTime}",
+                      "${widget.shiftData.actualStartTime ?? ''} - ${widget.shiftData.actualEndTime ?? ''}",
                       style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,

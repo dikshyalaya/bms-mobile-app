@@ -24,7 +24,7 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 138,
+      height: 150,
       width: double.infinity,
       child: Card(
         margin: EdgeInsets.zero,
@@ -37,31 +37,65 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
             LookingForShiftCardHeader(
               lookForShiftModel: widget.lookForShiftModel,
             ),
-            const SizedBox(
-              height: 11,
-            ),
+            const SizedBox(height: 11),
             Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
               child: Text(
-                "${widget.lookForShiftModel?.accountName} - ${widget.lookForShiftModel?.houseName}",
+                "Scheduled Date: ${widget.lookForShiftModel?.scheduleDate ?? ""}",
                 style: const TextStyle(
                     color: Color(0xff1B1B1B),
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13),
-                maxLines: 1,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500),
               ),
             ),
+            const SizedBox(height: 5),
             Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
               child: Text(
-                widget.lookForShiftModel?.houseAddress ?? "",
+                "Shift Time: ${widget.lookForShiftModel?.startTime ?? ""} - ${widget.lookForShiftModel?.endTime}",
                 style: const TextStyle(
                     color: Color(0xff1B1B1B),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13),
-                maxLines: 1,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500),
               ),
             ),
+            // Text(lookForShiftModel?.scheduleDate??"",style: const TextStyle(
+            //   color: Color(0xff1B1B1B),
+            //   fontSize: 15,fontWeight: FontWeight.w500
+            // ),),
+            // Text("${lookForShiftModel?.startTime??""} - ${lookForShiftModel?.endTime}",style: const TextStyle(
+            //   color: Color(0xff1B1B1B),
+            //   fontSize: 15,fontWeight: FontWeight.w500
+            // ),),
+            // Text(
+            //   "${widget.lookForShiftModel?.startTime ?? ""} - ${widget.lookForShiftModel?.endTime}",
+            //   style: const TextStyle(
+            //       color: Color(0xff1B1B1B),
+            //       fontSize: 15,
+            //       fontWeight: FontWeight.w500),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
+            //   child: Text(
+            //     "${widget.lookForShiftModel?.accountName} - ${widget.lookForShiftModel?.houseName}",
+            //     style: const TextStyle(
+            //         color: Color(0xff1B1B1B),
+            //         fontWeight: FontWeight.w500,
+            //         fontSize: 13),
+            //     maxLines: 1,
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
+            //   child: Text(
+            //     widget.lookForShiftModel?.houseAddress ?? "",
+            //     style: const TextStyle(
+            //         color: Color(0xff1B1B1B),
+            //         fontWeight: FontWeight.w400,
+            //         fontSize: 13),
+            //     maxLines: 1,
+            //   ),
+            // ),
             const Divider(
               color: Color(0xffEDEDED),
             ),

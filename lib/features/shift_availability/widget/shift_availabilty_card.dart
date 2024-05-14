@@ -1,12 +1,17 @@
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'shift_availability_card_header.dart';
 
 class ShiftAvailabilityCard extends StatefulWidget {
   final ScheduleCardModel scheduleCardModel;
-  final Function(bool,int)onCardAvailable;
-  const ShiftAvailabilityCard({Key? key,required this.scheduleCardModel,required this.onCardAvailable}) : super(key: key);
+  final Function(bool, int) onCardAvailable;
+  const ShiftAvailabilityCard(
+      {Key? key,
+      required this.scheduleCardModel,
+      required this.onCardAvailable})
+      : super(key: key);
 
   @override
   State<ShiftAvailabilityCard> createState() => _ShiftAvailabilityCardState();
@@ -14,6 +19,7 @@ class ShiftAvailabilityCard extends StatefulWidget {
 
 class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
   bool isTrue = false;
+  int value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,9 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
           borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
-           ShiftAvailabilityCardHeader(scheduleCardModel: widget.scheduleCardModel,),
+          ShiftAvailabilityCardHeader(
+            scheduleCardModel: widget.scheduleCardModel,
+          ),
           const SizedBox(
             height: 6,
           ),
@@ -40,15 +48,18 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
             children: [
               Padding(
                   padding: const EdgeInsetsDirectional.only(start: 57),
-                  child: richText('Shift Date: : ', widget.scheduleCardModel.startDateTime??'')),
+                  child: richText('Shift Date: : ',
+                      widget.scheduleCardModel.scheduleDate ?? '')),
               buildDivider(),
               Padding(
                   padding: const EdgeInsetsDirectional.only(start: 57),
-                  child: richText("Shift Time: ", '${widget.scheduleCardModel.startTime??''} - ${widget.scheduleCardModel.endTime??''} ')),
+                  child: richText("Shift Time: ",
+                      '${widget.scheduleCardModel.startTime ?? ''} - ${widget.scheduleCardModel.endTime ?? ''} ')),
               buildDivider(),
               Padding(
                   padding: const EdgeInsetsDirectional.only(start: 57),
-                  child: richText("Shift Day:  ", "Tuesday")),
+                  child: richText("Shift Day:  ",
+                      "${getDaysName(widget.scheduleCardModel.startDateTime ?? '', widget.scheduleCardModel.endDateTime ?? '')}")),
             ],
           ),
           const SizedBox(
@@ -76,30 +87,63 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
                 ),
                 Row(
                   children: [
-                    SizedBox(
-                      width: 30,
-                      height: 25,
-                      child: FittedBox(
-                        child: Switch(
-                            activeColor: Colors.blue,
-                            key: UniqueKey(),
-                            value: isTrue,
-                            onChanged: (bool val) {
-                              setState(() {
-                                isTrue = val;
-                                widget.onCardAvailable.call(
-                                    val, widget.scheduleCardModel.id ?? -0);
-                              });
-                            }),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    Radio(
+                        value: 1,
+                        groupValue: value,
+                        activeColor: Colors.blue,
+                        // fillColor: MaterialStateProperty.all(Colors.blue),
+                        onChanged: (int? val) {
+                          setState(() {
+                            value = val ?? 0;
+                            // widget.onCardAvailable.call(
+                            //     val == 1, widget.scheduleCardModel.id ?? -0);
+                          });
+                        }),
                     const Text(
                       "Yes",
                       style: TextStyle(color: Color(0xff324054), fontSize: 12),
+                    ),
+                    const SizedBox(width: 3),
+                    Radio(
+                        value: 2,
+                        groupValue: value,
+                        activeColor: Colors.blue,
+                        // fillColor: MaterialStateProperty.all(Colors.blue),
+                        onChanged: (int? val) {
+                          setState(() {
+                            value = val ?? 0;
+                            // widget.onCardAvailable.call(
+                            //     val == 1, widget.scheduleCardModel.id ?? -0);
+                          });
+                        }),
+                    const Text(
+                      "No",
+                      style: TextStyle(color: Color(0xff324054), fontSize: 12),
                     )
+                    // SizedBox(
+                    //   width: 30,
+                    //   height: 25,
+                    //   child: FittedBox(
+                    //     child: Switch(
+                    //         activeColor: Colors.blue,
+                    //         key: UniqueKey(),
+                    //         value: isTrue,
+                    //         onChanged: (bool val) {
+                    //           setState(() {
+                    //             isTrue = val;
+                    //             widget.onCardAvailable.call(
+                    //                 val, widget.scheduleCardModel.id ?? -0);
+                    //           });
+                    //         }),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   width: 8,
+                    // ),
+                    // const Text(
+                    //   "Yes",
+                    //   style: TextStyle(color: Color(0xff324054), fontSize: 12),
+                    // )
                   ],
                 )
               ],
@@ -134,4 +178,14 @@ Divider buildDivider({double? height, double? indent}) {
     indent: indent,
     color: const Color(0xffB5B5B5),
   );
+}
+
+getDaysName(String startDate, String endDate) {
+  DateTime start = DateTime.parse(startDate);
+  DateTime end = DateTime.parse(endDate);
+  String startDay = DateFormat('EEEE').format(start);
+  String endDay = DateFormat('EEEE').format(end);
+  return startDay == endDay
+      ? startDay
+      : '${startDay.substring(0, 3)} - ${endDay.substring(0, 3)}';
 }
