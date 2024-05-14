@@ -7,8 +7,8 @@ import 'package:beacon_flutter/features/prior_clock_in/domain/prior_clock_in_rep
 import 'package:flutter/cupertino.dart';
 
 class PriorClockInProvider extends ChangeNotifier{
-  final int dcId;
-  PriorClockInProvider(this.dcId);
+ 
+  PriorClockInProvider();
   bool isDataFetching = false;
 
   PriorClockInResponseModel? _priorClockInResponseModel;
@@ -26,7 +26,7 @@ class PriorClockInProvider extends ChangeNotifier{
   }
 
   Future<BMSResponse<PriorClockInResponseModel>> getPriorClockInList() async {
-    final PriorClockInRepo priorClockInRepo = PriorClockInRepo(dcId.toString());
+    final PriorClockInRepo priorClockInRepo = PriorClockInRepo();
     setLoading(true);
     await priorClockInRepo.fetch(
       params: {

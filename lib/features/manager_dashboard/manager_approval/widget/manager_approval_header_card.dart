@@ -2,29 +2,55 @@ import 'package:flutter/material.dart';
 
 class ManagerApprovalHeaderCard extends StatelessWidget {
   final String title;
-  const ManagerApprovalHeaderCard({Key? key, required this.title})
-      : super(key: key);
+  final String hasDispute;
+  final String startTime;
+  final String endTime;
+  const ManagerApprovalHeaderCard({
+    Key? key,
+    required this.title,
+    this.hasDispute = '',
+    required this.startTime,
+    required this.endTime,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 60,
       padding: const EdgeInsets.symmetric(vertical: 7.55, horizontal: 19),
-      decoration: const BoxDecoration(
-        color: Color(0xffD7ECFF),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: hasDispute.toLowerCase() == 'yes'
+            ? const Color(0xFFFDF3BE)
+            : const Color(0xffD7ECFF),
+        // color: ,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(15),
           topRight: Radius.circular(15),
         ),
       ),
       alignment: Alignment.center,
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Color(0xff1B1B1B),
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xff1B1B1B),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            "$startTime - $endTime",
+            style: const TextStyle(
+              color: Color(0xff1B1B1B),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }

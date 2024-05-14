@@ -17,7 +17,8 @@ class ServerResponseBuilder extends StatelessWidget {
     return IfElseBuilder(
         condition: isDataFetching,
         ifBuilder: (context) => const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+              ),
             ),
         elseBulider: (context) {
           return isNullData

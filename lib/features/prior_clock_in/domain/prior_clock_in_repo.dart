@@ -3,14 +3,14 @@ import 'package:beacon_flutter/core/network/base_api_repository.dart';
 import 'package:dio/dio.dart';
 
 class PriorClockInRepo extends BaseApiRepository<Map<String, dynamic>> {
-  final String dcId;
-  PriorClockInRepo(this.dcId);
+ 
+  PriorClockInRepo();
 
   @override
   dynamic parseJson(Response<dynamic> response) => {"response": response.data};
 
   @override
   String path(Map<String, String>? params, String? pathVariable) {
-    return '$priorClockInUrl/$dcId';
+    return priorClockInUrl;
   }
 }

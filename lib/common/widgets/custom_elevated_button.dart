@@ -53,7 +53,8 @@ class CustomElevatedButton extends StatelessWidget {
                               color: txtColor ?? Colors.white)),
                       Padding(
                         padding: EdgeInsets.all(8.sp),
-                        child: const CircularProgressIndicator(),
+                        child: const CircularProgressIndicator(
+                        ),
                       )
                     ],
                   ),

@@ -21,13 +21,11 @@ class PriorClockInHomeScreen extends StatelessWidget {
       ),
       child: ChangeNotifierProxyProvider<AuthProvider, PriorClockInProvider>(
         update: (_, authProvider, clockInProvide) {
-          return PriorClockInProvider(authProvider.bmsUserModel?.empId ?? 0)
-            ..getPriorClockInList();
+          return PriorClockInProvider()..getPriorClockInList();
         },
         lazy: false,
-        create: (_) => PriorClockInProvider(0),
+        create: (_) => PriorClockInProvider(),
         builder: (context, child) => Scaffold(
-
           backgroundColor: Colors.transparent,
           body: Column(
             children: [
@@ -45,12 +43,10 @@ class PriorClockInHomeScreen extends StatelessWidget {
                       return ServerResponseBuilder(
                           builder: (context) => ListView.separated(
                               shrinkWrap: true,
-                              itemBuilder: (context, index) =>
-                                  PriorClockInCard(
+                              itemBuilder: (context, index) => PriorClockInCard(
                                     index: index,
                                     priorClockInModel:
-                                        priorClockInResponseData
-                                            ?.data?[index],
+                                        priorClockInResponseData?.data?[index],
                                   ),
                               padding: const EdgeInsets.only(
                                   left: 12, right: 12, bottom: 29),
@@ -59,8 +55,7 @@ class PriorClockInHomeScreen extends StatelessWidget {
                                     height: 9,
                                   ),
                               itemCount:
-                                  priorClockInResponseData?.data?.length ??
-                                      0),
+                                  priorClockInResponseData?.data?.length ?? 0),
                           isDataFetching: isDataFetching,
                           isNullData: priorClockInResponseData?.data == null);
                     },
