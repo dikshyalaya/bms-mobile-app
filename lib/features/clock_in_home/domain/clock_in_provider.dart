@@ -94,14 +94,15 @@ class CLockInProvider extends ChangeNotifier {
     return BMSResponse(body: noMealReasonResponseModel);
   }
 
-  Future<void> punchIn(int shiftId, String startTime, String endTime,
-      String mealTime, String noMealReason, Function(bool) isCompleted) async {
+  Future<void> punchIn(int shiftId,String scheduleDate ,String startTime, String endTime,
+      String mealTime, String noMealReason, Function(bool) isCompleted,Function(bool) isLoaing) async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     await _punchInRepo.post(
       body: {
         "shiftId": shiftId,
+         "scheduleDate": scheduleDate,
         "dcId": dcId,
         "actualStartTime": startTime,
         "actualEndTime": endTime,
@@ -119,13 +120,19 @@ class CLockInProvider extends ChangeNotifier {
           onLoadedState: (loadedState) {
             setDataPosting(false);
             isCompleted.call(true);
+            isLoaing.call(false);
+
           },
           onErrorState: (errorState) {
             shoErrorToast("Something went wrong, Please try again later.");
+            isLoaing.call(false);
 
             setDataPosting(false);
           },
-          onLoadingState: (loadingState) {},
+          onLoadingState: (loadingState) {
+            isLoaing.call(true);
+
+          },
         );
       },
     );

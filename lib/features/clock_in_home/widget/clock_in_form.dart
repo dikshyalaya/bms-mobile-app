@@ -10,6 +10,7 @@ import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
@@ -35,9 +36,14 @@ class _ClockInFormState extends State<ClockInForm> {
   String? endTime;
   String? mealTime;
   String? noMealReason;
+  TextEditingController startTimeController = TextEditingController();
+  TextEditingController endTimeController = TextEditingController();
+  TextEditingController mealTimeController = TextEditingController();
+  TextEditingController noMealReasonController = TextEditingController();
   bool isSaving = false;
   double? differenceInHours;
   bool? isEarlyOrExceeded;
+  bool isEndTimeEmpty = true;
 
   @override
   void initState() {
@@ -46,8 +52,34 @@ class _ClockInFormState extends State<ClockInForm> {
     //     NoMealResponseModel(name: '', description: '', masterFor: '', id: 0));
     startTime = widget.clockInResponse?.startTime ?? "";
     endTime = widget.clockInResponse?.endTime ?? "";
+    startTimeController.text = startTime!;
+    endTimeController.text = endTime!;
+    mealTimeController.text = 'No Meal';
+    noMealReasonController.text = 'Community inclusion';
+
     super.initState();
     calculate();
+    // getSurroundingTimes(startTime ?? '');
+  }
+
+  List<String> getSurroundingTimes(String givenTime, bool isStartDate) {
+    int index = timeOptions.indexOf(givenTime);
+    if (index == -1) return []; // Given time not found in the list
+
+    int startIndex = index - 8 < 0 ? 0 : index - 8;
+    int endIndex =
+        index + 8 >= timeOptions.length ? timeOptions.length - 1 : index + 8;
+
+    List<String> surroundingTimes =
+        List<String>.from(timeOptions.sublist(startIndex, endIndex + 1));
+    // surroundingTimes.removeAt(index - startIndex); // Removing the current time
+
+    if (!isStartDate) {
+      surroundingTimes.insert(0, ""); // Add empty string at the beginning
+    }
+
+    log(surroundingTimes.toList().toString());
+    return surroundingTimes;
   }
 
   void calculate() {
@@ -57,17 +89,6 @@ class _ClockInFormState extends State<ClockInForm> {
         '${widget.clockInResponse?.scheduleDate ?? ''} ${widget.clockInResponse?.startTime ?? ''}');
 
     DateTime currentDate = DateTime.now();
-
-    // // Calculate the difference
-    // Duration difference = scheduledDateTime.difference(currentDate);
-
-    // // Convert difference to hours
-    // setState(() {
-    //   differenceInHours = difference.inHours.toDouble();
-    // });
-
-    // log(differenceInHours.toString());
-    // Check if the current time is 2 hours early or has already exceeded the scheduled time
     setState(() {
       isEarlyOrExceeded = currentDate
               .isBefore(scheduledDateTime.subtract(const Duration(hours: 2))) ||
@@ -87,6 +108,13 @@ class _ClockInFormState extends State<ClockInForm> {
             height: 80.h,
             width: double.infinity,
             decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      offset: const Offset(0, 0),
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 0.9,
+                      blurRadius: 12.r)
+                ],
                 color: const Color(0xffD9D9D9),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.r),
@@ -125,17 +153,20 @@ class _ClockInFormState extends State<ClockInForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       buildTitleText("Start Time"),
                       SizedBox(
                         height: 5.h,
                       ),
                       CustomDropdownButton(
                         hintText: 'Select Start Time',
-                        items: timeOptions,
-                        selectedItem: startTime ?? '',
+                        items: getSurroundingTimes(startTime!, true),
+                        selectedItem: startTimeController.text,
                         onChanged: (value) {
                           setState(() {
-                            startTime = value;
+                            startTimeController.text = value;
                           });
                         },
                       ),
@@ -152,11 +183,21 @@ class _ClockInFormState extends State<ClockInForm> {
                       ),
                       CustomDropdownButton(
                         hintText: 'Select End Time',
-                        items: timeOptions,
-                        selectedItem: '',
+                        items: getSurroundingTimes(endTime!, false),
+                        selectedItem: endTimeController.text,
                         onChanged: (value) {
                           setState(() {
-                            endTime = value;
+                            endTimeController.text = value;
+                            if (value == '') {
+                              isEndTimeEmpty = false;
+                              mealTimeController.text = '';
+                              noMealReasonController.text = '';
+                            } else {
+                              isEndTimeEmpty = true;
+                              mealTimeController.text = 'No Meal';
+                              noMealReasonController.text =
+                                  'Community inclusion';
+                            }
                           });
                         },
                       ),
@@ -170,26 +211,37 @@ class _ClockInFormState extends State<ClockInForm> {
                       ),
                       CustomDropdownButton(
                         hintText: 'Select Meal Time',
-                        items: mealTimeOption,
-                        selectedItem: '',
+                        items: isEndTimeEmpty == false
+                            ? mealTimeOption
+                            : mealTimeOption
+                                .where((item) => item != "")
+                                .toList(),
+                        selectedItem: isEndTimeEmpty ? 'No Meal' : '',
                         onChanged: (value) {
                           setState(() {
-                            mealTime = value;
+                            // mealTime = value;
+                            mealTimeController.text = value;
+                            if (value == 'No Meal') {
+                              noMealReasonController.text =
+                                  'Community inclusion';
+                            } else {
+                              noMealReasonController.text = '';
+                            }
                           });
                         },
                       ),
                       SizedBox(
                         height: 10.h,
                       ),
-                      mealTime == 'No Meal'
+                      mealTimeController.text == 'No Meal'
                           ? buildTitleText("No Meal Reason")
                           : const SizedBox(),
-                      mealTime == 'None'
+                      mealTimeController.text == 'No Meal'
                           ? SizedBox(
                               height: 5.h,
                             )
                           : const SizedBox(),
-                      mealTime == 'No Meal'
+                      mealTimeController.text == 'No Meal'
                           ? CustomDropdownButton(
                               hintText: 'Select your no meal reason',
                               items: widget.noMealResonList
@@ -199,7 +251,8 @@ class _ClockInFormState extends State<ClockInForm> {
                               // selectedItem: noMealReason ?? '',
                               onChanged: (value) {
                                 setState(() {
-                                  noMealReason = value;
+                                  // noMealReason = value;
+                                  noMealReasonController.text = value;
                                 });
                               },
                             )
@@ -233,42 +286,136 @@ class _ClockInFormState extends State<ClockInForm> {
                                         setState(() {
                                           isSaving = true;
                                         });
-                                        if ((startTime != null &&
-                                                endTime != null) &&
-                                            ((mealTime == "None" ||
-                                                    mealTime == null) &&
-                                                noMealReason == null)) {
-                                          shoErrorToast("Enter valid input");
-                                        } else {
-                                          if ((startTime != null)) {
-                                            if ((mealTime == "None" &&
-                                                noMealReason == null)) {
-                                              shoErrorToast(
-                                                  "Enter valid input");
+                                        log(startTimeController.text);
+                                        log(endTimeController.text);
+                                        log(mealTimeController.text);
+                                        log(noMealReasonController.text);
+
+                                        if ((startTimeController
+                                                    .text.isNotEmpty &&
+                                                endTimeController
+                                                    .text.isEmpty &&
+                                                mealTimeController
+                                                    .text.isEmpty &&
+                                                noMealReasonController
+                                                    .text.isEmpty) ||
+                                            (startTimeController
+                                                    .text.isNotEmpty &&
+                                                endTimeController
+                                                    .text.isNotEmpty &&
+                                                mealTimeController.text ==
+                                                    'No Meal' &&
+                                                noMealReasonController
+                                                    .text.isNotEmpty) ||
+                                            (startTimeController
+                                                    .text.isNotEmpty &&
+                                                endTimeController
+                                                    .text.isNotEmpty &&
+                                                mealTimeController.text !=
+                                                    'No Meal' &&
+                                                noMealReasonController
+                                                    .text.isEmpty) ||
+                                            (startTimeController
+                                                    .text.isNotEmpty &&
+                                                endTimeController
+                                                    .text.isEmpty &&
+                                                mealTimeController.text !=
+                                                    'No Meal' &&
+                                                noMealReasonController
+                                                    .text.isNotEmpty) ||
+                                            (startTimeController
+                                                    .text.isNotEmpty &&
+                                                endTimeController
+                                                    .text.isEmpty &&
+                                                mealTimeController.text ==
+                                                    'No Meal' &&
+                                                noMealReasonController
+                                                    .text.isNotEmpty) ||
+                                            (startTimeController
+                                                    .text.isNotEmpty &&
+                                                endTimeController
+                                                    .text.isNotEmpty &&
+                                                mealTimeController
+                                                    .text.isNotEmpty &&
+                                                noMealReasonController
+                                                    .text.isNotEmpty)) {
+                                          await widget.cLockInProvider.punchIn(
+                                              widget.clockInResponse?.id ?? -1,
+                                              widget.clockInResponse
+                                                      ?.scheduleDate ??
+                                                  '',
+                                              startTimeController.text,
+                                              endTimeController.text,
+                                              mealTimeController.text,
+                                              noMealReasonController.text,
+                                              (val) {
+                                            if (val) {
+                                              Navigator.pop(context, "save");
+                                            }
+                                          }, ((p0) {
+                                            if (p0) {
+                                              setState(() {
+                                                isSaving = true;
+                                              });
                                             } else {
-                                              await widget.cLockInProvider
-                                                  .punchIn(
-                                                      widget.clockInResponse
-                                                              ?.id ??
-                                                          -1,
-                                                      startTime ?? '',
-                                                      endTime ?? '',
-                                                      mealTime ?? '',
-                                                      noMealReason ?? '',
-                                                      (val) {
-                                                if (val) {
-                                                  Navigator.pop(
-                                                      context, "save");
-                                                }
+                                              setState(() {
+                                                isSaving = false;
                                               });
                                             }
-                                          } else {
-                                            shoErrorToast("Enter valid input");
-                                          }
+                                          }));
+                                        } else {
+                                          // else {
+                                          setState(() {
+                                            isSaving = false;
+                                          });
+                                          shoErrorToast("Enter valid input");
                                         }
-                                        setState(() {
-                                          isSaving = false;
-                                        });
+                                        // setState(() {
+                                        //   isSaving = true;
+                                        // });
+                                        // if ((startTimeController.text.isEmpty &&
+                                        //         endTimeController
+                                        //             .text.isEmpty) &&
+                                        //     ((mealTimeController.text ==
+                                        //                 "None" ||
+                                        //             mealTimeController
+                                        //                 .text.isEmpty) &&
+                                        //         noMealReasonController
+                                        //             .text.isEmpty)) {
+                                        //   shoErrorToast("Enter valid input");
+                                        // } else {
+                                        //   if ((startTimeController
+                                        //       .text.isEmpty)) {
+                                        //     if ((mealTimeController.text ==
+                                        //             "None" &&
+                                        //         noMealReasonController
+                                        //             .text.isEmpty)) {
+                                        //       shoErrorToast(
+                                        //           "Enter valid input");
+                                        //     } else {
+                                        //       await widget.cLockInProvider
+                                        //           .punchIn(
+                                        //               widget.clockInResponse
+                                        //                       ?.id ??
+                                        //                   -1,
+                                        //               startTime ?? '',
+                                        //               endTime ?? '',
+                                        //               mealTime ?? '',
+                                        //               noMealReason ?? '',
+                                        //               (val) {
+                                        //         if (val) {
+                                        //           Navigator.pop(
+                                        //               context, "save");
+                                        //         }
+                                        //       });
+                                        //     }
+                                        //   } else {
+                                        //     shoErrorToast("Enter valid input");
+                                        //   }
+                                        // }
+                                        // setState(() {
+                                        //   isSaving = false;
+                                        // });
                                       },
                                       child: const Text(
                                         "Save",
@@ -334,7 +481,7 @@ class CustomDropdownButton extends StatelessWidget {
       ),
       items: items
           .map((item) => DropdownMenuItem<String>(
-                value: item,
+                value: item, // Ensure each item has a unique value
                 child: Text(
                   item,
                   style: const TextStyle(
@@ -343,12 +490,17 @@ class CustomDropdownButton extends StatelessWidget {
                 ),
               ))
           .toList(),
-      // validator: (value) {
-      //   if (value == null) {
-      //     return 'Please select gender.';
-      //   }
-      //   return null;
-      // },
+      // items
+      //     .map((item) => DropdownMenuItem<String>(
+      //           value: item,
+      //           child: Text(
+      //             item,
+      //             style: const TextStyle(
+      //               fontSize: 14,
+      //             ),
+      //           ),
+      //         ))
+      //     .toList(),
       onChanged: (value) {
         //Do something when selected item is changed.
         log("Ischanged");
