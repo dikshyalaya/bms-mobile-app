@@ -45,6 +45,7 @@ class CLockInProvider extends ChangeNotifier {
               final Map<String, dynamic> map = loadedState.response?.body;
               clockInResponseModel =
                   clockInResponseModelFromJson(jsonEncode(map['response']));
+              log(map['response'].toString());
             });
             await getNoMealReasonList();
             log("No Meal Reasons API Called");
@@ -94,19 +95,26 @@ class CLockInProvider extends ChangeNotifier {
     return BMSResponse(body: noMealReasonResponseModel);
   }
 
-  Future<void> punchIn(int shiftId,String scheduleDate ,String startTime, String endTime,
-      String mealTime, String noMealReason, Function(bool) isCompleted,Function(bool) isLoaing) async {
+  Future<void> punchIn(
+      int shiftId,
+      String scheduleDate,
+      String startTime,
+      String endTime,
+      String mealTime,
+      String noMealReason,
+      Function(bool) isCompleted,
+      Function(bool) isLoaing) async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     await _punchInRepo.post(
       body: {
         "shiftId": shiftId,
-         "scheduleDate": scheduleDate,
+        "scheduleDate": scheduleDate,
         "dcId": dcId,
         "actualStartTime": startTime,
         "actualEndTime": endTime,
-        "mealTime": mealTime,
+        "mealTime": mealTime == '0' ? '' : mealTime,
         "noMealReason": noMealReason,
         "location": {
           "latitude": position.latitude,
@@ -121,7 +129,6 @@ class CLockInProvider extends ChangeNotifier {
             setDataPosting(false);
             isCompleted.call(true);
             isLoaing.call(false);
-
           },
           onErrorState: (errorState) {
             shoErrorToast("Something went wrong, Please try again later.");
@@ -131,7 +138,6 @@ class CLockInProvider extends ChangeNotifier {
           },
           onLoadingState: (loadingState) {
             isLoaing.call(true);
-
           },
         );
       },

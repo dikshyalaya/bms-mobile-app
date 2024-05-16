@@ -94,7 +94,8 @@ final timeOptions = [
   "11:00 PM",
   "11:15 PM",
   "11:30 PM",
-  "11:45 PM"
+  "11:45 PM",
+  "11:59 PM"
 ];
 
 final mealTimeOption = ["", "No Meal", "30 Minutes", "60 Minutes"];

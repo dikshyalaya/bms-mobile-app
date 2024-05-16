@@ -1,6 +1,6 @@
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
-import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form.dart';
+import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/clock_in_form.dart';
 import 'package:beacon_flutter/utils/bottom_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
