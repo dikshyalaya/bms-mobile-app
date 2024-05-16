@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:beacon_flutter/common/extension/extension.dart';
@@ -6,7 +5,6 @@ import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
-import 'package:beacon_flutter/common/widgets/password_change_field.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';

@@ -3,14 +3,12 @@ import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
 import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
-import 'package:beacon_flutter/features/dashboard/widget/dash_board_grid.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_home.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_screen.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

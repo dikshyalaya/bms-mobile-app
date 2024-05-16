@@ -1,5 +1,4 @@
 import 'package:beacon_flutter/features/login/split_widgets/alert_dialouge_forget_password.dart';
-import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

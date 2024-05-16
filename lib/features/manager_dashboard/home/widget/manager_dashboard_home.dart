@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';

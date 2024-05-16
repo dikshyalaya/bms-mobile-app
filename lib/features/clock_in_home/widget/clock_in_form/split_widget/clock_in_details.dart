@@ -2,11 +2,10 @@
 
 import 'dart:developer';
 
-import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/custom_drop_down.dart';
+import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/function/clock_in_functions.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -108,7 +107,7 @@ class _ClockInDetailsState extends State<ClockInDetails> {
                 widget.mealTimeController.text = value;
                 if (value == 'No Meal') {
                   widget.noMealReasonController.text = 'Community inclusion';
-                  widget.noMealReasonIdController.text = getIdByName(
+                  widget.noMealReasonIdController.text = ClockInUtils.getIdByName(
                       'Community inclusion', widget.noMealReasonList);
                 } else {
                   widget.noMealReasonController.text = '';
@@ -140,7 +139,7 @@ class _ClockInDetailsState extends State<ClockInDetails> {
                         // noMealReason = value;
                         widget.noMealReasonController.text = value;
                         widget.noMealReasonIdController.text =
-                            getIdByName(value, widget.noMealReasonList);
+                         ClockInUtils.getIdByName(value, widget.noMealReasonList);
                       });
                     },
                   ),
@@ -205,10 +204,4 @@ class _ClockInDetailsState extends State<ClockInDetails> {
     );
   }
 
-  String getIdByName(String name, List<NoMealResponseModel> itemList) {
-    // Find the item with the matching name
-    NoMealResponseModel item =
-        itemList.firstWhere((element) => element.name == name);
-    return item.id.toString();
-  }
 }

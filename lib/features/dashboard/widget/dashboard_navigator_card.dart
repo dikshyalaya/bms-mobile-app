@@ -6,7 +6,6 @@ import 'package:beacon_flutter/common/widgets/builder/server_response_builder.da
 import 'package:beacon_flutter/features/dashboard/domain/incomplete_activities_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/bottom_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class DashBoardNavigatorCard extends StatelessWidget {
