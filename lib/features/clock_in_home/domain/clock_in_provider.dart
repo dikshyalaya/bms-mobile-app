@@ -95,6 +95,17 @@ class CLockInProvider extends ChangeNotifier {
     return BMSResponse(body: noMealReasonResponseModel);
   }
 
+  void removeClockInListAfterCompleted(int shiftId) {
+    if (clockInResponseModel != null &&
+        clockInResponseModel!.data != null &&
+        clockInResponseModel!.data!.isNotEmpty) {
+      clockInResponseModel!.data!
+          .removeWhere((element) => element.id == shiftId);
+    }
+    log("Shift Removed Successfullt: $shiftId");
+    notifyListeners();
+  }
+
   Future<void> punchIn(
       int shiftId,
       String scheduleDate,
@@ -114,7 +125,7 @@ class CLockInProvider extends ChangeNotifier {
         "dcId": dcId,
         "actualStartTime": startTime,
         "actualEndTime": endTime,
-        "mealTime": mealTime == '0' ? '' : mealTime,
+        "mealTime": mealTime,
         "noMealReason": noMealReason,
         "location": {
           "latitude": position.latitude,

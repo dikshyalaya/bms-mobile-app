@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ClockInForm extends StatefulWidget {
   final List<NoMealResponseModel> noMealResonList;
@@ -144,6 +145,11 @@ class _ClockInFormState extends State<ClockInForm> {
               ClockInUtils.convertStringToMeal(mealTimeController.text);
           widget.clockInResponse!.noBreakReason =
               int.parse(noMealReasonIdController.text);
+          if (endTimeController.text.isNotEmpty) {
+            Provider.of<CLockInProvider>(context, listen: false)
+                .removeClockInListAfterCompleted(
+                    widget.clockInResponse?.id ?? -1);
+          }
         }
       }, ((p0) {
         if (p0) {
