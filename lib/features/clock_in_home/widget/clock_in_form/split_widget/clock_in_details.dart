@@ -107,8 +107,9 @@ class _ClockInDetailsState extends State<ClockInDetails> {
                 widget.mealTimeController.text = value;
                 if (value == 'No Meal') {
                   widget.noMealReasonController.text = 'Community inclusion';
-                  widget.noMealReasonIdController.text = ClockInUtils.getIdByName(
-                      'Community inclusion', widget.noMealReasonList);
+                  widget.noMealReasonIdController.text =
+                      ClockInUtils.getIdByName(
+                          'Community inclusion', widget.noMealReasonList);
                 } else {
                   widget.noMealReasonController.text = '';
                   widget.noMealReasonIdController.text = '';
@@ -136,10 +137,11 @@ class _ClockInDetailsState extends State<ClockInDetails> {
                     selectedItem: widget.noMealReasonController.text,
                     onChanged: (value) {
                       setState(() {
-                        // noMealReason = value;
+                        // noMealReasonId = value;
                         widget.noMealReasonController.text = value;
                         widget.noMealReasonIdController.text =
-                         ClockInUtils.getIdByName(value, widget.noMealReasonList);
+                            ClockInUtils.getIdByName(
+                                value, widget.noMealReasonList);
                       });
                     },
                   ),
@@ -203,5 +205,4 @@ class _ClockInDetailsState extends State<ClockInDetails> {
       ),
     );
   }
-
 }

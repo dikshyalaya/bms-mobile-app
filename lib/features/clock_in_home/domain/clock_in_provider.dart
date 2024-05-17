@@ -112,7 +112,7 @@ class CLockInProvider extends ChangeNotifier {
       String startTime,
       String endTime,
       String mealTime,
-      String noMealReason,
+      String noMealReasonId,
       Function(bool) isCompleted,
       Function(bool) isLoaing) async {
     Position position = await Geolocator.getCurrentPosition(
@@ -126,7 +126,7 @@ class CLockInProvider extends ChangeNotifier {
         "actualStartTime": startTime,
         "actualEndTime": endTime,
         "mealTime": mealTime,
-        "noMealReason": noMealReason,
+        "noMealReasonId": noMealReasonId,
         "location": {
           "latitude": position.latitude,
           "longitude": position.longitude

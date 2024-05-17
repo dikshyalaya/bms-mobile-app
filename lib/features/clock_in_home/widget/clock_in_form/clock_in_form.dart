@@ -35,7 +35,7 @@ class _ClockInFormState extends State<ClockInForm> {
   String? startTime;
   String? endTime;
   String? mealTime;
-  String? noMealReason;
+  String? noMealReasonId;
   TextEditingController startTimeController = TextEditingController();
   TextEditingController endTimeController = TextEditingController();
   TextEditingController mealTimeController = TextEditingController();
@@ -129,7 +129,7 @@ class _ClockInFormState extends State<ClockInForm> {
         startTime: startTimeController.text,
         endTime: endTimeController.text,
         mealTime: mealTimeController.text,
-        noMealReason: noMealReasonController.text);
+        noMealReasonId: noMealReasonController.text);
     if (isValidate) {
       await widget.cLockInProvider.punchIn(
           widget.clockInResponse?.id ?? -1,
