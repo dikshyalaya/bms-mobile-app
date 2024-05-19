@@ -41,7 +41,7 @@ class ClockInHomeScreen extends StatelessWidget {
               selector: (context, provider) => provider.isDataFetching,
               builder: (context, isDataFetching, child) {
                 final clockInResponseData =
-                    Provider.of<CLockInProvider>(context, listen: false)
+                    Provider.of<CLockInProvider>(context, listen: true)
                         .clockInResponseModel;
                 return ServerResponseBuilder(
                   builder: (context) => ListView.separated(
