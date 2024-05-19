@@ -10,7 +10,7 @@ class LookingForShiftCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 53,
+      // height: 53,
       padding: const EdgeInsets.symmetric(vertical: 7.55, horizontal: 19),
       decoration: const BoxDecoration(
           color: Color(0xffD7ECFF),
@@ -18,6 +18,7 @@ class LookingForShiftCardHeader extends StatelessWidget {
               topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       alignment: Alignment.center,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(

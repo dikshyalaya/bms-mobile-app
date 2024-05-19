@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
@@ -37,10 +38,15 @@ class PriorClockInProvider extends ChangeNotifier{
           networkState: networkState,
           // networkState: networkState,
           onLoadedState: (loadedState) {
-            onFutureNotifyListeners(() {
-              final Map<String,dynamic> map = loadedState.response?.body;
-              priorClockInResponseModel =
-                  priorClockInResponseModelFromJson(jsonEncode(map['response']));
+             onFutureNotifyListeners(() {
+              final Map<String, dynamic> map = loadedState.response?.body;
+              log(map.toString()); // Log the entire map for debugging
+              try {
+                priorClockInResponseModel =
+                    priorClockInResponseModelFromJson(jsonEncode(map['response']));
+              } catch (e) {
+                log("Error parsing JSON: $e");
+              }
             });
           },
           onErrorState: (errorState) {

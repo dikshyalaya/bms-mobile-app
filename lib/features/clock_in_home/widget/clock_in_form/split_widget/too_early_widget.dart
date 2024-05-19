@@ -8,10 +8,26 @@ class TooEarlyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200.h,
-      child: const Column(
+      child: Column(
         children: [
-          Icon(Icons.abc),
-          Text('You are Too Early'),
+          SizedBox(
+            height: 50.h,
+          ),
+          Icon(
+            Icons.lock_clock_rounded,
+            size: 33.sp,
+            color: Colors.orange[900],
+          ),
+          SizedBox(
+            height: 20.h,
+          ),
+          Text(
+            'You are Too Early',
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: Colors.orange[900]),
+          ),
         ],
       ),
     );

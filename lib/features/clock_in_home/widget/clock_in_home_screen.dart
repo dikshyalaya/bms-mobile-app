@@ -5,6 +5,7 @@ import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_display_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ClockInHomeScreen extends StatelessWidget {
@@ -44,16 +45,29 @@ class ClockInHomeScreen extends StatelessWidget {
                     Provider.of<CLockInProvider>(context, listen: true)
                         .clockInResponseModel;
                 return ServerResponseBuilder(
-                  builder: (context) => ListView.separated(
-                      itemBuilder: (context, index) => ClockInDisplayCard(
-                            clockInResponse: clockInResponseData?.data?[index],
+                  builder: (context) => clockInResponseData!.data!.isEmpty
+                      ? Padding(
+                          padding: EdgeInsets.only(top: 20.h),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              'No Record Found',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 16.sp),
+                            ),
                           ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 29),
-                      separatorBuilder: (context, index) => const SizedBox(
-                            height: 3,
-                          ),
-                      itemCount: clockInResponseData?.data?.length ?? 0),
+                        )
+                      : ListView.separated(
+                          itemBuilder: (context, index) => ClockInDisplayCard(
+                                clockInResponse:
+                                    clockInResponseData.data?[index],
+                              ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 29),
+                          separatorBuilder: (context, index) => const SizedBox(
+                                height: 3,
+                              ),
+                          itemCount: clockInResponseData.data?.length ?? 0),
                   isDataFetching: isDataFetching,
                   isNullData: clockInResponseData?.data == null,
                 );

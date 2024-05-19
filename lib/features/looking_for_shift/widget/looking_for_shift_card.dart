@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/features/looking_for_shift/data/look_for_shift_response_model.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_card_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LookingForShiftCard extends StatefulWidget {
   final int index;
@@ -24,7 +25,7 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150,
+      // height: 150,
       width: double.infinity,
       child: Card(
         margin: EdgeInsets.zero,
@@ -33,6 +34,7 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             LookingForShiftCardHeader(
               lookForShiftModel: widget.lookForShiftModel,
@@ -97,10 +99,12 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
             //   ),
             // ),
             const Divider(
-              color: Color(0xffEDEDED),
+              color: Color.fromARGB(255, 214, 214, 214),
             ),
             Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
+              padding: EdgeInsetsDirectional.symmetric(
+                horizontal: 19.w,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -142,6 +146,9 @@ class _LookingForShiftCardState extends State<LookingForShiftCard> {
                   )
                 ],
               ),
+            ),
+            SizedBox(
+              height: 6.h,
             )
           ],
         ),

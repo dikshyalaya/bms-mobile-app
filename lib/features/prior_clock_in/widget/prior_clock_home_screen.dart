@@ -4,6 +4,7 @@ import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/prior_clock_in/domain/prior_clock_in_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../clock_in_home/widget/clock_in_home_screen.dart';
@@ -41,21 +42,37 @@ class PriorClockInHomeScreen extends StatelessWidget {
                               .priorClockInResponseModel;
 
                       return ServerResponseBuilder(
-                          builder: (context) => ListView.separated(
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => PriorClockInCard(
-                                    index: index,
-                                    priorClockInModel:
-                                        priorClockInResponseData?.data?[index],
+                          builder: (context) => priorClockInResponseData!
+                                  .data!.isEmpty
+                              ? Padding(
+                                  padding: EdgeInsets.only(top: 20.h),
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Text(
+                                      'No Record Found',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16.sp),
+                                    ),
                                   ),
-                              padding: const EdgeInsets.only(
-                                  left: 12, right: 12, bottom: 29),
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                    height: 9,
-                                  ),
-                              itemCount:
-                                  priorClockInResponseData?.data?.length ?? 0),
+                                )
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) =>
+                                      PriorClockInCard(
+                                        index: index,
+                                        priorClockInModel:
+                                            priorClockInResponseData
+                                                .data?[index],
+                                      ),
+                                  padding: const EdgeInsets.only(
+                                      left: 12, right: 12, bottom: 29),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: 9,
+                                      ),
+                                  itemCount:
+                                      priorClockInResponseData.data?.length ??
+                                          0),
                           isDataFetching: isDataFetching,
                           isNullData: priorClockInResponseData?.data == null);
                     },

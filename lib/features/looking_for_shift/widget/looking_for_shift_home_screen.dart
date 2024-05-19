@@ -206,9 +206,9 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                                   listen: true)
                                               .isDataPosting,
                                       ifBuilder: (context) => const Center(
-                                              child: CircularProgressIndicator(
-                                            // color: Colors.amber,
-                                          )),
+                                          child: CircularProgressIndicator(
+                                              // color: Colors.amber,
+                                              )),
                                       elseBulider: (context) {
                                         return ElevatedButton(
                                             onPressed: () {

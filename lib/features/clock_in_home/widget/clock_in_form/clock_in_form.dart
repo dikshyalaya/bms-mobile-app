@@ -91,31 +91,30 @@ class _ClockInFormState extends State<ClockInForm> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: widget.cLockInProvider,
-      builder: (context,child) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClockInHeader(clockInResponse: widget.clockInResponse),
-            if (isEarlyOrExceeded) ...[
-              ClockInDetails(
-                noMealReasonList: widget.noMealResonList,
-                endTime: endTime!,
-                startTime: startTime!,
-                startTimeController: startTimeController,
-                endTimeController: endTimeController,
-                mealTimeController: mealTimeController,
-                noMealReasonController: noMealReasonController,
-                noMealReasonIdController: noMealReasonIdController,
-                isSaving: isSaving,
-                onSave: () => _handleSave(),
-              )
-            ] else
-              const TooEarlyWidget(),
-          ],
-        );
-      }
-    );
+        value: widget.cLockInProvider,
+        builder: (context, child) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClockInHeader(clockInResponse: widget.clockInResponse),
+              if (isEarlyOrExceeded) ...[
+                ClockInDetails(
+                  noMealReasonList: widget.noMealResonList,
+                  endTime: endTime!,
+                  startTime: startTime!,
+                  startTimeController: startTimeController,
+                  endTimeController: endTimeController,
+                  mealTimeController: mealTimeController,
+                  noMealReasonController: noMealReasonController,
+                  noMealReasonIdController: noMealReasonIdController,
+                  isSaving: isSaving,
+                  onSave: () => _handleSave(),
+                )
+              ] else
+                const TooEarlyWidget(),
+            ],
+          );
+        });
   }
 
   void _handleSave() async {
