@@ -146,9 +146,9 @@ class _ClockInFormState extends State<ClockInForm> {
           widget.clockInResponse!.noBreakReason =
               int.parse(noMealReasonIdController.text);
           if (endTimeController.text.isNotEmpty) {
-            Provider.of<CLockInProvider>(context, listen: false)
-                .removeClockInListAfterCompleted(
-                    widget.clockInResponse?.id ?? -1);
+            widget.cLockInProvider
+                .removeClockInListAfterCompleted(widget.clockInResponse!.id!);
+            setState(() {});
           }
         }
       }, ((p0) {
@@ -170,44 +170,4 @@ class _ClockInFormState extends State<ClockInForm> {
     }
     // handle save operation
   }
-
-  // bool isValidInput() {
-  //   final startTimeNotEmpty = startTimeController.text.isNotEmpty;
-  //   final endTimeEmpty = endTimeController.text.isEmpty;
-  //   final mealTimeNotEmpty = mealTimeController.text.isNotEmpty;
-  //   final noMealReasonNotEmpty = noMealReasonController.text.isNotEmpty;
-
-  //   // Define conditions
-  //   final bool case1 = startTimeNotEmpty &&
-  //       endTimeEmpty &&
-  //       mealTimeNotEmpty &&
-  //       noMealReasonNotEmpty;
-  //   final bool case2 = startTimeNotEmpty &&
-  //       !endTimeEmpty &&
-  //       mealTimeController.text == 'No Meal' &&
-  //       !noMealReasonNotEmpty;
-  //   final bool case3 = startTimeNotEmpty &&
-  //       !endTimeEmpty &&
-  //       mealTimeController.text != 'No Meal' &&
-  //       noMealReasonNotEmpty;
-  //   final bool case4 = startTimeNotEmpty &&
-  //       endTimeEmpty &&
-  //       mealTimeController.text != 'No Meal' &&
-  //       !noMealReasonNotEmpty;
-  //   final bool case5 = startTimeNotEmpty &&
-  //       endTimeEmpty &&
-  //       mealTimeController.text == 'No Meal' &&
-  //       !noMealReasonNotEmpty;
-  //   final bool case6 = startTimeNotEmpty &&
-  //       !endTimeEmpty &&
-  //       mealTimeNotEmpty &&
-  //       noMealReasonNotEmpty;
-  //   final bool case7 = startTimeNotEmpty &&
-  //       endTimeEmpty &&
-  //       mealTimeNotEmpty &&
-  //       !noMealReasonNotEmpty;
-
-  //   // Return the result
-  //   return case1 || case2 || case3 || case4 || case5 || case6 || case7;
-  // }
 }

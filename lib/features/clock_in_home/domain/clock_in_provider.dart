@@ -101,9 +101,12 @@ class CLockInProvider extends ChangeNotifier {
         clockInResponseModel!.data!.isNotEmpty) {
       clockInResponseModel!.data!
           .removeWhere((element) => element.id == shiftId);
+      log(clockInResponseModel!.data!.first.id.toString());
+      log("Shift Removed Successfullt: $shiftId");
     }
-    log("Shift Removed Successfullt: $shiftId");
+
     notifyListeners();
+    log(clockInResponseModel!.data!.first.id.toString());
   }
 
   Future<void> punchIn(

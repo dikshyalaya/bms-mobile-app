@@ -312,7 +312,6 @@ class DialogueUtils {
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: Container(
-                height: 403,
                 width: DimensionUtils.isTab(context)
                     ? _width()
                     : MediaQuery.of(context).size.width,
@@ -323,84 +322,183 @@ class DialogueUtils {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Column(children: [
-                      Image.asset(
-                        "profile".pngImage(),
-                        height: 86,
-                        width: 86,
+                    Image.asset(
+                      "profile".pngImage(),
+                      height: 86,
+                      width: 86,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      userName,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Color(0xff565656)),
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.notifications_active),
+                      title: Text('My Notifications',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16.sp)),
+                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                    Container(
+                      color: Colors.black38,
+                      height: (0.5).h,
+                      width: double.infinity,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        changePasswordDialogue(context: context);
+                      },
+                      leading: const Icon(Icons.password),
+                      title: Text('Change Password',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16.sp)),
+                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                    Container(
+                      color: Colors.black38,
+                      height: (0.5).h,
+                      width: double.infinity,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        authProvider.logOut();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                      },
+                      leading: const Icon(Icons.logout),
+                      title: Text(
+                        'Logout',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16.sp),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                    Container(
+                      color: Colors.black38,
+                      height: (0.5).h,
+                      width: double.infinity,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15.sp),
                       ),
-                      Text(
-                        userName,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Color(0xff565656)),
-                      ),
-                    ]),
-                    Column(
-                      children: [
-                        SizedBox(
-                            height: 40,
-                            width: 270,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color(0xff3B85FF)),
-                                    shape: MaterialStateProperty.all(
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))))),
-                                onPressed: () {
-                                  changePasswordDialogue(context: context);
-                                  // Navigator.pop(context,true);
-                                },
-                                child: const Text(
-                                  "Change Password",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ))),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            authProvider.logOut();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
-                          },
-                          child: const Text(
-                            "Log Out",
-                            style: TextStyle(
-                                color: Color(0xff6F6F6F),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context, false);
-                          },
-                          child: const Text(
-                            "Close",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13),
-                          ),
-                        ),
-                      ],
-                    )
+                    ),
+                    // const Column(
+                    //   children: [
+                    //     ListTile(
+                    //       leading: Icon(Icons.notifications_active),
+                    //       title: Text(
+                    //         'Notifications',
+                    //       ),
+                    //       trailing: Icon(Icons.arrow_forward_ios_outlined),
+                    //       // subtitle: Text('See all your notifications here'),
+                    //       // selected: true,
+                    //     ),
+                    //     ListTile(
+                    //       leading: Icon(Icons.password),
+                    //       title: Text(
+                    //         'Change Passowrd',
+                    //       ),
+                    //       trailing: Icon(Icons.arrow_forward_ios_outlined),
+                    //       // subtitle: Text('See all your notifications here'),
+                    //       // selected: true,
+                    //     ),
+                    //     ListTile(
+                    //       leading: Icon(Icons.logout),
+                    //       title: Text(
+                    //         'Logout',
+                    //       ),
+                    //       trailing: Icon(Icons.arrow_forward_ios_outlined),
+                    //       // subtitle: Text('See all your notifications here'),
+                    //       // selected: true,
+                    //     ),
+
+                    //     // SizedBox(
+                    //     //     height: 40,
+                    //     //     width: 270,
+                    //     //     child: ElevatedButton(
+                    //     //         style: ButtonStyle(
+                    //     //             backgroundColor: MaterialStateProperty.all(
+                    //     //                 const Color(0xff3B85FF)),
+                    //     //             shape: MaterialStateProperty.all(
+                    //     //                 const RoundedRectangleBorder(
+                    //     //                     borderRadius: BorderRadius.all(
+                    //     //                         Radius.circular(20))))),
+                    //     //         onPressed: () {
+                    // changePasswordDialogue(context: context);
+                    //     //           // Navigator.pop(context,true);
+                    //     //         },
+                    //     //         child: const Text(
+                    //     //           "Change Password",
+                    //     //           style: TextStyle(
+                    //     //               color: Colors.white,
+                    //     //               fontSize: 15,
+                    //     //               fontWeight: FontWeight.bold),
+                    //     //         ))),
+                    //     // const SizedBox(
+                    //     //   height: 16,
+                    //     // ),
+                    //     // GestureDetector(
+                    //     //   onTap: () {
+                    // authProvider.logOut();
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const LoginScreen()));
+                    //     //   },
+                    //     //   child: const Text(
+                    //     //     "Log Out",
+                    // style: TextStyle(
+                    //     color: Color(0xff6F6F6F),
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 15),
+                    //     //   ),
+                    //     // ),
+                    //     // const SizedBox(
+                    //     //   height: 37,
+                    //     // ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    // Navigator.pop(context, false);
+                    //   },
+                    //   child: const Text(
+                    //     "Close",
+                    //     style: TextStyle(
+                    //         color: Colors.black,
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: 13),
+                    //   ),
+                    // ),
+                    //   ],
+                    // )
                   ],
                 ),
               ),
