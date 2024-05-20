@@ -117,5 +117,5 @@ List<CardModel> newGridCardProviders = [
   CardModel(title: "House Employees", asset: "add-shift".pngImage()),
   CardModel(title: "House Shifts", asset: "house-shift".pngImage()),
   CardModel(title: "Approval History", asset: "shift-availiability".pngImage()),
-  CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
+  // CardModel(title: "View Bill & TS", asset: "schedule".pngImage()),
 ];

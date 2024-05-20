@@ -18,8 +18,7 @@ class DashBoardGrid extends StatelessWidget {
     return Wrap(alignment: WrapAlignment.start, children: [
       ...cardProvider.gridCardProviders.map((e) {
         final index = cardProvider.gridCardProviders.indexOf(e);
-        return 
-        Container(
+        return Container(
           height: 134,
           margin: const EdgeInsetsDirectional.only(top: 14, start: 7, end: 7),
           width: 110,

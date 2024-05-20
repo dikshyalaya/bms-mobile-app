@@ -132,8 +132,8 @@ class DashBoardScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Container(
-                              height: 100,
-                              width: 100,
+                              height: 90,
+                              width: 90,
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15)),

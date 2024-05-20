@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
+import 'package:beacon_flutter/features/auth/widget/change_password_page.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
@@ -73,9 +74,8 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
             final empId = onData['data']['empId'];
             final empFirstName = onData['data']['employee']['empFirstName'];
             final empLastName = onData['data']['employee']['empLastName'];
-             final isPasswordUpdateRequired =
-                                                        onData['data'][
-                                                            'isPasswordUpdateRequired'];
+            final isPasswordUpdateRequired =
+                onData['data']['isPasswordUpdateRequired'];
             authProvider.savedLoginInfo(
               accessToken,
               BmsUserModel(
@@ -85,28 +85,50 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
                 empFirstName: empFirstName,
                 empLastName: empLastName,
                 empId: empId,
-                isPasswordUpdateRequired:
-                                                            isPasswordUpdateRequired,
+                isPasswordUpdateRequired: isPasswordUpdateRequired,
               ),
             );
 
             if (userTypeId == 1) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const DashBoardScreen()),
-                (route) => false,
-              );
+              if (isPasswordUpdateRequired == false) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangePasswordPage(
+                      userTypeId: userTypeId as int,
+                    ),
+                  ),
+                  (route) => false,
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DashBoardScreen()),
+                  (route) => false,
+                );
+              }
             } else if (userTypeId == 4) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ManagerDashBoardScreen()),
-                (route) => false,
-              );
+              if (isPasswordUpdateRequired == false) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangePasswordPage(
+                      userTypeId: userTypeId as int,
+                    ),
+                  ),
+                  (route) => false,
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ManagerDashBoardScreen()),
+                  (route) => false,
+                );
+              }
             } else {}
           } else {
-            print("has error");
             shoErrorToast(onData['message']);
           }
           setState(() {

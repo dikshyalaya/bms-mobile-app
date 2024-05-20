@@ -80,9 +80,10 @@ class _ClockInDetailsState extends State<ClockInDetails> {
           ),
           CustomDropdownButton(
             hintText: 'Select Start Time',
-            items:
-                // mealTimeOption,
-                getSurroundingTimes(widget.startTime, true),
+            items: getCircularSublist(
+                timeOptions, timeOptions.indexOf(widget.startTime) - 8, 17),
+            // mealTimeOption,
+            // getSurroundingTimes(widget.startTime, true),
             selectedItem: widget.startTimeController.text,
             onChanged: (value) {
               setState(() {
@@ -107,8 +108,9 @@ class _ClockInDetailsState extends State<ClockInDetails> {
                 widget.mealTimeController.text = value;
                 if (value == 'No Meal') {
                   widget.noMealReasonController.text = 'Community inclusion';
-                  widget.noMealReasonIdController.text = ClockInUtils.getIdByName(
-                      'Community inclusion', widget.noMealReasonList);
+                  widget.noMealReasonIdController.text =
+                      ClockInUtils.getIdByName(
+                          'Community inclusion', widget.noMealReasonList);
                 } else {
                   widget.noMealReasonController.text = '';
                   widget.noMealReasonIdController.text = '';
@@ -139,7 +141,8 @@ class _ClockInDetailsState extends State<ClockInDetails> {
                         // noMealReason = value;
                         widget.noMealReasonController.text = value;
                         widget.noMealReasonIdController.text =
-                         ClockInUtils.getIdByName(value, widget.noMealReasonList);
+                            ClockInUtils.getIdByName(
+                                value, widget.noMealReasonList);
                       });
                     },
                   ),
@@ -203,5 +206,4 @@ class _ClockInDetailsState extends State<ClockInDetails> {
       ),
     );
   }
-
 }
