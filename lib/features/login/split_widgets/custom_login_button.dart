@@ -90,7 +90,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
             );
 
             if (userTypeId == 1) {
-              if (isPasswordUpdateRequired == false) {
+              if (isPasswordUpdateRequired == true) {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -109,7 +109,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
                 );
               }
             } else if (userTypeId == 4) {
-              if (isPasswordUpdateRequired == false) {
+              if (isPasswordUpdateRequired == true) {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

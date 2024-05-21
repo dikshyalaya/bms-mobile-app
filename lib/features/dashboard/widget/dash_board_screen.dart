@@ -10,6 +10,7 @@ import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_s
 import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/widgets/beacon_app_bar.dart';
@@ -52,7 +53,7 @@ class DashBoardScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 30),
                   child: GridView.count(
                     mainAxisSpacing: 20,
-                    crossAxisSpacing: 12,
+                    crossAxisSpacing: 3,
                     crossAxisCount: 3,
                     children: List.generate(
                         CardProvider().gridCardProviders.length, (index) {
@@ -132,8 +133,8 @@ class DashBoardScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Container(
-                              height: 90,
-                              width: 90,
+                              height: 100.h,
+                              width: 100.w,
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15)),
