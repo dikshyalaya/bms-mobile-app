@@ -5,6 +5,7 @@ import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_scree
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
 import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_card.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
+import 'package:beacon_flutter/utils/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -90,8 +91,7 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
                               )
                             : ListView.builder(
                                 itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
+                                  padding: bodyOnlyPadding(context),
                                   child: MySchedulecard(
                                     scheduleCardModel:
                                         availableShiftsForDcModel.data![index],

@@ -14,6 +14,7 @@ import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_r
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
+import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
@@ -343,6 +344,12 @@ class DialogueUtils {
                       height: 15.h,
                     ),
                     ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const NotificationPage()));
+                      },
                       leading: const Icon(Icons.notifications_active),
                       title: Text('My Notifications',
                           style: TextStyle(

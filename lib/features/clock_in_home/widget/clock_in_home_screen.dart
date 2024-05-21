@@ -4,6 +4,7 @@ import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_display_card.dart';
+import 'package:beacon_flutter/utils/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -62,8 +63,7 @@ class ClockInHomeScreen extends StatelessWidget {
                                 clockInResponse:
                                     clockInResponseData.data?[index],
                               ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 29),
+                          padding: bodyOnlyPadding(context),
                           separatorBuilder: (context, index) => const SizedBox(
                                 height: 3,
                               ),

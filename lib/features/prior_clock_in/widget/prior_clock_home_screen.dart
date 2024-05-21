@@ -3,6 +3,7 @@ import 'package:beacon_flutter/common/widgets/builder/server_response_builder.da
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/prior_clock_in/domain/prior_clock_in_provider.dart';
+import 'package:beacon_flutter/utils/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -64,8 +65,7 @@ class PriorClockInHomeScreen extends StatelessWidget {
                                             priorClockInResponseData
                                                 .data?[index],
                                       ),
-                                  padding: const EdgeInsets.only(
-                                      left: 12, right: 12, bottom: 29),
+                                  padding: bodyOnlyPadding(context),
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
                                         height: 9,
