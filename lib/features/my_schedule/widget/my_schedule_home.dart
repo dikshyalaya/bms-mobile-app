@@ -25,7 +25,7 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
       update: (_, authProvider, clockInProvide) {
         return MyScheduleProvider(authProvider.bmsUserModel?.empId ?? 0)
           ..getAvailableShiftsForDcModel()
-          ..getListHouseForDCAddShift();
+          ..getHouseWorkedInLastThreeWeeks();
       },
       lazy: false,
       create: (_) => MyScheduleProvider(0),
@@ -35,18 +35,20 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
             action: [
               GestureDetector(
                 onTap: () async {
+                  final houses =
+                      Provider.of<MyScheduleProvider>(context, listen: false)
+                          .houseWorkedinLastThreeWeeksModel;
+
                   DialogueUtils.onPressedMyScheduleDialogue(
-                      context: context,
-                      onSaveSchedule: () {
-                        Navigator.pop(context);
-                        DialogueUtils.successMessageDialogue(
-                            context: context,
-                            successMessage: "Shift Added Successfully.");
-                      },
-                      listHouseForDcAddShiftModel:
-                          Provider.of<MyScheduleProvider>(context,
-                                  listen: false)
-                              .listHouseForDCAddShiftModel);
+                    context: context,
+                    onSaveSchedule: () {
+                      Navigator.pop(context);
+                      DialogueUtils.successMessageDialogue(
+                          context: context,
+                          successMessage: "Shift Added Successfully.");
+                    },
+                    houseWorkedInLastThreeWeeksModel: houses,
+                  );
                 },
                 child: SizedBox(
                   height: 34,

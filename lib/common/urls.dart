@@ -20,6 +20,8 @@ const availableShiftForDCList = "ShiftManagement/ListAvailableShiftsForDC";
 const availableForShift = "ShiftManagement/AvailableForShift";
 const lookingForShift = "ShiftManagement/UpdateLookForShift";
 const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
+const getHouseWorkedInLastThreeWeeks =
+    "ShiftManagement/GetHouseWorkedInLastThreeWeeks";
 const myScheduleList = "ShiftManagement/GetMySchedules";
 const sendOtpByEmail = "Account/RequestResetPassword";
 const resetPassword = "Account/SetPasswordWithOTP";

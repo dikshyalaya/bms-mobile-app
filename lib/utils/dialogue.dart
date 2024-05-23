@@ -12,13 +12,12 @@ import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart'
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
-import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
 import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -515,10 +514,11 @@ class DialogueUtils {
   static Future<void> onPressedMyScheduleDialogue(
       {required BuildContext context,
       required VoidCallback onSaveSchedule,
-      ListHouseForDcAddShiftModel? listHouseForDcAddShiftModel}) async {
+      HouseWorkedInLastThreeWeeksModel?
+          houseWorkedInLastThreeWeeksModel}) async {
     final availableShiftsProvider =
         Provider.of<MyScheduleProvider>(context, listen: false);
-    List<String> listHouse = listHouseForDcAddShiftModel?.data
+    List<String> listHouse = houseWorkedInLastThreeWeeksModel?.data
             ?.map((element) => element.accountNumber ?? '')
             .toList() ??
         [""];
@@ -741,55 +741,68 @@ class DialogueUtils {
                                             child: CircularProgressIndicator()),
                                         elseBulider: (context) {
                                           return ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          const Color(
-                                                              0xff3B85FF)),
-                                                  shape: MaterialStateProperty.all(
-                                                      const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      20))))),
-                                              onPressed: () async {
-                                                selectedHouseNumber ??=
-                                                    listHouse[0];
-                                                if (selectedHouseNumber !=
-                                                        null &&
-                                                    startTime != null &&
-                                                    endTime != null &&
-                                                    scheduledDate != null) {
-                                                  setState(() {
-                                                    isPosting = true;
-                                                  });
-                                                  final houseId =
-                                                      listHouseForDcAddShiftModel
-                                                          ?.data
-                                                          ?.firstWhere((element) =>
-                                                              element
-                                                                  .accountNumber ==
-                                                              selectedHouseNumber)
-                                                          .id;
-                                                  await availableShiftsProvider
-                                                      .createShift(
-                                                          scheduledDate!,
-                                                          startTime!,
-                                                          endTime!,
-                                                          houseId!,
-                                                          (bool isCreated) {
-                                                    if (isCreated) {
-                                                      onSaveSchedule.call();
-                                                    }
-                                                  });
-                                                  setState(() {
-                                                    isPosting = false;
-                                                  });
-                                                } else {
-                                                  shoErrorToast(
-                                                      "Must select all the required field");
-                                                }
-                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    shiftGivenByManager == 'No'
+                                                        ? const Color(
+                                                            0xFF9C9C9C)
+                                                        : const Color(
+                                                            0xff3B85FF),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(20),
+                                                  ),
+                                                ),
+                                              ),
+                                              onPressed: shiftGivenByManager ==
+                                                      'No'
+                                                  ? null
+                                                  : () async {
+                                                      selectedHouseNumber ??=
+                                                          listHouse[0];
+                                                      if (selectedHouseNumber !=
+                                                              null &&
+                                                          startTime != null &&
+                                                          endTime != null &&
+                                                          scheduledDate !=
+                                                              null) {
+                                                        setState(() {
+                                                          isPosting = true;
+                                                        });
+                                                        final houseId =
+                                                            houseWorkedInLastThreeWeeksModel
+                                                                ?.data
+                                                                ?.firstWhere(
+                                                                    (element) =>
+                                                                        element
+                                                                            .accountNumber ==
+                                                                        selectedHouseNumber)
+                                                                .id;
+                                                        await availableShiftsProvider
+                                                            .createShift(
+                                                                scheduledDate!,
+                                                                startTime!,
+                                                                endTime!,
+                                                                int.tryParse(
+                                                                        houseId!) ??
+                                                                    0,
+                                                                (bool
+                                                                    isCreated) {
+                                                          if (isCreated) {
+                                                            onSaveSchedule
+                                                                .call();
+                                                          }
+                                                        });
+                                                        setState(() {
+                                                          isPosting = false;
+                                                        });
+                                                      } else {
+                                                        shoErrorToast(
+                                                            "Must select all the required field");
+                                                      }
+                                                    },
                                               child: const Text(
                                                 "Save",
                                                 style: TextStyle(
