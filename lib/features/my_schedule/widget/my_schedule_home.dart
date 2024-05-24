@@ -24,92 +24,102 @@ class _MyScheduleHomeScreenState extends State<MyScheduleHomeScreen> {
     return ChangeNotifierProxyProvider<AuthProvider, MyScheduleProvider>(
       update: (_, authProvider, clockInProvide) {
         return MyScheduleProvider(authProvider.bmsUserModel?.empId ?? 0)
-          ..getAvailableShiftsForDcModel()
-          ..getHouseWorkedInLastThreeWeeks();
+          ..getAvailableShiftsForDcModel();
       },
       lazy: false,
       create: (_) => MyScheduleProvider(0),
       builder: (context, child) => ScaffoldBackGroundWrapper(
-          appBar: BeaconAppBar(
-            title: "My Schedule",
-            action: [
-              GestureDetector(
-                onTap: () async {
-                  final houses =
-                      Provider.of<MyScheduleProvider>(context, listen: false)
-                          .houseWorkedinLastThreeWeeksModel;
+        appBar: BeaconAppBar(
+          title: "My Schedule",
+          action: [
+            GestureDetector(
+              onTap: () async {
+                final houses =
+                    Provider.of<MyScheduleProvider>(context, listen: false)
+                        .houseWorkedinLastThreeWeeksModel;
 
-                  DialogueUtils.onPressedMyScheduleDialogue(
-                    context: context,
-                    onSaveSchedule: () {
-                      Navigator.pop(context);
-                      DialogueUtils.successMessageDialogue(
-                          context: context,
-                          successMessage: "Shift Added Successfully.");
-                    },
-                    houseWorkedInLastThreeWeeksModel: houses,
-                  );
-                },
-                child: SizedBox(
-                  height: 34,
-                  width: 34,
-                  child: Card(
-                    margin: EdgeInsets.zero,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(34)),
-                    child: const Icon(
-                      Icons.add,
-                      color: Color(0xff325CA1),
-                    ),
+                DialogueUtils.onPressedMyScheduleDialogue(
+                  context: context,
+                  onSaveSchedule: () {
+                    Navigator.pop(context);
+                    DialogueUtils.successMessageDialogue(
+                        context: context,
+                        successMessage: "Shift Added Successfully.");
+                    Provider.of<MyScheduleProvider>(context, listen: false)
+                        .getAvailableShiftsForDcModel();
+                  },
+                  houseWorkedInLastThreeWeeksModel: houses,
+                );
+              },
+              child: SizedBox(
+                height: 34,
+                width: 34,
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(34)),
+                  child: const Icon(
+                    Icons.add,
+                    color: Color(0xff325CA1),
                   ),
                 ),
-              )
-            ],
-            leadingIcon: const AppBarLeadingIcon(),
-          ),
-          child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Selector<MyScheduleProvider, bool>(
-                  builder: (context, isDataFetching, child) {
-                    final availableShiftsForDcModel =
-                        Provider.of<MyScheduleProvider>(context, listen: false)
-                            .availableShiftsForDcModel;
+              ),
+            )
+          ],
+          leadingIcon: const AppBarLeadingIcon(),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Selector<MyScheduleProvider, bool>(
+            selector: (context, provider) => provider.isDataFetching,
+            builder: (context, isDataFetching, child) {
+              final availableShiftsForDcModel =
+                  Provider.of<MyScheduleProvider>(context, listen: false)
+                      .availableShiftsForDcModel;
 
-                    return ServerResponseBuilder(
-                        builder: (context) => availableShiftsForDcModel
-                                .data!.isEmpty
-                            ? const Padding(
-                                padding: EdgeInsets.only(top: 22),
-                                child: Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      'No Record Found',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    )),
-                              )
-                            : ListView.builder(
-                                itemBuilder: (context, index) => Padding(
-                                  padding: bodyOnlyPadding(context),
-                                  child: MySchedulecard(
-                                    scheduleCardModel:
-                                        availableShiftsForDcModel.data![index],
-                                    index: index,
-                                    onFinished: () {
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                                itemCount:
-                                    availableShiftsForDcModel.data!.length,
-                              ),
-                        isDataFetching: isDataFetching,
-                        isNullData: availableShiftsForDcModel.data == null);
-                  },
-                  selector: (context, provider) => provider.isDataFetching))),
+              return ServerResponseBuilder(
+                isDataFetching: isDataFetching,
+                isNullData: availableShiftsForDcModel.data == null,
+                builder: (context) {
+                  return availableShiftsForDcModel.data!.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.only(top: 22),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              'No Record Found',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        )
+                      : Padding(
+                          padding: bodyOnlyPadding(context),
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              return MySchedulecard(
+                                scheduleCardModel:
+                                    availableShiftsForDcModel.data![index],
+                                index: index,
+                                onFinished: () {
+                                  availableShiftsForDcModel.data!
+                                      .removeAt(index);
+                                  setState(() {});
+                                },
+                              );
+                            },
+                            itemCount: availableShiftsForDcModel.data!.length,
+                          ),
+                        );
+                },
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

@@ -17,12 +17,19 @@ class ServerResponseBuilder extends StatelessWidget {
     return IfElseBuilder(
         condition: isDataFetching,
         ifBuilder: (context) => const Center(
-              child: CircularProgressIndicator(
-              ),
+              child: CircularProgressIndicator(),
             ),
         elseBulider: (context) {
           return isNullData
               ? const SizedBox()
+              // ? const Align(
+              //     alignment: Alignment.topCenter,
+              //     child: Text(
+              //       "NUll Data!",
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //       ),
+              //     ))
               : IfElseBuilder(
                   condition: isNullData,
                   ifBuilder: (context) => const Align(

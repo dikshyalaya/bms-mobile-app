@@ -20,6 +20,7 @@ import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DialogueUtils {
@@ -559,8 +560,9 @@ class DialogueUtils {
                                 DateTime.now().add(const Duration(days: 30)));
                         setState(() {
                           if (returnDate != null) {
-                            selectedDate =
-                                returnDate.toString().substring(0, 10);
+                            selectedDate = DateFormat('MM/dd/yyyy')
+                                .format(returnDate)
+                                .toString();
                             onChooseOption?.call(returnDate.toString());
                           }
                         });
@@ -689,10 +691,16 @@ class DialogueUtils {
                               const SizedBox(
                                 height: 7.25,
                               ),
-                              rowBuilder("House", listHouse,
-                                  onChooseOption: (String val) {
-                                selectedHouseNumber = val;
-                              }),
+                              rowBuilder(
+                                "House",
+                                listHouse,
+                                hint: selectedHouseNumber,
+                                onChooseOption: (String val) {
+                                  setState(() {
+                                    selectedHouseNumber = val;
+                                  });
+                                },
+                              ),
                               const SizedBox(
                                 height: 7.25,
                               ),
@@ -709,24 +717,30 @@ class DialogueUtils {
                                   onChooseOption: (String val) {
                                 setState(() {
                                   startTime = val;
+                                  endTime = val;
                                 });
                               }),
                               const SizedBox(
                                 height: 7.25,
                               ),
-                              rowBuilder("End Time", timeOptions, hint: endTime,
-                                  onChooseOption: (String val) {
-                                setState(() {
-                                  if ((startTime?.contains("PM") ?? false) &&
-                                      (val.contains("PM"))) {
-                                    shoErrorToast(
-                                        "Start time and end time must be valid");
-                                    endTime = null;
-                                  } else {
-                                    endTime = val;
-                                  }
-                                });
-                              }, ignoring: startTime == null),
+                              rowBuilder(
+                                "End Time",
+                                timeOptions,
+                                hint: endTime,
+                                onChooseOption: (String val) {
+                                  setState(() {
+                                    if ((startTime?.contains("PM") ?? false) &&
+                                        (val.contains("PM"))) {
+                                      shoErrorToast(
+                                          "Start time and end time must be valid");
+                                      endTime = null;
+                                    } else {
+                                      endTime = val;
+                                    }
+                                  });
+                                },
+                                ignoring: startTime == null,
+                              ),
                               const SizedBox(
                                 height: 16.25,
                               ),
