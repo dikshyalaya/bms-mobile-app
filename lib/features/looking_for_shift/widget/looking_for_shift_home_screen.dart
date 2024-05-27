@@ -83,36 +83,36 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldBackGroundWrapper(
-      child: Scaffold(
-        appBar: BeaconAppBar(
-          leadingIcon: const AppBarLeadingIcon(),
-          action: [
-            GestureDetector(
-              onTap: () async {
-                if (_lookingForShiftProvider
-                        .schedulePeriodResponseModel?.data?.isNotEmpty ??
-                    false) {
-                  await onOpenPeriodDialogue(context);
-                }
-              },
-              child: SizedBox(
-                height: 34,
-                width: 34,
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(34)),
-                  child: const Icon(
-                    Icons.calendar_month,
-                    color: Color(0xff04437F),
-                  ),
+      appBar: BeaconAppBar(
+        leadingIcon: const AppBarLeadingIcon(),
+        action: [
+          GestureDetector(
+            onTap: () async {
+              if (_lookingForShiftProvider
+                      .schedulePeriodResponseModel?.data?.isNotEmpty ??
+                  false) {
+                await onOpenPeriodDialogue(context);
+              }
+            },
+            child: SizedBox(
+              height: 34,
+              width: 34,
+              child: Card(
+                margin: EdgeInsets.zero,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(34)),
+                child: const Icon(
+                  Icons.calendar_month,
+                  color: Color(0xff04437F),
                 ),
               ),
-            )
-          ],
-          title: "Looking For Shift",
-        ),
+            ),
+          )
+        ],
+        title: "Looking For Shift",
+      ),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
