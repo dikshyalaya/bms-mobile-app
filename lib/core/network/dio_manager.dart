@@ -13,6 +13,9 @@ class DioManager {
   final Dio _prodDio = Dio(
     BaseOptions(
       baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30),
     ),
   );
 

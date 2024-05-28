@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
@@ -91,11 +92,14 @@ class AuthProvider extends ChangeNotifier {
     var headers = {
       "Content-Type": "application/json",
     };
+    // DateTime startTime = DateTime.now();
+
     final response = await http.post(
       url,
       body: json.encode(body),
       headers: headers,
     );
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data['success'] == true) {
@@ -162,6 +166,9 @@ class AuthProvider extends ChangeNotifier {
       } else {
         shoErrorToast(data['message']);
       }
+      // DateTime endTime = DateTime.now();
+      // Duration responseTime = endTime.difference(startTime);
+      // log('----- Login API response Time : ${responseTime.inSeconds} sec-----');
     } else {
       final data = json.decode(response.body);
       shoErrorToast(data['message']);
@@ -253,5 +260,21 @@ class AuthProvider extends ChangeNotifier {
 
   void logOut() async {
     await BMSHiveModel.hive.clear();
+  }
+
+  void showLoadingIndicator(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  void hideLoadingIndicator(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }

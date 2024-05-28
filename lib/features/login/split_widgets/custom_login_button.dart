@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/service/generate_fcm_token.dart';
@@ -49,12 +51,18 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
     try {
       FocusScope.of(context).unfocus();
       var fcm = await generateFCMToken();
+      DateTime startTime = DateTime.now();
       await authProvider.login(
         context,
         widget.userName.text,
         widget.password.text,
         fcm,
       );
+
+      DateTime endTime = DateTime.now();
+
+      Duration responseTime = endTime.difference(startTime);
+      log('----- Login API response Time : ${responseTime.inSeconds} sec-----');
       // await authProvider.logIn(
       //   widget.userName.text,
       //   widget.password.text,
