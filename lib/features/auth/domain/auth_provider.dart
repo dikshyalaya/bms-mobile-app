@@ -1,12 +1,18 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_repo.dart';
+import 'package:beacon_flutter/features/auth/widget/change_password_page.dart';
+import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
+import 'package:beacon_flutter/features/login/src/login_screen.dart';
+import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/main.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class AuthProvider extends ChangeNotifier {
   BmsUserModel? _bmsUserModel;
@@ -59,6 +65,107 @@ class AuthProvider extends ChangeNotifier {
             onLoadingState: onLoadingState);
       },
     );
+  }
+
+  Future<void> login(
+    BuildContext context,
+    String name,
+    String password,
+    String fcm,
+  ) async {
+    final hasPermission = await handleLocationPermission();
+    if (!hasPermission) return;
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final url = Uri.parse(
+        "https://api-beacon.dikshyalaya.com/api/Authentication/login");
+    var body = {
+      "password": password,
+      "loginName": name,
+      "fcmToken": fcm,
+      "location": {
+        "latitude": position.latitude,
+        "longitude": position.longitude
+      }
+    };
+    var headers = {
+      "Content-Type": "application/json",
+    };
+    final response = await http.post(
+      url,
+      body: json.encode(body),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final accessToken = data["accessToken"];
+        final email = data['data']['email'];
+        final isActive = data['data']['isActive'];
+        final userTypeId = data['data']['userTypeId'];
+        final empId = data['data']['empId'];
+        final empFirstName = data['data']['employee']['empFirstName'];
+        final empLastName = data['data']['employee']['empLastName'];
+        final isPasswordUpdateRequired =
+            data['data']['isPasswordUpdateRequired'];
+        savedLoginInfo(
+          accessToken,
+          BmsUserModel(
+            email: email,
+            isActive: isActive,
+            userTypeId: userTypeId,
+            empFirstName: empFirstName,
+            empLastName: empLastName,
+            empId: empId,
+            isPasswordUpdateRequired: isPasswordUpdateRequired,
+          ),
+        );
+        //Navigate to page
+        if (userTypeId == 1) {
+          if (isPasswordUpdateRequired == true) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChangePasswordPage(
+                  userTypeId: userTypeId as int,
+                ),
+              ),
+              (route) => false,
+            );
+          } else {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const DashBoardScreen()),
+              (route) => false,
+            );
+          }
+        } else if (userTypeId == 4) {
+          if (isPasswordUpdateRequired == true) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChangePasswordPage(
+                  userTypeId: userTypeId as int,
+                ),
+              ),
+              (route) => false,
+            );
+          } else {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ManagerDashBoardScreen()),
+              (route) => false,
+            );
+          }
+        } else {}
+      } else {
+        shoErrorToast(data['message']);
+      }
+    } else {
+      final data = json.decode(response.body);
+      shoErrorToast(data['message']);
+    }
   }
 
   Future<void> changePassword(String newPassword,
@@ -140,7 +247,8 @@ class AuthProvider extends ChangeNotifier {
             empFirstName: "",
             empId: 0,
             userTypeId: 0,
-            isActive: false,isPasswordUpdateRequired: false);
+            isActive: false,
+            isPasswordUpdateRequired: false);
   }
 
   void logOut() async {
