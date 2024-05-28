@@ -1,10 +1,5 @@
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
-import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
-import 'package:beacon_flutter/features/auth/widget/change_password_page.dart';
-import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
-import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/service/generate_fcm_token.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
@@ -54,90 +49,100 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
     try {
       FocusScope.of(context).unfocus();
       var fcm = await generateFCMToken();
-      await authProvider.logIn(
+      await authProvider.login(
+        context,
         widget.userName.text,
         widget.password.text,
         fcm,
-        onErrorState: (errorState) {
-          print("has Error");
-          shoErrorToast(errorState.message);
-          setState(() {
-            _isLoading = false;
-          });
-        },
-        onAccessToken: (Map<String, dynamic> onData) {
-          if (onData['data'] != null) {
-            final accessToken = onData["accessToken"];
-            final email = onData['data']['email'];
-            final isActive = onData['data']['isActive'];
-            final userTypeId = onData['data']['userTypeId'];
-            final empId = onData['data']['empId'];
-            final empFirstName = onData['data']['employee']['empFirstName'];
-            final empLastName = onData['data']['employee']['empLastName'];
-            final isPasswordUpdateRequired =
-                onData['data']['isPasswordUpdateRequired'];
-            authProvider.savedLoginInfo(
-              accessToken,
-              BmsUserModel(
-                email: email,
-                isActive: isActive,
-                userTypeId: userTypeId,
-                empFirstName: empFirstName,
-                empLastName: empLastName,
-                empId: empId,
-                isPasswordUpdateRequired: isPasswordUpdateRequired,
-              ),
-            );
-
-            if (userTypeId == 1) {
-              if (isPasswordUpdateRequired == true) {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChangePasswordPage(
-                      userTypeId: userTypeId as int,
-                    ),
-                  ),
-                  (route) => false,
-                );
-              } else {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const DashBoardScreen()),
-                  (route) => false,
-                );
-              }
-            } else if (userTypeId == 4) {
-              if (isPasswordUpdateRequired == true) {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChangePasswordPage(
-                      userTypeId: userTypeId as int,
-                    ),
-                  ),
-                  (route) => false,
-                );
-              } else {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ManagerDashBoardScreen()),
-                  (route) => false,
-                );
-              }
-            } else {}
-          } else {
-            shoErrorToast(onData['message']);
-          }
-          setState(() {
-            _isLoading = false;
-          });
-        },
       );
+      // await authProvider.logIn(
+      //   widget.userName.text,
+      //   widget.password.text,
+      //   fcm,
+      //   onErrorState: (errorState) {
+      //     print("has Error");
+      //     shoErrorToast(errorState.message);
+      //     setState(() {
+      //       _isLoading = false;
+      //     });
+      //   },
+      //   onAccessToken: (Map<String, dynamic> onData) {
+      //     if (onData['data'] != null) {
+      //       final accessToken = onData["accessToken"];
+      //       final email = onData['data']['email'];
+      //       final isActive = onData['data']['isActive'];
+      //       final userTypeId = onData['data']['userTypeId'];
+      //       final empId = onData['data']['empId'];
+      //       final empFirstName = onData['data']['employee']['empFirstName'];
+      //       final empLastName = onData['data']['employee']['empLastName'];
+      //       final isPasswordUpdateRequired =
+      //           onData['data']['isPasswordUpdateRequired'];
+      //       authProvider.savedLoginInfo(
+      //         accessToken,
+      //         BmsUserModel(
+      //           email: email,
+      //           isActive: isActive,
+      //           userTypeId: userTypeId,
+      //           empFirstName: empFirstName,
+      //           empLastName: empLastName,
+      //           empId: empId,
+      //           isPasswordUpdateRequired: isPasswordUpdateRequired,
+      //         ),
+      //       );
+
+      //       if (userTypeId == 1) {
+      //         if (isPasswordUpdateRequired == true) {
+      //           Navigator.pushAndRemoveUntil(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) => ChangePasswordPage(
+      //                 userTypeId: userTypeId as int,
+      //               ),
+      //             ),
+      //             (route) => false,
+      //           );
+      //         } else {
+      //           Navigator.pushAndRemoveUntil(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (context) => const DashBoardScreen()),
+      //             (route) => false,
+      //           );
+      //         }
+      //       } else if (userTypeId == 4) {
+      //         if (isPasswordUpdateRequired == true) {
+      //           Navigator.pushAndRemoveUntil(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) => ChangePasswordPage(
+      //                 userTypeId: userTypeId as int,
+      //               ),
+      //             ),
+      //             (route) => false,
+      //           );
+      //         } else {
+      //           Navigator.pushAndRemoveUntil(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (context) => const ManagerDashBoardScreen()),
+      //             (route) => false,
+      //           );
+      //         }
+      //       } else {}
+      //     } else {
+      //       shoErrorToast(onData['message']);
+      //     }
+      //     setState(() {
+      //       _isLoading = false;
+      //     });
+      //   },
+      // );
     } catch (e) {
       print("Error occurred: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    } finally {
       setState(() {
         _isLoading = false;
       });

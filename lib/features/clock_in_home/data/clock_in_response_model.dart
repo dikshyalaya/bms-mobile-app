@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-ClockInResponseModel clockInResponseModelFromJson(String str) => ClockInResponseModel.fromJson(json.decode(str));
+ClockInResponseModel clockInResponseModelFromJson(String str) =>
+    ClockInResponseModel.fromJson(json.decode(str));
 
-String clockInResponseModelToJson(ClockInResponseModel data) => json.encode(data.toJson());
+String clockInResponseModelToJson(ClockInResponseModel data) =>
+    json.encode(data.toJson());
 
 class ClockInResponseModel {
   bool? error;
@@ -27,26 +29,29 @@ class ClockInResponseModel {
     required this.pageSize,
   });
 
-  factory ClockInResponseModel.fromJson(Map<String, dynamic> json) => ClockInResponseModel(
-    error: json["error"],
-    message: json["message"],
-    data: List<ClockInResponse>.from(json["data"].map((x) => ClockInResponse.fromJson(x))),
-    currentPage: json["currentPage"],
-    nextPage: json["nextPage"],
-    previouPage: json["previouPage"],
-    pageSize: json["pageSize"],
-  );
+  factory ClockInResponseModel.fromJson(Map<String, dynamic> json) =>
+      ClockInResponseModel(
+        error: json["error"],
+        message: json["message"],
+        data: List<ClockInResponse>.from(
+            json["data"].map((x) => ClockInResponse.fromJson(x))),
+        currentPage: json["currentPage"],
+        nextPage: json["nextPage"],
+        previouPage: json["previouPage"],
+        pageSize: json["pageSize"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "error": error,
-    "message": message,
-    "data": List<dynamic>.from(data?.map((x) => x.toJson())??{}),
-    "currentPage": currentPage,
-    "nextPage": nextPage,
-    "previouPage": previouPage,
-    "pageSize": pageSize,
-  };
+        "error": error,
+        "message": message,
+        "data": List<dynamic>.from(data?.map((x) => x.toJson()) ?? {}),
+        "currentPage": currentPage,
+        "nextPage": nextPage,
+        "previouPage": previouPage,
+        "pageSize": pageSize,
+      };
 }
+
 class ClockInResponse {
   int? id;
   String? schedulePeriod;
@@ -59,28 +64,34 @@ class ClockInResponse {
   String? directCare;
   String? scheduleDate;
   String? startTime;
-  dynamic startDateTime;  // Changed from Null to dynamic to handle multiple types
+  dynamic
+      startDateTime; // Changed from Null to dynamic to handle multiple types
   String? endTime;
-  dynamic endDateTime;  // Changed from Null to dynamic to handle multiple types
-  dynamic actualStartDateTime;  // Changed from Null to dynamic to handle multiple types
-  dynamic actualEndDateTime;  // Changed from Null to dynamic to handle multiple types
+  dynamic endDateTime; // Changed from Null to dynamic to handle multiple types
+  dynamic
+      actualStartDateTime; // Changed from Null to dynamic to handle multiple types
+  dynamic
+      actualEndDateTime; // Changed from Null to dynamic to handle multiple types
   String? actualStartTime;
   String? actualEndTime;
   String? lunchTime;
-  double? totalTime;  // Changed from Null to double? to handle multiple types
+  double? totalTime; // Changed from Null to double? to handle multiple types
   int? noBreakReason;
-  dynamic invoiceNumber;  // Changed from Null to dynamic to handle multiple types
+  dynamic
+      invoiceNumber; // Changed from Null to dynamic to handle multiple types
   int? timeDiff;
-  dynamic hasDisputed;  // Changed from Null to dynamic to handle multiple types
-  dynamic overTimeComment;  // Changed from Null to dynamic to handle multiple types
+  dynamic hasDisputed; // Changed from Null to dynamic to handle multiple types
+  dynamic
+      overTimeComment; // Changed from Null to dynamic to handle multiple types
   String? endUserLocation;
   bool? billClosed;
   bool? punchCardClosed;
   bool? isClosed;
   bool? approvedByBeacon;
   bool? approvedByManager;
-  dynamic overTimeEntry;  // Changed from Null to dynamic to handle multiple types
-  dynamic disputedHour;  // Changed from Null to dynamic to handle multiple types
+  dynamic
+      overTimeEntry; // Changed from Null to dynamic to handle multiple types
+  dynamic disputedHour; // Changed from Null to dynamic to handle multiple types
 
   ClockInResponse({
     this.id,
@@ -157,40 +168,40 @@ class ClockInResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['schedulePeriod'] = this.schedulePeriod;
-    data['accountId'] = this.accountId;
-    data['accountName'] = this.accountName;
-    data['houseId'] = this.houseId;
-    data['houseName'] = this.houseName;
-    data['houseAddress'] = this.houseAddress;
-    data['dcId'] = this.dcId;
-    data['directCare'] = this.directCare;
-    data['scheduleDate'] = this.scheduleDate;
-    data['startTime'] = this.startTime;
-    data['startDateTime'] = this.startDateTime;
-    data['endTime'] = this.endTime;
-    data['endDateTime'] = this.endDateTime;
-    data['actualStartDateTime'] = this.actualStartDateTime;
-    data['actualEndDateTime'] = this.actualEndDateTime;
-    data['actualStartTime'] = this.actualStartTime;
-    data['actualEndTime'] = this.actualEndTime;
-    data['lunchTime'] = this.lunchTime;
-    data['totalTime'] = this.totalTime;
-    data['noBreakReason'] = this.noBreakReason;
-    data['invoiceNumber'] = this.invoiceNumber;
-    data['timeDiff'] = this.timeDiff;
-    data['hasDisputed'] = this.hasDisputed;
-    data['overTimeComment'] = this.overTimeComment;
-    data['endUserLocation'] = this.endUserLocation;
-    data['billClosed'] = this.billClosed;
-    data['punchCardClosed'] = this.punchCardClosed;
-    data['isClosed'] = this.isClosed;
-    data['approvedByBeacon'] = this.approvedByBeacon;
-    data['approvedByManager'] = this.approvedByManager;
-    data['overTimeEntry'] = this.overTimeEntry;
-    data['disputedHour'] = this.disputedHour;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['schedulePeriod'] = schedulePeriod;
+    data['accountId'] = accountId;
+    data['accountName'] = accountName;
+    data['houseId'] = houseId;
+    data['houseName'] = houseName;
+    data['houseAddress'] = houseAddress;
+    data['dcId'] = dcId;
+    data['directCare'] = directCare;
+    data['scheduleDate'] = scheduleDate;
+    data['startTime'] = startTime;
+    data['startDateTime'] = startDateTime;
+    data['endTime'] = endTime;
+    data['endDateTime'] = endDateTime;
+    data['actualStartDateTime'] = actualStartDateTime;
+    data['actualEndDateTime'] = actualEndDateTime;
+    data['actualStartTime'] = actualStartTime;
+    data['actualEndTime'] = actualEndTime;
+    data['lunchTime'] = lunchTime;
+    data['totalTime'] = totalTime;
+    data['noBreakReason'] = noBreakReason;
+    data['invoiceNumber'] = invoiceNumber;
+    data['timeDiff'] = timeDiff;
+    data['hasDisputed'] = hasDisputed;
+    data['overTimeComment'] = overTimeComment;
+    data['endUserLocation'] = endUserLocation;
+    data['billClosed'] = billClosed;
+    data['punchCardClosed'] = punchCardClosed;
+    data['isClosed'] = isClosed;
+    data['approvedByBeacon'] = approvedByBeacon;
+    data['approvedByManager'] = approvedByManager;
+    data['overTimeEntry'] = overTimeEntry;
+    data['disputedHour'] = disputedHour;
     return data;
   }
 }

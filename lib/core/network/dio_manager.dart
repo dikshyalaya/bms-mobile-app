@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names, prefer_typing_uninitialized_variables
 
-
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/common/urls.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -11,12 +10,11 @@ class DioManager {
 
   static DioManager get instance => _instance ??= DioManager._init();
 
-  final Dio _prodDio = Dio(BaseOptions(
-    baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 15),
-    receiveTimeout: const Duration(seconds: 15),
-    sendTimeout: const Duration(seconds: 15),
-  ));
+  final Dio _prodDio = Dio(
+    BaseOptions(
+      baseUrl: baseUrl,
+    ),
+  );
 
   DioManager._init() {
     initDio(_prodDio);
@@ -34,13 +32,8 @@ class DioManager {
 
   Future<Response<T>> get<T>(
       {required String path,
-      shouldCache = false,
       BaseUrlType baseUrlType = BaseUrlType.DEFAULT}) async {
-    if (shouldCache) {
-      return await getDio(baseUrlType).get(path);
-    } else {
-      return await getDio(baseUrlType).get(path);
-    }
+    return await getDio(baseUrlType).get(path);
   }
 
   Future<Response<T>> post<T>(
@@ -119,13 +112,11 @@ class ErrorInterceptor extends Interceptor {
     }
 
     if ((err.response?.statusCode ?? 0) >= 500) {
-      return handler.next(ServerException(
-          err.requestOptions,
-          err.response?.statusMessage ?? '',
-          err.response?.statusCode ?? 0));
+      return handler.next(ServerException(err.requestOptions,
+          err.response?.statusMessage ?? '', err.response?.statusCode ?? 0));
     }
 
-     if (err.response?.statusCode == 400 ||
+    if (err.response?.statusCode == 400 ||
         err.response?.statusCode == 401 ||
         err.response?.statusCode == 403) {
       String errorMessage = '';
@@ -147,7 +138,6 @@ class ErrorInterceptor extends Interceptor {
               : err.response?.statusMessage ?? 'Something went wrong',
           err.response?.statusCode ?? 0));
     }
-
 
     if (err.response?.data != null) {
       return handler.next(ServerException(
