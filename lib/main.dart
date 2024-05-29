@@ -20,6 +20,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,16 +33,31 @@ Future<bool> handleLocationPermission() async {
 
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
+    Fluttertoast.showToast(
+      msg: "Cannot login without Location enabled",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
     return false;
   }
   permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
+      Fluttertoast.showToast(
+      msg: "Cannot login without Location enabled",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
       return false;
     }
   }
   if (permission == LocationPermission.deniedForever) {
+    Fluttertoast.showToast(
+      msg: "Cannot login without Location enabled",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
     return false;
   }
   return true;
@@ -80,8 +96,9 @@ void listenFCMForeground() async {
 
 void main() async {
   bool isLoggedIn = false;
-  // await handleLocationPermission();
-  WidgetsFlutterBinding.ensureInitialized();
+ 
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await handleLocationPermission();
   await setupLocator();
   await Hive.initFlutter();
   await BMSHiveModel.init();

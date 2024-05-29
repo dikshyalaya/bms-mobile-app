@@ -26,47 +26,47 @@ class AuthProvider extends ChangeNotifier {
     _bmsUserModel = value;
   }
 
-  final LoginRepo _loginRepo = LoginRepo();
+  // final LoginRepo _loginRepo = LoginRepo();
   final ChangePasswordRepo _changePasswordRepo = ChangePasswordRepo();
   final SendOtpByEmailRepo _sendOtpByEmailRepo = SendOtpByEmailRepo();
   final ResetPasswordRepo _resetPasswordRepo = ResetPasswordRepo();
 
-  Future<void> logIn(
-    String name,
-    String password,
-    String fcm, {
-    LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
-    ErrorStateCallback<Map<String, dynamic>>? onErrorState,
-    LoadedStateCallback<Map<String, dynamic>>? onLoadedState,
-    ValueChanged<Map<String, dynamic>>? onAccessToken,
-  }) async {
-    final hasPermission = await handleLocationPermission();
-    if (!hasPermission) return;
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+  // Future<void> logIn(
+  //   String name,
+  //   String password,
+  //   String fcm, {
+  //   LoadingStateCallback<Map<String, dynamic>>? onLoadingState,
+  //   ErrorStateCallback<Map<String, dynamic>>? onErrorState,
+  //   LoadedStateCallback<Map<String, dynamic>>? onLoadedState,
+  //   ValueChanged<Map<String, dynamic>>? onAccessToken,
+  // }) async {
+  //   final hasPermission = await handleLocationPermission();
+  //   if (!hasPermission) return;
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
 
-    _loginRepo.post(
-      body: {
-        "password": password,
-        "loginName": name,
-        "fcmToken": fcm,
-        "location": {
-          "latitude": position.latitude,
-          "longitude": position.longitude
-        }
-      },
-      onAccessToken: (val) {
-        onAccessToken?.call(val);
-      },
-      apiCallback: (networkState) {
-        onApiCallback(
-            networkState: networkState,
-            onLoadedState: onLoadedState,
-            onErrorState: onErrorState,
-            onLoadingState: onLoadingState);
-      },
-    );
-  }
+  //   _loginRepo.post(
+  //     body: {
+  //       "password": password,
+  //       "loginName": name,
+  //       "fcmToken": fcm,
+  //       "location": {
+  //         "latitude": position.latitude,
+  //         "longitude": position.longitude
+  //       }
+  //     },
+  //     onAccessToken: (val) {
+  //       onAccessToken?.call(val);
+  //     },
+  //     apiCallback: (networkState) {
+  //       onApiCallback(
+  //           networkState: networkState,
+  //           onLoadedState: onLoadedState,
+  //           onErrorState: onErrorState,
+  //           onLoadingState: onLoadingState);
+  //     },
+  //   );
+  // }
 
   Future<void> login(
     BuildContext context,
