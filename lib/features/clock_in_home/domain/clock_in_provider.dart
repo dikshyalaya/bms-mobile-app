@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -7,6 +9,8 @@ import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_repo.dart';
+import 'package:beacon_flutter/location_denied_alert_diaouge_box.dart';
+import 'package:beacon_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -110,6 +114,7 @@ class CLockInProvider extends ChangeNotifier {
   }
 
   Future<void> punchIn(
+    BuildContext context,
       int shiftId,
       String scheduleDate,
       String startTime,
@@ -118,6 +123,7 @@ class CLockInProvider extends ChangeNotifier {
       String noMealReason,
       Function(bool) isCompleted,
       Function(bool) isLoaing) async {
+      
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 

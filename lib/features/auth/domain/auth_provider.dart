@@ -10,6 +10,7 @@ import 'package:beacon_flutter/features/auth/widget/change_password_page.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/location_denied_alert_diaouge_box.dart';
 import 'package:beacon_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -74,8 +75,10 @@ class AuthProvider extends ChangeNotifier {
     String password,
     String fcm,
   ) async {
-    final hasPermission = await handleLocationPermission();
-    if (!hasPermission) return;
+    final hasPermission = await handleLocationPermission("You must enable location to login");
+    if (!hasPermission) {
+      showLocationDeniedDialog(context,"Enable Location","You must enable location to login");
+      return;}
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     final url = Uri.parse(

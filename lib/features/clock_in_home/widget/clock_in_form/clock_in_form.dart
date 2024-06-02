@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/clock_in_details.dart';
@@ -9,6 +11,8 @@ import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
+import 'package:beacon_flutter/location_denied_alert_diaouge_box.dart';
+import 'package:beacon_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -134,8 +138,16 @@ class _ClockInFormState extends State<ClockInForm> {
         endTime: endTimeController.text,
         mealTime: mealTimeController.text,
         noMealReason: noMealReasonController.text);
-    if (isValidate) {
+           final hasPermission = await handleLocationPermission("You must enable lacation to use the app");
+    if (!hasPermission) {
+      showLocationDeniedDialog(context,"Enable Location","You must enable loaction to clock-in");
+       setState(() {
+            isSaving = true;
+          });
+      return;}{
+ if (isValidate) {
       await widget.cLockInProvider.punchIn(
+        context,
           widget.clockInResponse?.id ?? -1,
           widget.clockInResponse?.scheduleDate ?? '',
           startTimeController.text,
@@ -172,6 +184,8 @@ class _ClockInFormState extends State<ClockInForm> {
       });
       shoErrorToast("Enter valid input");
     }
+      }
+   
     // handle save operation
   }
 }

@@ -13,6 +13,7 @@ import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_pe
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
+import 'package:beacon_flutter/location_denied_alert_diaouge_box.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,17 +28,18 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-Future<bool> handleLocationPermission() async {
+
+Future<bool> handleLocationPermission(String errorMessage) async {
   bool serviceEnabled;
   LocationPermission permission;
 
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     Fluttertoast.showToast(
-      msg: "Cannot login without Location enabled",
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-    );
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+      );
     return false;
   }
   permission = await Geolocator.checkPermission();
@@ -45,16 +47,16 @@ Future<bool> handleLocationPermission() async {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
       Fluttertoast.showToast(
-      msg: "Cannot login without Location enabled",
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-    );
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+      );
       return false;
     }
   }
   if (permission == LocationPermission.deniedForever) {
     Fluttertoast.showToast(
-      msg: "Cannot login without Location enabled",
+      msg: errorMessage,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
     );
@@ -98,7 +100,7 @@ void main() async {
   bool isLoggedIn = false;
  
   WidgetsFlutterBinding.ensureInitialized(); 
-  await handleLocationPermission();
+  // await handleLocationPermission("You must enable login");
   await setupLocator();
   await Hive.initFlutter();
   await BMSHiveModel.init();
