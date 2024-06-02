@@ -1,8 +1,10 @@
+import 'dart:ui';
+
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
-import 'package:beacon_flutter/common/widgets/password_change_field.dart';
+import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
@@ -10,12 +12,15 @@ import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart'
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
-import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
+import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
+import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DialogueUtils {
@@ -289,11 +294,13 @@ class DialogueUtils {
     );
   }
 
-  static Text buildText(String text) {
+  static Text buildText(String text, bool isTablet) {
     return Text(
       text,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          color: Colors.black,
+          fontSize: isTablet ? 12.sp : 15.sp,
+          fontWeight: FontWeight.bold),
     );
   }
 
@@ -306,7 +313,6 @@ class DialogueUtils {
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
               content: Container(
-                height: 403,
                 width: DimensionUtils.isTab(context)
                     ? _width()
                     : MediaQuery.of(context).size.width,
@@ -317,84 +323,189 @@ class DialogueUtils {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Column(children: [
-                      Image.asset(
-                        "profile".pngImage(),
-                        height: 86,
-                        width: 86,
+                    Image.asset(
+                      "profile".pngImage(),
+                      height: 86,
+                      width: 86,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      userName,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Color(0xff565656)),
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const NotificationPage()));
+                      },
+                      leading: const Icon(Icons.notifications_active),
+                      title: Text('My Notifications',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16.sp)),
+                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                    Container(
+                      color: Colors.black38,
+                      height: (0.5).h,
+                      width: double.infinity,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        changePasswordDialogue(context: context);
+                      },
+                      leading: const Icon(Icons.password),
+                      title: Text('Change Password',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16.sp)),
+                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                    Container(
+                      color: Colors.black38,
+                      height: (0.5).h,
+                      width: double.infinity,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        authProvider.logOut();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                      },
+                      leading: const Icon(Icons.logout),
+                      title: Text(
+                        'Logout',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16.sp),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    ),
+                    Container(
+                      color: Colors.black38,
+                      height: (0.5).h,
+                      width: double.infinity,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15.sp),
                       ),
-                      Text(
-                        userName,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Color(0xff565656)),
-                      ),
-                    ]),
-                    Column(
-                      children: [
-                        SizedBox(
-                            height: 40,
-                            width: 270,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color(0xff3B85FF)),
-                                    shape: MaterialStateProperty.all(
-                                        const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))))),
-                                onPressed: () {
-                                  changePasswordDialogue(context: context);
-                                  // Navigator.pop(context,true);
-                                },
-                                child: const Text(
-                                  "Change Password",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ))),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            authProvider.logOut();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
-                          },
-                          child: const Text(
-                            "Log Out",
-                            style: TextStyle(
-                                color: Color(0xff6F6F6F),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context, false);
-                          },
-                          child: const Text(
-                            "Close",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13),
-                          ),
-                        ),
-                      ],
-                    )
+                    ),
+                    // const Column(
+                    //   children: [
+                    //     ListTile(
+                    //       leading: Icon(Icons.notifications_active),
+                    //       title: Text(
+                    //         'Notifications',
+                    //       ),
+                    //       trailing: Icon(Icons.arrow_forward_ios_outlined),
+                    //       // subtitle: Text('See all your notifications here'),
+                    //       // selected: true,
+                    //     ),
+                    //     ListTile(
+                    //       leading: Icon(Icons.password),
+                    //       title: Text(
+                    //         'Change Passowrd',
+                    //       ),
+                    //       trailing: Icon(Icons.arrow_forward_ios_outlined),
+                    //       // subtitle: Text('See all your notifications here'),
+                    //       // selected: true,
+                    //     ),
+                    //     ListTile(
+                    //       leading: Icon(Icons.logout),
+                    //       title: Text(
+                    //         'Logout',
+                    //       ),
+                    //       trailing: Icon(Icons.arrow_forward_ios_outlined),
+                    //       // subtitle: Text('See all your notifications here'),
+                    //       // selected: true,
+                    //     ),
+
+                    //     // SizedBox(
+                    //     //     height: 40,
+                    //     //     width: 270,
+                    //     //     child: ElevatedButton(
+                    //     //         style: ButtonStyle(
+                    //     //             backgroundColor: MaterialStateProperty.all(
+                    //     //                 const Color(0xff3B85FF)),
+                    //     //             shape: MaterialStateProperty.all(
+                    //     //                 const RoundedRectangleBorder(
+                    //     //                     borderRadius: BorderRadius.all(
+                    //     //                         Radius.circular(20))))),
+                    //     //         onPressed: () {
+                    // changePasswordDialogue(context: context);
+                    //     //           // Navigator.pop(context,true);
+                    //     //         },
+                    //     //         child: const Text(
+                    //     //           "Change Password",
+                    //     //           style: TextStyle(
+                    //     //               color: Colors.white,
+                    //     //               fontSize: 15,
+                    //     //               fontWeight: FontWeight.bold),
+                    //     //         ))),
+                    //     // const SizedBox(
+                    //     //   height: 16,
+                    //     // ),
+                    //     // GestureDetector(
+                    //     //   onTap: () {
+                    // authProvider.logOut();
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const LoginScreen()));
+                    //     //   },
+                    //     //   child: const Text(
+                    //     //     "Log Out",
+                    // style: TextStyle(
+                    //     color: Color(0xff6F6F6F),
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 15),
+                    //     //   ),
+                    //     // ),
+                    //     // const SizedBox(
+                    //     //   height: 37,
+                    //     // ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    // Navigator.pop(context, false);
+                    //   },
+                    //   child: const Text(
+                    //     "Close",
+                    //     style: TextStyle(
+                    //         color: Colors.black,
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: 13),
+                    //   ),
+                    // ),
+                    //   ],
+                    // )
                   ],
                 ),
               ),
@@ -404,10 +515,11 @@ class DialogueUtils {
   static Future<void> onPressedMyScheduleDialogue(
       {required BuildContext context,
       required VoidCallback onSaveSchedule,
-      ListHouseForDcAddShiftModel? listHouseForDcAddShiftModel}) async {
+      HouseWorkedInLastThreeWeeksModel?
+          houseWorkedInLastThreeWeeksModel}) async {
     final availableShiftsProvider =
         Provider.of<MyScheduleProvider>(context, listen: false);
-    List<String> listHouse = listHouseForDcAddShiftModel?.data
+    List<String> listHouse = houseWorkedInLastThreeWeeksModel?.data
             ?.map((element) => element.accountNumber ?? '')
             .toList() ??
         [""];
@@ -448,8 +560,9 @@ class DialogueUtils {
                                 DateTime.now().add(const Duration(days: 30)));
                         setState(() {
                           if (returnDate != null) {
-                            selectedDate =
-                                returnDate.toString().substring(0, 10);
+                            selectedDate = DateFormat('MM/dd/yyyy')
+                                .format(returnDate)
+                                .toString();
                             onChooseOption?.call(returnDate.toString());
                           }
                         });
@@ -578,10 +691,16 @@ class DialogueUtils {
                               const SizedBox(
                                 height: 7.25,
                               ),
-                              rowBuilder("House", listHouse,
-                                  onChooseOption: (String val) {
-                                selectedHouseNumber = val;
-                              }),
+                              rowBuilder(
+                                "House",
+                                listHouse,
+                                hint: selectedHouseNumber,
+                                onChooseOption: (String val) {
+                                  setState(() {
+                                    selectedHouseNumber = val;
+                                  });
+                                },
+                              ),
                               const SizedBox(
                                 height: 7.25,
                               ),
@@ -598,24 +717,30 @@ class DialogueUtils {
                                   onChooseOption: (String val) {
                                 setState(() {
                                   startTime = val;
+                                  endTime = val;
                                 });
                               }),
                               const SizedBox(
                                 height: 7.25,
                               ),
-                              rowBuilder("End Time", timeOptions, hint: endTime,
-                                  onChooseOption: (String val) {
-                                setState(() {
-                                  if ((startTime?.contains("PM") ?? false) &&
-                                      (val.contains("PM"))) {
-                                    shoErrorToast(
-                                        "Start time and end time must be valid");
-                                    endTime = null;
-                                  } else {
-                                    endTime = val;
-                                  }
-                                });
-                              }, ignoring: startTime == null),
+                              rowBuilder(
+                                "End Time",
+                                timeOptions,
+                                hint: endTime,
+                                onChooseOption: (String val) {
+                                  setState(() {
+                                    if ((startTime?.contains("PM") ?? false) &&
+                                        (val.contains("PM"))) {
+                                      shoErrorToast(
+                                          "Start time and end time must be valid");
+                                      endTime = null;
+                                    } else {
+                                      endTime = val;
+                                    }
+                                  });
+                                },
+                                ignoring: startTime == null,
+                              ),
                               const SizedBox(
                                 height: 16.25,
                               ),
@@ -630,55 +755,68 @@ class DialogueUtils {
                                             child: CircularProgressIndicator()),
                                         elseBulider: (context) {
                                           return ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          const Color(
-                                                              0xff3B85FF)),
-                                                  shape: MaterialStateProperty.all(
-                                                      const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      20))))),
-                                              onPressed: () async {
-                                                selectedHouseNumber ??=
-                                                    listHouse[0];
-                                                if (selectedHouseNumber !=
-                                                        null &&
-                                                    startTime != null &&
-                                                    endTime != null &&
-                                                    scheduledDate != null) {
-                                                  setState(() {
-                                                    isPosting = true;
-                                                  });
-                                                  final houseId =
-                                                      listHouseForDcAddShiftModel
-                                                          ?.data
-                                                          ?.firstWhere((element) =>
-                                                              element
-                                                                  .accountNumber ==
-                                                              selectedHouseNumber)
-                                                          .id;
-                                                  await availableShiftsProvider
-                                                      .createShift(
-                                                          scheduledDate!,
-                                                          startTime!,
-                                                          endTime!,
-                                                          houseId!,
-                                                          (bool isCreated) {
-                                                    if (isCreated) {
-                                                      onSaveSchedule.call();
-                                                    }
-                                                  });
-                                                  setState(() {
-                                                    isPosting = false;
-                                                  });
-                                                } else {
-                                                  shoErrorToast(
-                                                      "Must select all the required field");
-                                                }
-                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    shiftGivenByManager == 'No'
+                                                        ? const Color(
+                                                            0xFF9C9C9C)
+                                                        : const Color(
+                                                            0xff3B85FF),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(20),
+                                                  ),
+                                                ),
+                                              ),
+                                              onPressed: shiftGivenByManager ==
+                                                      'No'
+                                                  ? null
+                                                  : () async {
+                                                      selectedHouseNumber ??=
+                                                          listHouse[0];
+                                                      if (selectedHouseNumber !=
+                                                              null &&
+                                                          startTime != null &&
+                                                          endTime != null &&
+                                                          scheduledDate !=
+                                                              null) {
+                                                        setState(() {
+                                                          isPosting = true;
+                                                        });
+                                                        final houseId =
+                                                            houseWorkedInLastThreeWeeksModel
+                                                                ?.data
+                                                                ?.firstWhere(
+                                                                    (element) =>
+                                                                        element
+                                                                            .accountNumber ==
+                                                                        selectedHouseNumber)
+                                                                .id;
+                                                        await availableShiftsProvider
+                                                            .createShift(
+                                                                scheduledDate!,
+                                                                startTime!,
+                                                                endTime!,
+                                                                int.tryParse(
+                                                                        houseId!) ??
+                                                                    0,
+                                                                (bool
+                                                                    isCreated) {
+                                                          if (isCreated) {
+                                                            onSaveSchedule
+                                                                .call();
+                                                          }
+                                                        });
+                                                        setState(() {
+                                                          isPosting = false;
+                                                        });
+                                                      } else {
+                                                        shoErrorToast(
+                                                            "Must select all the required field");
+                                                      }
+                                                    },
                                               child: const Text(
                                                 "Save",
                                                 style: TextStyle(
@@ -864,7 +1002,7 @@ class DialogueUtils {
       barrierDismissible: false,
       builder: (context) {
         return Dialog(
-          backgroundColor: const Color(0xFF000000).withOpacity(0.25),
+          backgroundColor: const Color(0xFFBCBCBC),
           insetPadding: const EdgeInsets.symmetric(horizontal: 15),
           child: StatefulBuilder(
             builder: (context, setState) {
@@ -1236,177 +1374,227 @@ class DialogueUtils {
   static Future<void> changePasswordDialogue(
       {required BuildContext context}) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    String newPassword = "";
-    String confirmPassword = "";
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              content: Container(
-                height: 240,
-                width: DimensionUtils.isTab(context)
-                    ? _width()
-                    : MediaQuery.of(context).size.width,
-                // padding: const EdgeInsets.symmetric(horizontal: 6),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        color: const Color(0xffD9D9D9),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF7D7B7B).withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 2), // changes position of shadow
-                          ),
-                        ],
+    final TextEditingController newPassword = TextEditingController();
+    final TextEditingController confirmPassword = TextEditingController();
+    bool isLoading = false;
+    bool? isTablet = getBool("isTablet");
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
+          content: Container(
+            width: DimensionUtils.isTab(context)
+                ? _width()
+                : MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                    height: 50.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.r),
+                        topRight: Radius.circular(20.r),
                       ),
-                      alignment: Alignment.center,
-                      child: buildText("Change Password"),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          buildText('New Password       '),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: SizedBox(
-                              child: PWChangeTextFormField(
-                                onChangedInput: (String val) {
-                                  newPassword = val;
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        buildText('Confirm Password'),
-                        const SizedBox(
-                          width: 15,
+                      color: const Color(0xffD9D9D9),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF7D7B7B).withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
                         ),
-                        Expanded(
-                          child: PWChangeTextFormField(
-                            onChangedInput: (String val) {
-                              confirmPassword = val;
-                            },
-                          ),
-                        )
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
+                    alignment: Alignment.center,
+                    child: buildText("Change Password", isTablet ?? false)
+                    // Text("Change Password"),
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        height: 40,
-                        width: 163,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (newPassword.isEmpty ||
-                                  confirmPassword.isEmpty) {
-                                shoErrorToast(
-                                    "Password field must not be empty");
-                              } else if (newPassword != confirmPassword) {
-                                shoErrorToast("Password is not match");
-                              } else {
-                                FocusScope.of(context).unfocus();
-                                showProgressDialogue(
-                                    context, "Signing in, Please wait...");
+                SizedBox(height: 20.h),
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet == true ? 10.w : 24.w),
+                    child: BeaconTextFormField(
+                      labelText: "New Password",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 12.sp : 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                      floatingStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 15.sp : 17.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                      controller: newPassword,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      borderSide:
+                          const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
+                    )),
+                SizedBox(height: 13.h),
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet == true ? 10.w : 24.w),
+                    child: BeaconTextFormField(
+                      labelText: "Confirm Password",
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 12.sp : 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                      floatingStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(
+                              fontSize: isTablet == true ? 15.sp : 17.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                      controller: confirmPassword,
+                      verticalPadding: 10.h,
+                      horizontalPadding: 25.w,
+                      radius: 25.r,
+                      backgroundColor: const Color(0xFFFFFFFF),
+                      borderSide:
+                          const BorderSide(width: 1, color: Color(0xFFA9A9A9)),
+                    )),
+                SizedBox(
+                  height: 13.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: isTablet == true ? 60.w : 90.w,
+                      bottom: 24.h,
+                      left: isTablet == true ? 60.w : 90.w),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      child: isLoading
+                          ? SizedBox(
+                              width: 230.w,
+                              height: 40.h,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                    color: Color(0xFF1870FF)),
+                              ),
+                            )
+                          : SizedBox(
+                              child: CustomElevatedButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  FocusScope.of(context).unfocus();
+                                  if (newPassword.text.isEmpty ||
+                                      confirmPassword.text.isEmpty) {
+                                    shoErrorToast(
+                                        "Password fields must not be empty");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  } else if (newPassword.text !=
+                                      confirmPassword.text) {
+                                    shoErrorToast("Password is not match");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  } else {
+                                    await authProvider.changePassword(
+                                      confirmPassword.text,
+                                      onErrorState: (val) {
+                                        shoErrorToast(
+                                            val.response?.exception?.message ??
+                                                "");
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      },
+                                      onLoadedState: (val) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        successMessageDialogue(
+                                          context: context,
+                                          successMessage:
+                                              "Password changed successfully.",
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xFF1870FF), // Start color
+                                    Color(0xFF2E5698), // End color
+                                  ],
+                                ),
+                                text1: 'Change Password',
+                                ftSize: isTablet == true ? 8.sp : 15.sp,
+                                bdRadius: 20.r,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-                                await authProvider.changePassword(
-                                    confirmPassword, onErrorState: (val) {
-                                  Navigator.pop(context);
-                                  shoErrorToast(
-                                      val.response?.exception?.message ?? "");
-                                }, onLoadedState: (val) {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  successMessageDialogue(
-                                      context: context,
-                                      successMessage:
-                                          "Password changed successfully.");
-                                });
-                              }
-                            },
-                            style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
-                                    EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))))),
-                            child: Text(
-                              "Change Password",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                            )),
+  static Future<void> onSystemSettingsDialogue({
+    required BuildContext context,
+  }) async {
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    return await showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Stack(
+                  children: [
+                    BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                      child: Container(
+                        width: DimensionUtils.isTab(context)
+                            ? _width()
+                            : MediaQuery.of(context).size.width,
+                        // padding: const EdgeInsets.symmetric(vertical: 23), // Adjust if needed
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: DashBoardNavigatorCard(
+                          isFromPopUp: true,
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ));
-  }
-
-  static Future<void> onSystemSettingsDialogue(
-      {required BuildContext context}) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              content: Container(
-                // height: 403,
-                width: DimensionUtils.isTab(context)
-                    ? _width()
-                    : MediaQuery.of(context).size.width,
-                // padding: const EdgeInsets.symmetric(vertical: 23),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: DashBoardNavigatorCard(),
               ),
             ));
   }

@@ -16,12 +16,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late bool isTabletDevice; // Initialize with a default value
   @override
   void initState() {
     super.initState();
     // checkDevice();
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-    checkDevice();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkDevice();
     });
   }
 
@@ -33,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  late bool isTabletDevice;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: SizedBox(
             height: MediaQuery.sizeOf(context).height / 1.5,
-            width: isTabletDevice? (300.w ):null,
+            width: isTabletDevice ? (300.w) : null,
             child: Stack(
               children: [
                 const LoginFormWidget(),

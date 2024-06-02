@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
@@ -7,8 +8,8 @@ import 'package:beacon_flutter/features/prior_clock_in/domain/prior_clock_in_rep
 import 'package:flutter/cupertino.dart';
 
 class PriorClockInProvider extends ChangeNotifier{
-  final int dcId;
-  PriorClockInProvider(this.dcId);
+ 
+  PriorClockInProvider();
   bool isDataFetching = false;
 
   PriorClockInResponseModel? _priorClockInResponseModel;
@@ -26,7 +27,7 @@ class PriorClockInProvider extends ChangeNotifier{
   }
 
   Future<BMSResponse<PriorClockInResponseModel>> getPriorClockInList() async {
-    final PriorClockInRepo priorClockInRepo = PriorClockInRepo(dcId.toString());
+    final PriorClockInRepo priorClockInRepo = PriorClockInRepo();
     setLoading(true);
     await priorClockInRepo.fetch(
       params: {
@@ -37,10 +38,15 @@ class PriorClockInProvider extends ChangeNotifier{
           networkState: networkState,
           // networkState: networkState,
           onLoadedState: (loadedState) {
-            onFutureNotifyListeners(() {
-              final Map<String,dynamic> map = loadedState.response?.body;
-              priorClockInResponseModel =
-                  priorClockInResponseModelFromJson(jsonEncode(map['response']));
+             onFutureNotifyListeners(() {
+              final Map<String, dynamic> map = loadedState.response?.body;
+              log(map.toString()); // Log the entire map for debugging
+              try {
+                priorClockInResponseModel =
+                    priorClockInResponseModelFromJson(jsonEncode(map['response']));
+              } catch (e) {
+                log("Error parsing JSON: $e");
+              }
             });
           },
           onErrorState: (errorState) {

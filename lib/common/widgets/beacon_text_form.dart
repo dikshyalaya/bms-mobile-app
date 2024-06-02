@@ -1,10 +1,8 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
-import 'package:beacon_flutter/constants/app_icons.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class BeaconTextFormField extends StatefulWidget {
   final Color? backgroundColor;

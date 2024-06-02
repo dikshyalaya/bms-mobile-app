@@ -74,13 +74,23 @@ class Datum {
   dynamic endDateTime;
   dynamic actualStartDateTime;
   dynamic actualEndDateTime;
+  String? actualStartTime;
+  String? actualEndTime;
   String? lunchTime;
   double? totalTime;
   String? noBreakReason;
   dynamic invoiceNumber;
   int? timeDiff;
   String? hasDisputed;
-  dynamic overTimeComment;
+  String? overTimeComment;
+  dynamic endUserLocation;
+  bool? billClosed;
+  bool? punchCardClosed;
+  bool? isClosed;
+  bool? approvedByBeacon;
+  bool? approvedByManager;
+  dynamic overTimeEntry;
+  dynamic disputedHour;
 
   Datum({
     this.id,
@@ -99,6 +109,8 @@ class Datum {
     this.endDateTime,
     this.actualStartDateTime,
     this.actualEndDateTime,
+    this.actualStartTime,
+    this.actualEndTime,
     this.lunchTime,
     this.totalTime,
     this.noBreakReason,
@@ -106,32 +118,50 @@ class Datum {
     this.timeDiff,
     this.hasDisputed,
     this.overTimeComment,
+    this.endUserLocation,
+    this.billClosed,
+    this.punchCardClosed,
+    this.isClosed,
+    this.approvedByBeacon,
+    this.approvedByManager,
+    this.overTimeEntry,
+    this.disputedHour,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
-        schedulePeriod: json["schedulePeriod"]!,
+        schedulePeriod: json["schedulePeriod"],
         accountId: json["accountId"],
-        accountName: json["accountName"]!,
+        accountName: json["accountName"],
         houseId: json["houseId"],
-        houseName: json["houseName"]!,
+        houseName: json["houseName"],
         houseAddress: json["houseAddress"],
         dcId: json["dcId"],
         directCare: json["directCare"],
         scheduleDate: json["scheduleDate"],
-        startTime: json["startTime"]!,
+        startTime: json["startTime"],
         startDateTime: json["startDateTime"],
-        endTime: json["endTime"]!,
+        endTime: json["endTime"],
         endDateTime: json["endDateTime"],
         actualStartDateTime: json["actualStartDateTime"],
         actualEndDateTime: json["actualEndDateTime"],
+        actualStartTime: json["actualStartTime"],
+        actualEndTime: json["actualEndTime"],
         lunchTime: json["lunchTime"],
         totalTime: json["totalTime"]?.toDouble(),
-        noBreakReason: json["noBreakReason"]!,
+        noBreakReason: json["noBreakReason"],
         invoiceNumber: json["invoiceNumber"],
         timeDiff: json["timeDiff"],
-        hasDisputed: json["hasDisputed"]!,
+        hasDisputed: json["hasDisputed"],
         overTimeComment: json["overTimeComment"],
+        endUserLocation: json["endUserLocation"],
+        billClosed: json["billClosed"],
+        punchCardClosed: json["punchCardClosed"],
+        isClosed: json["isClosed"],
+        approvedByBeacon: json["approvedByBeacon"],
+        approvedByManager: json["approvedByManager"],
+        overTimeEntry: json["overTimeEntry"],
+        disputedHour: json["disputedHour"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -151,6 +181,8 @@ class Datum {
         "endDateTime": endDateTime,
         "actualStartDateTime": actualStartDateTime,
         "actualEndDateTime": actualEndDateTime,
+        "actualStartTime": actualStartTime,
+        "actualEndTime": actualEndTime,
         "lunchTime": lunchTime,
         "totalTime": totalTime,
         "noBreakReason": noBreakReason,
@@ -158,5 +190,13 @@ class Datum {
         "timeDiff": timeDiff,
         "hasDisputed": hasDisputed,
         "overTimeComment": overTimeComment,
+        "endUserLocation": endUserLocation,
+        "billClosed": billClosed,
+        "punchCardClosed": punchCardClosed,
+        "isClosed": isClosed,
+        "approvedByBeacon": approvedByBeacon,
+        "approvedByManager": approvedByManager,
+        "overTimeEntry": overTimeEntry,
+        "disputedHour": disputedHour,
       };
 }

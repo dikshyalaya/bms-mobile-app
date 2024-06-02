@@ -1,8 +1,10 @@
 const baseUrl =
 //"http://100.25.49.138/BeaconMobile/api/";
-    "https://api-beacon.byterays.com/api/";
+    "https://api-beacon.dikshyalaya.com/api/";
+// "api-beacon-live.dikshyalaya.com";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
+
 const clockInUrl = "PunchCard/ListPunchCardShifts";
 const punchInUrl = "PunchCard/PunchIn";
 const incompleteActivitiesUrl = "ShiftManagement/CheckIncompleteActivities";
@@ -18,11 +20,21 @@ const availableShiftForDCList = "ShiftManagement/ListAvailableShiftsForDC";
 const availableForShift = "ShiftManagement/AvailableForShift";
 const lookingForShift = "ShiftManagement/UpdateLookForShift";
 const listHouseForDCAddShift = "ShiftManagement/ListHouseForDCAddShift";
+const getHouseWorkedInLastThreeWeeks =
+    "ShiftManagement/GetHouseWorkedInLastThreeWeeks";
 const myScheduleList = "ShiftManagement/GetMySchedules";
+const sendOtpByEmail = "Account/RequestResetPassword";
+const resetPassword = "Account/SetPasswordWithOTP";
 
 //Manager Dashboard Urls
 const accountHouses = "Manager/ShiftManagement/LoadAccounts";
 const listShiftsForApproval = "Manager/ShiftManagement/ListShiftsForApproval";
+const approveShifts = "Manager/ShiftManagement/ApproveShifts";
+const raiseDispute = "Manager/ShiftManagement/RaiseDispute";
+
+//Notifications
+const notificationHistory = 'RTPushNotification/NotificationHistory';
+const notificationMarkAsSeen = 'RTPushNotification/MarkAsSeen';
 
 
 // pending invitations =>Shift availibility

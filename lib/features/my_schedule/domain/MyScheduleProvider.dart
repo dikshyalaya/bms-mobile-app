@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
-import 'package:beacon_flutter/features/my_schedule/data/ListHouseForDCAddShiftModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,17 +16,19 @@ class MyScheduleProvider extends ChangeNotifier {
   MyScheduleProvider(this.dcId);
 
   bool isDataFetching = false;
+  bool isHouseLoading = false;
   bool isDataPosting = false;
   int selectedIndex = -1;
 
   AvailableShiftsForDcModel? _availableShiftsForDcModel;
-  ListHouseForDcAddShiftModel? _listHouseForDCAddShiftModel;
+  HouseWorkedInLastThreeWeeksModel? _houseWorkedInLastThreeWeeksModel;
 
-  ListHouseForDcAddShiftModel? get listHouseForDCAddShiftModel =>
-      _listHouseForDCAddShiftModel;
+  HouseWorkedInLastThreeWeeksModel get houseWorkedinLastThreeWeeksModel =>
+      _houseWorkedInLastThreeWeeksModel ?? HouseWorkedInLastThreeWeeksModel();
 
-  set listHouseForDCAddShiftModel(ListHouseForDcAddShiftModel? value) {
-    _listHouseForDCAddShiftModel = value;
+  set houseWorkedinLastThreeWeeksModel(
+      HouseWorkedInLastThreeWeeksModel? value) {
+    _houseWorkedInLastThreeWeeksModel = value;
   }
 
   AvailableShiftsForDcModel get availableShiftsForDcModel =>
@@ -37,7 +40,8 @@ class MyScheduleProvider extends ChangeNotifier {
 
   void setLoading(bool val) {
     isDataFetching = val;
-    futureNotifyListeners();
+    // futureNotifyListeners();
+    notifyListeners();
   }
 
   void setDataPosting(bool val) {
@@ -47,36 +51,36 @@ class MyScheduleProvider extends ChangeNotifier {
 
   Future<BMSResponse<AvailableShiftsForDcModel>>
       getAvailableShiftsForDcModel() async {
-    final MyScheduleRepo availableShiftRepo =
-        MyScheduleRepo(dcId.toString());
+    final MyScheduleRepo availableShiftRepo = MyScheduleRepo(dcId.toString());
     setLoading(true);
     await availableShiftRepo.fetch(
         params: {},
         apiCallback: (networkState) {
           onApiCallback<dynamic>(
             networkState: networkState,
-            // networkState: networkState,
             onLoadedState: (loadedState) {
               onFutureNotifyListeners(() {
                 final Map<String, dynamic> map = loadedState.response?.body;
-                availableShiftsForDcModel = availableShiftsForDcModelFromJson(
+                log("Available Shifts for DC Model: ${jsonEncode(map['response'])}");
+                _availableShiftsForDcModel = availableShiftsForDcModelFromJson(
                     jsonEncode(map['response']));
               });
             },
             onErrorState: (errorState) {
-              availableShiftsForDcModel.data = null;
+              _availableShiftsForDcModel?.data = null;
               onFutureNotifyListeners(() {
-                // loadedPostModel = errorState.response?.body;
+                setLoading(false);
               });
             },
             onLoadingState: (loadingState) {},
           );
         });
+    await getHouseWorkedInLastThreeWeeks();
     setLoading(false);
     return BMSResponse(body: availableShiftsForDcModel);
   }
 
-  void cancelShift(int shiftId,Function onFinished) async {
+  void cancelShift(int shiftId, Function onFinished) async {
     setDataPosting(true);
 
     final CancelShiftRepo cancelShiftRepo = CancelShiftRepo(shiftId);
@@ -96,14 +100,13 @@ class MyScheduleProvider extends ChangeNotifier {
     setDataPosting(false);
   }
 
-
-
-  Future<BMSResponse<ListHouseForDcAddShiftModel>>
-      getListHouseForDCAddShift() async {
-    final ListHouseForDCAddShiftRepo listHouseForDCAddShiftRepo =
-        ListHouseForDCAddShiftRepo();
-    setLoading(true);
-    await listHouseForDCAddShiftRepo.fetch(
+  Future<BMSResponse<HouseWorkedInLastThreeWeeksModel>>
+      getHouseWorkedInLastThreeWeeks() async {
+    final HouseWorkedInLastThreeWeeksRepo houseWorkedInLastThreeWeeksRepo =
+        HouseWorkedInLastThreeWeeksRepo();
+    isHouseLoading = true;
+    notifyListeners();
+    await houseWorkedInLastThreeWeeksRepo.fetch(
         params: {},
         apiCallback: (networkState) {
           onApiCallback<dynamic>(
@@ -111,40 +114,41 @@ class MyScheduleProvider extends ChangeNotifier {
             onLoadedState: (loadedState) {
               onFutureNotifyListeners(() {
                 final Map<String, dynamic> map = loadedState.response?.body;
-                listHouseForDCAddShiftModel =
-                    listHouseForDcAddShiftModelFromJson(
+                houseWorkedinLastThreeWeeksModel =
+                    houseWorkedInLastThreeWeeksModelFromJson(
                         jsonEncode(map['response']));
               });
             },
             onErrorState: (errorState) {
-              listHouseForDCAddShiftModel?.data = null;
+              houseWorkedinLastThreeWeeksModel.data = null;
               onFutureNotifyListeners(() {});
             },
             onLoadingState: (loadingState) {},
           );
         });
-    setLoading(false);
-    return BMSResponse(body: listHouseForDCAddShiftModel);
+    isHouseLoading = true;
+    notifyListeners();
+    return BMSResponse(body: houseWorkedinLastThreeWeeksModel);
   }
 
-  Future<void> createShift(String scheduledDate,String startDate,String endDate,int houseId,Function(bool)isCreated) async{
+  Future<void> createShift(String scheduledDate, String startTime,
+      String endTime, int houseId, Function(bool) isCreated) async {
     CreateShiftRepo createShiftRepo = CreateShiftRepo();
     setDataPosting(true);
 
     DateTime tempSceduleDate = DateTime.parse(scheduledDate);
-    if(startDate.contains("PM")){
-      int tempStartTime = int.parse(startDate.split(":").first);
-      tempStartTime= 12+tempStartTime;
-      startDate = "$tempStartTime:${startDate.split(":").last}";
-      tempSceduleDate= tempSceduleDate.add(const Duration(days: 1));
+    if (startTime.contains("PM")) {
+      int tempStartTime = int.parse(startTime.split(":").first);
+      tempStartTime = 12 + tempStartTime;
+      startTime = "$tempStartTime:${startTime.split(":").last}";
+      tempSceduleDate = tempSceduleDate.add(const Duration(days: 1));
     }
 
-    if(endDate.contains("PM")){
-      int tempEndTime = int.parse(endDate.split(":").first);
-      tempEndTime= 12+tempEndTime;
-      endDate = "$endDate:${endDate.split(":").last}";
+    if (endTime.contains("PM")) {
+      int tempEndTime = int.parse(endTime.split(":").first);
+      tempEndTime = 12 + tempEndTime;
+      endTime = "$endTime:${endTime.split(":").last}";
     }
-
 
     await createShiftRepo.post(
         apiCallback: (networkState) {
@@ -154,11 +158,10 @@ class MyScheduleProvider extends ChangeNotifier {
             onLoadedState: (loadedState) {
               isCreated.call(true);
 
-                setDataPosting(false);
+              setDataPosting(false);
             },
             onErrorState: (errorState) {
-              shoErrorToast(
-                  "Something went wrong, Please try again later.");
+              shoErrorToast(errorState.message);
 
               setDataPosting(false);
             },
@@ -168,18 +171,18 @@ class MyScheduleProvider extends ChangeNotifier {
         body: {
           "houseId": houseId,
           "dcId": dcId,
-          "scheduleDate": scheduledDate.substring(0,10),
-          "startDateTime": '${scheduledDate.substring(0,10)}T${startDate.split(" ").first}',
-          "endDateTime": '${tempSceduleDate.toString().substring(0,10)}T${endDate.split(" ").first}'
-
+          "scheduleDate": scheduledDate.substring(0, 10),
+          "startTime": startTime,
+          // '${scheduledDate.substring(0, 10)}T${startDate.split(" ").first}',
+          "endTime": endTime,
+          // '${tempSceduleDate.toString().substring(0, 10)}T${endDate.split(" ").first}'
         });
     isCreated.call(false);
 
     setDataPosting(false);
-
   }
 
-  void notify(){
+  void notify() {
     futureNotifyListeners();
   }
 }

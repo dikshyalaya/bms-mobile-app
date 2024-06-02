@@ -30,14 +30,14 @@ class CancelShiftRepo extends BaseApiRepository<Map<String, dynamic>> {
   }
 }
 
-class ListHouseForDCAddShiftRepo
+class HouseWorkedInLastThreeWeeksRepo
     extends BaseApiRepository<Map<String, dynamic>> {
   @override
   dynamic parseJson(Response<dynamic> response) => {"response": response.data};
 
   @override
   String path(Map<String, String>? params, String? pathVariable) {
-    return listHouseForDCAddShift;
+    return getHouseWorkedInLastThreeWeeks;
   }
 }
 

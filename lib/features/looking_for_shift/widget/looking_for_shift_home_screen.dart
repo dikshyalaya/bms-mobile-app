@@ -83,36 +83,36 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldBackGroundWrapper(
-      child: Scaffold(
-        appBar: BeaconAppBar(
-          leadingIcon: const AppBarLeadingIcon(),
-          action: [
-            GestureDetector(
-              onTap: () async {
-                if (_lookingForShiftProvider
-                        .schedulePeriodResponseModel?.data?.isNotEmpty ??
-                    false) {
-                  await onOpenPeriodDialogue(context);
-                }
-              },
-              child: SizedBox(
-                height: 34,
-                width: 34,
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(34)),
-                  child: const Icon(
-                    Icons.calendar_month,
-                    color: Color(0xff04437F),
-                  ),
+      appBar: BeaconAppBar(
+        leadingIcon: const AppBarLeadingIcon(),
+        action: [
+          GestureDetector(
+            onTap: () async {
+              if (_lookingForShiftProvider
+                      .schedulePeriodResponseModel?.data?.isNotEmpty ??
+                  false) {
+                await onOpenPeriodDialogue(context);
+              }
+            },
+            child: SizedBox(
+              height: 34,
+              width: 34,
+              child: Card(
+                margin: EdgeInsets.zero,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(34)),
+                child: const Icon(
+                  Icons.calendar_month,
+                  color: Color(0xff04437F),
                 ),
               ),
-            )
-          ],
-          title: "Looking For Shift",
-        ),
+            ),
+          )
+        ],
+        title: "Looking For Shift",
+      ),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
@@ -163,7 +163,9 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                                     .lookForShiftResponseModel
                                                     ?.data?[index],
                                             onSwitchEnabled: (isEnabled, id) {
-                                             _lookingForShiftProvider.addRemoveShiftIds(isEnabled, id);
+                                              _lookingForShiftProvider
+                                                  .addRemoveShiftIds(
+                                                      isEnabled, id);
                                             },
                                           ),
                                       padding:
@@ -198,23 +200,29 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                               builder: (BuildContext context, lookForShiftIds,
                                       Widget? child) =>
                                   IfElseBuilder(
-                                      condition: Provider.of<LookingForShiftProvider>(context,listen: true).isDataPosting,
-                                      ifBuilder: (context) =>
-                                          const Center(child: CircularProgressIndicator()),
+                                      condition:
+                                          Provider.of<LookingForShiftProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .isDataPosting,
+                                      ifBuilder: (context) => const Center(
+                                          child: CircularProgressIndicator(
+                                              // color: Colors.amber,
+                                              )),
                                       elseBulider: (context) {
                                         return ElevatedButton(
                                             onPressed: () {
-                                             if(lookForShiftIds.isNotEmpty){
-                                               _lookingForShiftProvider
-                                                   .postAvailableForShift(
-                                                   lookForShiftIds, () {
-                                                 DialogueUtils
-                                                     .successMessageDialogue(
-                                                     context: context,
-                                                     successMessage:
-                                                     "Availability Saved Successfully.");
-                                               });
-                                             }
+                                              if (lookForShiftIds.isNotEmpty) {
+                                                _lookingForShiftProvider
+                                                    .postAvailableForShift(
+                                                        lookForShiftIds, () {
+                                                  DialogueUtils
+                                                      .successMessageDialogue(
+                                                          context: context,
+                                                          successMessage:
+                                                              "Availability Saved Successfully.");
+                                                });
+                                              }
                                             },
                                             style: ButtonStyle(
                                                 padding: MaterialStateProperty.all(
@@ -224,8 +232,11 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                                         4),
                                                 backgroundColor:
                                                     MaterialStateProperty.all(
-                                                      lookForShiftIds.isNotEmpty?  const Color(
-                                                            0xff1870FF):Colors.grey),
+                                                        lookForShiftIds
+                                                                .isNotEmpty
+                                                            ? const Color(
+                                                                0xff1870FF)
+                                                            : Colors.grey),
                                                 shape: MaterialStateProperty.all(
                                                     const RoundedRectangleBorder(
                                                         borderRadius:

@@ -19,8 +19,7 @@ class NetworkState<T> {
 
   NetworkState({required this.state, required this.response});
 
-  NetworkState.loading([this.response])
-      : state = DataFetchState.IS_LOADING;
+  NetworkState.loading([this.response]) : state = DataFetchState.IS_LOADING;
 
   NetworkState.loaded(BMSResponse<T> this.response)
       : state = DataFetchState.IS_LOADED;

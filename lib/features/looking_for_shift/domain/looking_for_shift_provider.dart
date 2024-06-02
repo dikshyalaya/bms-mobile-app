@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
@@ -16,14 +17,15 @@ class LookingForShiftProvider extends ChangeNotifier {
   bool isDataFetching = false;
   bool isDataPosting = false;
   List<int> lookForShiftIds = [];
-  void addRemoveShiftIds(bool add, int id){
-    if(add){
+  void addRemoveShiftIds(bool add, int id) {
+    if (add) {
       lookForShiftIds.add(id);
-    }else{
+    } else {
       lookForShiftIds.remove(id);
     }
     notifyListeners();
   }
+
   SchedulePeriodResponseModel? _schedulePeriodResponseModel;
   LookForShiftResponseModel? _lookForShiftResponseModel;
 
@@ -36,6 +38,7 @@ class LookingForShiftProvider extends ChangeNotifier {
     isDataFetching = val;
     futureNotifyListeners();
   }
+
   void setDataPosting(bool val) {
     isDataPosting = val;
     futureNotifyListeners();
@@ -95,6 +98,7 @@ class LookingForShiftProvider extends ChangeNotifier {
               setLoading(false);
               onFutureNotifyListeners(() {
                 final Map<String, dynamic> map = loadedState.response?.body;
+                log("Looking for shift Response: ${jsonEncode(map['response'])}");
                 _lookForShiftResponseModel = lookForShiftResponseModelFromJson(
                     jsonEncode(map['response']));
               });
@@ -112,7 +116,8 @@ class LookingForShiftProvider extends ChangeNotifier {
     return BMSResponse(body: _schedulePeriodResponseModel);
   }
 
-  void postAvailableForShift(List<int> availableShifts,VoidCallback onCompleteCallBack) async {
+  void postAvailableForShift(
+      List<int> availableShifts, VoidCallback onCompleteCallBack) async {
     setDataPosting(true);
     await _postAvailableForShiftReo.post(
         apiCallback: (networkState) {
@@ -123,15 +128,13 @@ class LookingForShiftProvider extends ChangeNotifier {
               onCompleteCallBack.call();
             },
             onErrorState: (errorState) {
-                setDataPosting(false);
+              setDataPosting(false);
               shoErrorToast(errorState.message);
             },
             onLoadingState: (loadingState) {},
           );
         },
-        body:
-          availableShifts
-        );
+        body: availableShifts);
     setDataPosting(false);
   }
 }

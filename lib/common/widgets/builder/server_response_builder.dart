@@ -7,26 +7,43 @@ class ServerResponseBuilder extends StatelessWidget {
   final Widget Function(BuildContext context) builder;
   const ServerResponseBuilder({
     Key? key,
-    required this.builder, required this.isDataFetching, required this.isNullData,
-
+    required this.builder,
+    required this.isDataFetching,
+    required this.isNullData,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IfElseBuilder(
         condition: isDataFetching,
-        ifBuilder: (context)=>const Center(child: CircularProgressIndicator(),),
+        ifBuilder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ),
         elseBulider: (context) {
-
-          return IfElseBuilder(
-              condition: isNullData,
-              ifBuilder: (context)=>const Center(child:  Text("Something went wrong")),
-
-              elseBulider: (context) {
-                return builder(context);
-              }
-          );
-        }
-    );
+          return isNullData
+              ? const SizedBox()
+              // ? const Align(
+              //     alignment: Alignment.topCenter,
+              //     child: Text(
+              //       "NUll Data!",
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //       ),
+              //     ))
+              : IfElseBuilder(
+                  condition: isNullData,
+                  ifBuilder: (context) => const Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          "No Data found!",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  elseBulider: (context) {
+                    return builder(context);
+                  });
+        });
   }
 }

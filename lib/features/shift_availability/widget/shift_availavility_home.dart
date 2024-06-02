@@ -9,6 +9,7 @@ import 'package:beacon_flutter/features/shift_availability/widget/shift_availabi
 import 'package:beacon_flutter/features/shift_availability/widget/toggle_bar.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ShiftAvailabilityHome extends StatefulWidget {
@@ -19,7 +20,6 @@ class ShiftAvailabilityHome extends StatefulWidget {
 }
 
 class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProxyProvider<AuthProvider, AvailableShiftProvider>(
@@ -43,8 +43,9 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                 listen: false)
                             .availableShiftsForDcModel;
 
-                    final availableShiftProvider =Provider.of<AvailableShiftProvider>(context,
-                        listen: false);
+                    final availableShiftProvider =
+                        Provider.of<AvailableShiftProvider>(context,
+                            listen: false);
 
                     return ServerResponseBuilder(
                         builder: (context) => Padding(
@@ -75,99 +76,127 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: ListView.separated(
-                                        itemBuilder: (context, index) =>
-                                            ShiftAvailabilityCard(
-                                              scheduleCardModel:
-                                                  availableShiftsForDcModel
-                                                      .data![index],
-                                              onCardAvailable: (isChecked, id) {
-                                                availableShiftProvider.addRemoveShiftId(isChecked, id);
-                                              },
+                                    child: availableShiftsForDcModel
+                                            .data!.isEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.only(top: 20.h),
+                                            child: Align(
+                                              alignment: Alignment.topCenter,
+                                              child: Text(
+                                                'No Record Found',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.sp),
+                                              ),
                                             ),
-                                        separatorBuilder: (context, index) =>
-                                            const SizedBox(
-                                              height: 9,
-                                            ),
-                                        itemCount: availableShiftsForDcModel
-                                                .data?.length ??
-                                            0),
+                                          )
+                                        : ListView.separated(
+                                            itemBuilder: (context, index) =>
+                                                ShiftAvailabilityCard(
+                                                  scheduleCardModel:
+                                                      availableShiftsForDcModel
+                                                          .data![index],
+                                                  onCardAvailable:
+                                                      (isChecked, id) {
+                                                    availableShiftProvider
+                                                        .addRemoveShiftId(
+                                                            isChecked, id);
+                                                  },
+                                                ),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    const SizedBox(
+                                                      height: 9,
+                                                    ),
+                                            itemCount: availableShiftsForDcModel
+                                                    .data?.length ??
+                                                0),
                                   ),
                                   SizedBox(
                                     height: 81,
                                     child: Center(
                                       child: SizedBox(
-                                        height: 40,
-                                        width: 163.47,
-                                        child:
-
-
-                                        Selector<AvailableShiftProvider,List<int>>(builder: (context,shiftIds,child)=>
-
-                                            IfElseBuilder(
-                                                condition:Provider.of<AvailableShiftProvider>(context,
-                                                    listen: true).isDataPosting,
-                                                ifBuilder: (context) =>
-                                                const Center(
-                                                  child:
-                                                  CircularProgressIndicator(),
-                                                ),
-                                                elseBulider: (context) {
-                                                  return ElevatedButton(
-                                                      onPressed: () async {
-                                                        if (shiftIds.isNotEmpty) {
-                                                          // setState(() {
-                                                          //   isPosting = true;
-                                                          // });
-                                                          await Provider.of<
-                                                              AvailableShiftProvider>(
+                                          height: 40,
+                                          width: 163.47,
+                                          child: Selector<
+                                                  AvailableShiftProvider,
+                                                  List<int>>(
+                                              builder: (context, shiftIds,
+                                                      child) =>
+                                                  IfElseBuilder(
+                                                      condition: Provider.of<
+                                                                  AvailableShiftProvider>(
                                                               context,
-                                                              listen: false)
-                                                              .postShiftAvailability(
-                                                              shiftIds, () {
-                                                            DialogueUtils
-                                                                .successMessageDialogue(
-                                                                context:
-                                                                context,
-                                                                successMessage:
-                                                                "Availability Saved Successfully.");
-                                                          });
-                                                          // setState(() {
-                                                          //   isPosting = false;
-                                                          // });
-                                                        }
-                                                      },
-                                                      style: ButtonStyle(
-                                                          padding: MaterialStateProperty.all(
-                                                              EdgeInsetsDirectional
-                                                                  .zero),
-                                                          elevation:
-                                                          MaterialStateProperty
-                                                              .all(4),
-                                                          backgroundColor:
-                                                          MaterialStateProperty.all(
-                                                              shiftIds.isEmpty?Colors.grey:  const Color(
-                                                                  0xff1870FF)),
-                                                          shape: MaterialStateProperty.all(
-                                                              const RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius.circular(20))))),
-                                                      child: Text(
-                                                        "Save",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge!
-                                                            .copyWith(
-                                                            fontSize: 15,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold),
-                                                      ));
-                                                }), selector: (context,provider)=>provider.shiftIds)
-
-                                      ),
+                                                              listen: true)
+                                                          .isDataPosting,
+                                                      ifBuilder: (context) =>
+                                                          const Center(
+                                                            child:
+                                                                CircularProgressIndicator(),
+                                                          ),
+                                                      elseBulider: (context) {
+                                                        return ElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              if (shiftIds
+                                                                  .isNotEmpty) {
+                                                                // setState(() {
+                                                                //   isPosting = true;
+                                                                // });
+                                                                await Provider.of<
+                                                                            AvailableShiftProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .postShiftAvailability(
+                                                                        shiftIds,
+                                                                        () {
+                                                                  DialogueUtils.successMessageDialogue(
+                                                                      context:
+                                                                          context,
+                                                                      successMessage:
+                                                                          "Availability Saved Successfully.");
+                                                                });
+                                                                // setState(() {
+                                                                //   isPosting = false;
+                                                                // });
+                                                              }
+                                                            },
+                                                            style: ButtonStyle(
+                                                                padding: MaterialStateProperty.all(
+                                                                    EdgeInsetsDirectional
+                                                                        .zero),
+                                                                elevation:
+                                                                    MaterialStateProperty
+                                                                        .all(4),
+                                                                backgroundColor: MaterialStateProperty.all(shiftIds
+                                                                        .isEmpty
+                                                                    ? Colors
+                                                                        .grey
+                                                                    : const Color(
+                                                                        0xff1870FF)),
+                                                                shape: MaterialStateProperty.all(
+                                                                    const RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(20))))),
+                                                            child: Text(
+                                                              "Save",
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          15,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                            ));
+                                                      }),
+                                              selector: (context, provider) =>
+                                                  provider.shiftIds)),
                                     ),
                                   )
                                 ],

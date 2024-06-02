@@ -1,5 +1,10 @@
+
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/shift_for_approval_response_model.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class BottomModalSheetUtils {
   BottomModalSheetUtils._();
@@ -24,7 +29,13 @@ class BottomModalSheetUtils {
   }
 
   //Bootom Model sheet for manager approval Dispute
-  static void openBottomModalSheetForDispute(BuildContext context) async {
+  static void openBottomModalSheetForDispute(
+      BuildContext context, Datum shiftData) async {
+    final formKey = GlobalKey<FormState>();
+    ManagerApprovalProvider managerApprovalProvider =
+        Provider.of<ManagerApprovalProvider>(context, listen: false);
+    managerApprovalProvider.disputeCommentController.text =
+        shiftData.overTimeComment ?? "";
     await showModalBottomSheet(
       context: context,
       isDismissible: true,
@@ -52,7 +63,7 @@ class BottomModalSheetUtils {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 40,
+                height: 65,
                 padding:
                     const EdgeInsets.symmetric(vertical: 7.55, horizontal: 19),
                 decoration: BoxDecoration(
@@ -63,13 +74,26 @@ class BottomModalSheetUtils {
                   ),
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  "Dispute Information",
-                  style: TextStyle(
-                    color: Color(0xff1B1B1B),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Dispute Information",
+                      style: TextStyle(
+                        color: Color(0xff1B1B1B),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      "${shiftData.directCare}",
+                      style: const TextStyle(
+                        color: Color(0xff1B1B1B),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
@@ -78,12 +102,12 @@ class BottomModalSheetUtils {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Schedule Date:",
                               style: TextStyle(
                                 color: Color(0xff8A8181),
@@ -91,8 +115,8 @@ class BottomModalSheetUtils {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 6),
-                            Text(
+                            const SizedBox(height: 6),
+                            const Text(
                               "Shift Time:",
                               style: TextStyle(
                                 color: Color(0xff8A8181),
@@ -100,17 +124,19 @@ class BottomModalSheetUtils {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 6),
+                            const SizedBox(height: 6),
                             Text(
-                              "Meal Time:",
-                              style: TextStyle(
+                              (shiftData.lunchTime ?? "").isEmpty
+                                  ? "No Meal Reason:"
+                                  : "Meal Time:",
+                              style: const TextStyle(
                                 color: Color(0xff8A8181),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 6),
-                            Text(
+                            const SizedBox(height: 6),
+                            const Text(
                               "Total Hours:",
                               style: TextStyle(
                                 color: Color(0xff8A8181),
@@ -120,40 +146,42 @@ class BottomModalSheetUtils {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "2/10/2024",
-                              style: TextStyle(
+                              "${shiftData.scheduleDate}",
+                              style: const TextStyle(
                                 color: Color(0xff1B1B1B),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 6),
+                            const SizedBox(height: 6),
                             Text(
-                              "08:00 AM - 04:00 PM",
-                              style: TextStyle(
+                              "${shiftData.actualStartTime ?? ""} - ${shiftData.actualEndTime ?? ''}",
+                              style: const TextStyle(
                                 color: Color(0xff1B1B1B),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 6),
+                            const SizedBox(height: 6),
                             Text(
-                              "30 Min",
-                              style: TextStyle(
+                              (shiftData.lunchTime ?? "").isEmpty
+                                  ? shiftData.noBreakReason ?? 'N/A'
+                                  : "${shiftData.lunchTime} Min",
+                              style: const TextStyle(
                                 color: Color(0xff1B1B1B),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(height: 6),
+                            const SizedBox(height: 6),
                             Text(
-                              "8 Hrs",
-                              style: TextStyle(
+                              "${shiftData.totalTime?.toDouble()} Hrs",
+                              style: const TextStyle(
                                 color: Color(0xff1B1B1B),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
@@ -173,62 +201,100 @@ class BottomModalSheetUtils {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xffF2F2F2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        minLines: 3,
-                        maxLines: 3,
-                        textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
-                          hintStyle: TextStyle(
-                            color: Color(0xff8A8181),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                    Form(
+                      key: formKey,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xffF2F2F2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          controller:
+                              managerApprovalProvider.disputeCommentController,
+                          minLines: 3,
+                          maxLines: 3,
+                          textInputAction: TextInputAction.done,
+                          style: const TextStyle(
+                            color: Color(0xff1B1B1B),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
                           ),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
+                          decoration: InputDecoration(
+                            // fillColor: Colors.grey.withOpacity(0.2),
+                            // filled: true,
+                            hintStyle: const TextStyle(
+                              color: Color(0xff8A8181),
+                              fontSize: 15,
+                              // fontWeight: FontWeight.w500,
+                            ),
+                            border: InputBorder.none,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.black38),
+                                borderRadius: BorderRadius.circular(15.r)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.black38),
+                                borderRadius: BorderRadius.circular(15.r)),
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter comment";
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        height: 40,
-                        width: 94.11,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsetsDirectional.zero),
-                              elevation: MaterialStateProperty.all(4),
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff3B85FF)),
-                              shape: MaterialStateProperty.all(
-                                  const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))))),
-                          child: Text(
-                            "Ok",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                          ),
-                        ),
+                    Consumer<ManagerApprovalProvider>(
+                      builder: (context, value, child) => Align(
+                        alignment: Alignment.centerRight,
+                        child: value.isRaisingDispute
+                            ? const CircularProgressIndicator()
+                            : SizedBox(
+                                height: 40,
+                                width: 94.11,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      managerApprovalProvider
+                                          .raiseDisputeForShift(
+                                        context,
+                                        shiftId: shiftData.id,
+                                        dcId: shiftData.dcId,
+                                        comment: managerApprovalProvider
+                                            .disputeCommentController.text,
+                                      );
+                                    }
+                                  },
+                                  style: ButtonStyle(
+                                      padding: MaterialStateProperty.all(
+                                          EdgeInsetsDirectional.zero),
+                                      elevation: MaterialStateProperty.all(4),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color(0xff3B85FF)),
+                                      shape: MaterialStateProperty.all(
+                                          const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))))),
+                                  child: Text(
+                                    "Ok",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 15),
