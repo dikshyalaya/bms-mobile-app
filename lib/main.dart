@@ -13,7 +13,6 @@ import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_pe
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
-import 'package:beacon_flutter/location_denied_alert_diaouge_box.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -150,7 +149,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({key, required this.isLoggedIn});
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // FlutterNativeSplash.remove();
