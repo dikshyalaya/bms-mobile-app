@@ -17,10 +17,12 @@ class AvailableShiftProvider extends ChangeNotifier {
   int selectedIndex = -1;
   List<int> shiftIds = [];
 
-  void addRemoveShiftId(bool add,int id){
-    if(add) {
-      shiftIds.add(id);
-    }else{
+  void addRemoveShiftId(bool add, int id) {
+    if (add) {
+      if (shiftIds.contains(id) == false) {
+        shiftIds.add(id);
+      }
+    } else {
       shiftIds.remove(id);
     }
     notifyListeners();
@@ -46,9 +48,9 @@ class AvailableShiftProvider extends ChangeNotifier {
   }
 
   Future<BMSResponse<AvailableShiftsForDcModel>>
-  getAvailableShiftsForDcModel() async {
+      getAvailableShiftsForDcModel() async {
     final AvailableShiftRepo availableShiftRepo =
-    AvailableShiftRepo(dcId.toString());
+        AvailableShiftRepo(dcId.toString());
     setLoading(true);
     await availableShiftRepo.fetch(
         params: {},
@@ -76,28 +78,33 @@ class AvailableShiftProvider extends ChangeNotifier {
     return BMSResponse(body: availableShiftsForDcModel);
   }
 
-
-  Future<void> postShiftAvailability(List<int> availableShifts,VoidCallback onCompleteCallBack) async {
-    final PostShiftAvailabilityRepo postShiftAvailabilityRepo = PostShiftAvailabilityRepo();
+  Future<void> postShiftAvailability(
+      List<int> availableShifts, VoidCallback onCompleteCallBack) async {
+    final PostShiftAvailabilityRepo postShiftAvailabilityRepo =
+        PostShiftAvailabilityRepo();
     setDataPosting(true);
-    await postShiftAvailabilityRepo.post(
-        apiCallback: (networkState) {
-          onApiCallback<dynamic>(
-            networkState: networkState,
-            onLoadedState: (loadedState) {
-              setDataPosting(false);
-              onCompleteCallBack.call();
-            },
-            onErrorState: (errorState) {
-              setDataPosting(false);
-              shoErrorToast(errorState.message);
-            },
-            onLoadingState: (loadingState) {},
-          );
-        },
-        body:
-        availableShifts
-    );
+    for (int shiftId in shiftIds) {
+      _availableShiftsForDcModel?.data
+          ?.removeWhere((element) => element.id == shiftId);
+    }
+    shiftIds.clear();
+    notifyListeners();
+    // await postShiftAvailabilityRepo.post(
+    //     apiCallback: (networkState) {
+    //       onApiCallback<dynamic>(
+    //         networkState: networkState,
+    //         onLoadedState: (loadedState) {
+    //           setDataPosting(false);
+    //           onCompleteCallBack.call();
+    //         },
+    //         onErrorState: (errorState) {
+    //           setDataPosting(false);
+    //           shoErrorToast(errorState.message);
+    //         },
+    //         onLoadingState: (loadingState) {},
+    //       );
+    //     },
+    //     body: availableShifts);
     setDataPosting(false);
   }
 }

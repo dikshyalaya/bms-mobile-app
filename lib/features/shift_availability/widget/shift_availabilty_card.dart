@@ -95,8 +95,8 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
                         onChanged: (int? val) {
                           setState(() {
                             value = val ?? 0;
-                            // widget.onCardAvailable.call(
-                            //     val == 1, widget.scheduleCardModel.id ?? -0);
+                            widget.onCardAvailable.call(
+                                val == 1, widget.scheduleCardModel.id ?? -0);
                           });
                         }),
                     const Text(
@@ -112,8 +112,8 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
                         onChanged: (int? val) {
                           setState(() {
                             value = val ?? 0;
-                            // widget.onCardAvailable.call(
-                            //     val == 1, widget.scheduleCardModel.id ?? -0);
+                            widget.onCardAvailable.call(
+                                val == 2, widget.scheduleCardModel.id ?? -0);
                           });
                         }),
                     const Text(

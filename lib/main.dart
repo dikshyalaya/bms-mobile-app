@@ -13,6 +13,7 @@ import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_pe
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
+import 'package:beacon_flutter/features/shift_availability/domain/AvailableShiftProvider.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +28,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 Future<bool> handleLocationPermission(String errorMessage) async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -35,10 +35,10 @@ Future<bool> handleLocationPermission(String errorMessage) async {
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     Fluttertoast.showToast(
-        msg: errorMessage,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-      );
+      msg: errorMessage,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+    );
     return false;
   }
   permission = await Geolocator.checkPermission();
@@ -97,8 +97,8 @@ void listenFCMForeground() async {
 
 void main() async {
   bool isLoggedIn = false;
- 
-  WidgetsFlutterBinding.ensureInitialized(); 
+
+  WidgetsFlutterBinding.ensureInitialized();
   // await handleLocationPermission("You must enable login");
   await setupLocator();
   await Hive.initFlutter();
@@ -173,39 +173,42 @@ class MyApp extends StatelessWidget {
             create: (_) => NavigationHandler()),
         ChangeNotifierProvider<ManagerApprovalProvider>(
             create: (_) => ManagerApprovalProvider()),
+        ChangeNotifierProvider<AvailableShiftProvider>(
+            create: (_) => AvailableShiftProvider(0)),
       ],
       child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         return ScreenUtilInit(
             splitScreenMode: true,
-              designSize: const Size(390, 844),
-              minTextAdapt: true,
-          builder: (context,child) {
-            return MaterialApp(
-              title: 'Beacon',
-              debugShowCheckedModeBanner: false,
-              theme: defaultLightTheme,
-              home: isLoggedIn
-                  ? IfElseBuilder(
-                      condition: authProvider.bmsUserModel?.userTypeId == 1,
-                      ifBuilder: (context) => const DashBoardScreen(),
-                      elseBulider: (context) {
-                        return IfElseBuilder(
-                            condition: authProvider.bmsUserModel?.userTypeId == 4,
-                            ifBuilder: (context) => const ManagerDashBoardScreen(),
-                            elseBulider: (context) {
-                              return EmptyDashBoard(
-                                key: key,
-                              );
-                            });
-                      })
-                  : LoginScreen(
-                      key: key,
-                    ),
-            );
-          }
-        );
+            designSize: const Size(390, 844),
+            minTextAdapt: true,
+            builder: (context, child) {
+              return MaterialApp(
+                title: 'Beacon',
+                debugShowCheckedModeBanner: false,
+                theme: defaultLightTheme,
+                home: isLoggedIn
+                    ? IfElseBuilder(
+                        condition: authProvider.bmsUserModel?.userTypeId == 1,
+                        ifBuilder: (context) => const DashBoardScreen(),
+                        elseBulider: (context) {
+                          return IfElseBuilder(
+                              condition:
+                                  authProvider.bmsUserModel?.userTypeId == 4,
+                              ifBuilder: (context) =>
+                                  const ManagerDashBoardScreen(),
+                              elseBulider: (context) {
+                                return EmptyDashBoard(
+                                  key: key,
+                                );
+                              });
+                        })
+                    : LoginScreen(
+                        key: key,
+                      ),
+              );
+            });
       }),
     );
   }
