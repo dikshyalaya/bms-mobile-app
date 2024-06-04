@@ -1,4 +1,5 @@
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
+import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,6 +10,7 @@ class ClockInHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool? isTablet = getBool("isTablet");
     return Container(
       height: 80.h,
       width: double.infinity,
@@ -36,16 +38,16 @@ class ClockInHeader extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 15.sp,
+              fontSize: isTablet == true ? 8.sp : 15.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: isTablet == true ? 5.h : 8.h),
           Text(
             "${clockInResponse?.scheduleDate ?? ''}     ${clockInResponse?.startTime} - ${clockInResponse?.endTime}",
             style: TextStyle(
               color: const Color(0xff5B5B5B),
-              fontSize: 15.sp,
+              fontSize: isTablet == true ? 8.sp : 15.sp,
               fontWeight: FontWeight.w500,
             ),
           ),

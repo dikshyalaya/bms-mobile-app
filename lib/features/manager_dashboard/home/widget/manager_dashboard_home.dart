@@ -17,19 +17,20 @@ class ManagerDashBoardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // final authProvider = Provider.of<AuthProvider>(context, listen: false)
     //   ..getUserDetail();
-    return ScaffoldBackGroundWrapper(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: PreferredSize(
-            preferredSize: const Size(double.infinity, 68),
-            child: Selector<AuthProvider, BmsUserModel?>(
-              selector: (context, provider) => provider.bmsUserModel,
-              builder: (context, bmsUserModel, child) => BeaconAppBar(
-                title:
-                    "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
-              ),
-            )),
-        body: Container(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 68),
+          child: Selector<AuthProvider, BmsUserModel?>(
+            selector: (context, provider) => provider.bmsUserModel,
+            builder: (context, bmsUserModel, child) => BeaconAppBar(
+              title:
+                  "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+            ),
+          )),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -51,7 +52,7 @@ class ManagerDashBoardScreen extends StatelessWidget {
                       return const Expanded(child: ManagerDashBoardGrid());
                     }),
               )
-
+            
               // DashBoardNavigatorCard(),
             ],
           ),

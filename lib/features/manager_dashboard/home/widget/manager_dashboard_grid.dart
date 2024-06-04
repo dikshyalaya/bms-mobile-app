@@ -1,5 +1,6 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
+import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
 import 'package:beacon_flutter/features/manager_dashboard/house_employees/widget/house_employees_home.dart';
 import 'package:beacon_flutter/features/manager_dashboard/house_shift/widget/house_shift_home.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/widget/manage_shift_home.dart';
@@ -11,6 +12,7 @@ class ManagerDashBoardGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     bool value = isTablet(context);
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsetsDirectional.all(14),
