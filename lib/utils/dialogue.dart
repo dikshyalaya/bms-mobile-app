@@ -29,6 +29,7 @@ class DialogueUtils {
     required BuildContext context,
     required String message,
   }) async {
+    bool? isTablet = getBool("isTablet");
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -306,6 +307,8 @@ class DialogueUtils {
 
   static Future<void> onProfileIconClickDialogue(
       {required BuildContext context, required String userName}) async {
+    bool? isTablet = getBool("isTablet");
+
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return await showDialog(
         context: context,
@@ -335,10 +338,10 @@ class DialogueUtils {
                     ),
                     Text(
                       userName,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Color(0xff565656)),
+                          fontSize: isTablet == true ? 12.sp : 20.sp,
+                          color: const Color(0xff565656)),
                     ),
                     SizedBox(
                       height: 15.h,
@@ -350,13 +353,19 @@ class DialogueUtils {
                             MaterialPageRoute(
                                 builder: (_) => const NotificationPage()));
                       },
-                      leading: const Icon(Icons.notifications_active),
+                      leading: Icon(
+                        Icons.notifications_active,
+                        size: isTablet == true ? 12.sp : 16.sp,
+                      ),
                       title: Text('My Notifications',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.normal,
-                              fontSize: 16.sp)),
-                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                              fontSize: isTablet == true ? 12.sp : 16.sp)),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: isTablet == true ? 12.sp : 16.sp,
+                      ),
                     ),
                     Container(
                       color: Colors.black38,
@@ -367,13 +376,20 @@ class DialogueUtils {
                       onTap: () {
                         changePasswordDialogue(context: context);
                       },
-                      leading: const Icon(Icons.password),
+                      leading: Icon(
+                        Icons.password,
+                        size: isTablet == true ? 12.sp : 16.sp,
+                      ),
                       title: Text('Change Password',
                           style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16.sp)),
-                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: isTablet == true ? 12.sp : 16.sp,
+                          )),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: isTablet == true ? 12.sp : 16.sp,
+                      ),
                     ),
                     Container(
                       color: Colors.black38,
@@ -388,15 +404,22 @@ class DialogueUtils {
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen()));
                       },
-                      leading: const Icon(Icons.logout),
+                      leading: Icon(
+                        Icons.logout,
+                        size: isTablet == true ? 12.sp : 16.sp,
+                      ),
                       title: Text(
                         'Logout',
                         style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16.sp),
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: isTablet == true ? 12.sp : 16.sp,
+                        ),
                       ),
-                      trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: isTablet == true ? 12.sp : 16.sp,
+                      ),
                     ),
                     Container(
                       color: Colors.black38,
@@ -415,7 +438,7 @@ class DialogueUtils {
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.normal,
-                            fontSize: 15.sp),
+                            fontSize: isTablet == true ? 12.sp : 16.sp),
                       ),
                     ),
                     // const Column(
@@ -805,14 +828,17 @@ class DialogueUtils {
                                                                 (bool
                                                                     isCreated) {
                                                           if (isCreated) {
-                                                            onSaveSchedule
-                                                                .call();
+                                                            
                                                           }
-                                                        });
+                                                        }
+                                                        );
+                                                        onSaveSchedule
+                                                                .call();
                                                         setState(() {
                                                           isPosting = false;
                                                         });
-                                                      } else {
+                                                      }
+                                                       else {
                                                         shoErrorToast(
                                                             "Must select all the required field");
                                                       }

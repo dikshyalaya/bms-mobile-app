@@ -76,16 +76,16 @@ class _BeaconTextFormFieldState extends State<BeaconTextFormField> {
     super.initState();
     isTablet();
   }
-isTablet(){
-  setState(() {
-   isTabletDevice =  getBool("isTablet");
-  });
-  
-}
-bool? isTabletDevice;
+
+  isTablet() {
+    setState(() {
+      isTabletDevice = getBool("isTablet");
+    });
+  }
+
+  bool? isTabletDevice;
   @override
   Widget build(BuildContext context) {
-
     return TextFormField(
       // enableSuggestions: false,
       // maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -97,7 +97,11 @@ bool? isTabletDevice;
       onChanged: widget.onChanged,
       textInputAction: widget.inputAction,
       key: widget.formKey,
-      style: TextStyle(color: widget.textColor,fontWeight:isTabletDevice == true?FontWeight.normal: FontWeight.bold ,fontSize: isTabletDevice == true?12.sp:15.sp),
+      style: TextStyle(
+          color: widget.textColor,
+          fontWeight:
+              isTabletDevice == true ? FontWeight.normal : FontWeight.normal,
+          fontSize: isTabletDevice == true ? 12.sp : 15.sp),
       onTap: widget.onTap,
       readOnly: widget.readOnly ?? false,
       controller: widget.controller,
@@ -159,23 +163,23 @@ bool? isTabletDevice;
                     },
                     child: isPassword
                         ? Padding(
-                          padding:  EdgeInsets.only(right:8.w),
-                          child: Icon(Icons.visibility,
-                              size: 20.sp,
-                              color:
-                                  Theme.of(context).brightness == Brightness.light
-                                      ? Colors.grey
-                                      : Colors.grey),
-                        )
+                            padding: EdgeInsets.only(right: 8.w),
+                            child: Icon(Icons.visibility,
+                                size: 20.sp,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey
+                                    : Colors.grey),
+                          )
                         : Padding(
-                          padding:  EdgeInsets.only(right:8.w),
-                          child: Icon(Icons.visibility_off,
-                              size: 20.sp,
-                              color:
-                                  Theme.of(context).brightness == Brightness.light
-                                      ? Colors.grey
-                                      : Colors.grey),
-                        )
+                            padding: EdgeInsets.only(right: 8.w),
+                            child: Icon(Icons.visibility_off,
+                                size: 20.sp,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.grey
+                                    : Colors.grey),
+                          )
                     // SvgPicture.asset(
                     //     isPassword ? AppIcons.eyeShow : AppIcons.eyeHide,
                     //     height: 20.h,
