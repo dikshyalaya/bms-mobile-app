@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
+import 'package:beacon_flutter/features/admin_dashboard/src/admin_dashboard_screen.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_repo.dart';
 import 'package:beacon_flutter/features/auth/widget/change_password_page.dart';
@@ -111,6 +112,7 @@ class AuthProvider extends ChangeNotifier {
         final empLastName = data['data']['employee']['empLastName'];
         final isPasswordUpdateRequired =
             data['data']['isPasswordUpdateRequired'];
+
         savedLoginInfo(
           accessToken,
           BmsUserModel(
@@ -123,51 +125,53 @@ class AuthProvider extends ChangeNotifier {
             isPasswordUpdateRequired: isPasswordUpdateRequired,
           ),
         );
-        //Navigate to page
-        if (userTypeId == 1) {
-          if (isPasswordUpdateRequired == true) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChangePasswordPage(
-                  userTypeId: userTypeId as int,
-                ),
+
+        if (isPasswordUpdateRequired == true) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChangePasswordPage(
+                userTypeId: userTypeId as int,
               ),
-              (route) => false,
-            );
-          } else {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const DashBoardScreen()),
-              (route) => false,
-            );
+            ),
+            (route) => false,
+          );
+        } else {
+          switch (userTypeId) {
+            case 1:
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => name.toLowerCase() == 'beacon'
+                        ? const AdminDashboardScreen()
+                        : const DashBoardScreen()),
+                (route) => false,
+              );
+              break;
+            case 4:
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ManagerDashBoardScreen()),
+                (route) => false,
+              );
+              break;
+            //  case 0:
+            // Navigator.pushAndRemoveUntil(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => const AdminDashboardScreen()),
+            //   (route) => false,
+            // );
+            // break;
+            default:
+              // Handle other user types if necessary
+              break;
           }
-        } else if (userTypeId == 4) {
-          if (isPasswordUpdateRequired == true) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChangePasswordPage(
-                  userTypeId: userTypeId as int,
-                ),
-              ),
-              (route) => false,
-            );
-          } else {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ManagerDashBoardScreen()),
-              (route) => false,
-            );
-          }
-        } else {}
+        }
       } else {
         shoErrorToast(data['message']);
       }
-      // DateTime endTime = DateTime.now();
-      // Duration responseTime = endTime.difference(startTime);
-      // log('----- Login API response Time : ${responseTime.inSeconds} sec-----');
     } else {
       final data = json.decode(response.body);
       shoErrorToast(data['message']);
