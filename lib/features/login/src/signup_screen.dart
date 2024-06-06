@@ -1,20 +1,18 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:beacon_flutter/constants/app_images.dart';
 import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
-import 'package:beacon_flutter/features/login/split_widgets/login_form_widget.dart';
+import 'package:beacon_flutter/features/login/split_widgets/signup_form_widget.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   late bool isTabletDevice; // Initialize with a default value
   @override
   void initState() {
@@ -50,20 +48,27 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: Center(
           child: SizedBox(
-            height: MediaQuery.sizeOf(context).height / 1.5,
+            height: MediaQuery.sizeOf(context).height,
             width: isTabletDevice ? (300.w) : null,
-            child: Stack(
-              children: [
-                const LoginFormWidget(),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    AppImages.appLogo,
-                    height: 107.h,
-                    width: 107.w,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 100),
+                  Stack(
+                    children: [
+                      const SignupFormWidget(),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Image.asset(
+                          AppImages.appLogo,
+                          height: 107.h,
+                          width: 107.w,
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -71,4 +76,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

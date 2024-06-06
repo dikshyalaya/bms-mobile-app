@@ -29,6 +29,14 @@ class AuthProvider extends ChangeNotifier {
   final ChangePasswordRepo _changePasswordRepo = ChangePasswordRepo();
   final SendOtpByEmailRepo _sendOtpByEmailRepo = SendOtpByEmailRepo();
   final ResetPasswordRepo _resetPasswordRepo = ResetPasswordRepo();
+  final SignupRepo _signupRepo = SignupRepo();
+
+  bool isAgreeTerms = false;
+
+  void toggleAgreeTerms() {
+    isAgreeTerms = !isAgreeTerms;
+    notifyListeners();
+  }
 
   // Future<void> logIn(
   //   String name,
@@ -185,6 +193,39 @@ class AuthProvider extends ChangeNotifier {
         popUpType: PopUpType.error,
       );
     }
+  }
+
+  Future<void> signUp(
+    BuildContext context,
+    String firstName,
+    String lastName,
+    String email,
+    String password,
+  ) async {
+    Navigator.pop(context);
+    DialogueUtils.popUpMessageDialogue(
+      context: context,
+      message:
+          "Your request has been submitted successfully. An confirmation link has been sent to your email. Please check your mail.",
+      popUpType: PopUpType.success,
+    );
+    // _signupRepo.post(
+    //   body: {
+    //     "firstName": firstName,
+    //   },
+    //   apiCallback: (networkState) {
+    //     onApiCallback(
+    //       networkState: networkState,
+    //       onLoadedState: (loadedState) {
+    //         final data = loadedState.response?.body;
+    //         log("SignRedponse $data");
+    //         log("Respoinse type ${data.runtimeType}");
+    //       },
+    //       onErrorState: (onErrorState) {},
+    //       onLoadingState: (onLoadingState) {},
+    //     );
+    //   },
+    // );
   }
 
   Future<void> changePassword(String newPassword,

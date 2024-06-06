@@ -3,6 +3,7 @@ const baseUrl =
     "https://api-beacon.dikshyalaya.com/api/";
 // "api-beacon-live.dikshyalaya.com";
 const logInUrl = "Authentication/Login";
+const signUpUrl = "Authentication/signup";
 const changePasswordUrl = "Authentication/ChangePassword";
 
 const clockInUrl = "PunchCard/ListPunchCardShifts";
@@ -36,10 +37,7 @@ const raiseDispute = "Manager/ShiftManagement/RaiseDispute";
 const notificationHistory = 'RTPushNotification/NotificationHistory';
 const notificationMarkAsSeen = 'RTPushNotification/MarkAsSeen';
 
-
 // pending invitations =>Shift availibility
-
-
 
 //2 apis before landing dash board
 
@@ -50,3 +48,7 @@ const notificationMarkAsSeen = 'RTPushNotification/MarkAsSeen';
 // if(pending action>0&&enabled){
 //
 // }
+
+///Terms and conditions and Privacy policy URL
+const termsAndConditionsUrl = "https://beaconnysystem.com/PrivacyPolicy";
+const privacyPolicyUrl = "https://beaconnysystem.com/PrivacyPolicy";

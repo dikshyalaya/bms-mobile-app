@@ -338,6 +338,7 @@ class DialogueUtils {
                     ListTile(
                       onTap: () {
                         authProvider.logOut();
+                        Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -693,9 +694,10 @@ class DialogueUtils {
                                   setState(() {
                                     if ((startTime?.contains("PM") ?? false) &&
                                         (val.contains("PM"))) {
-                                           DialogueUtils.popUpMessageDialogue(
+                                      DialogueUtils.popUpMessageDialogue(
                                         context: context,
-                                        message: "Start time and end time must be valid",
+                                        message:
+                                            "Start time and end time must be valid",
                                         popUpType: PopUpType.error,
                                       );
                                       endTime = null;
@@ -761,7 +763,7 @@ class DialogueUtils {
                                                                 .id;
                                                         await availableShiftsProvider
                                                             .createShift(
-                                                              context,
+                                                                context,
                                                                 scheduledDate!,
                                                                 startTime!,
                                                                 endTime!,
@@ -777,7 +779,7 @@ class DialogueUtils {
                                                           isPosting = false;
                                                         });
                                                       } else {
-                                                         DialogueUtils
+                                                        DialogueUtils
                                                             .popUpMessageDialogue(
                                                           context: context,
                                                           message:
@@ -1142,9 +1144,9 @@ class DialogueUtils {
                         child: Text(
                           message,
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.black),
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
                         ),
                       )
                     ],
@@ -1335,9 +1337,10 @@ class DialogueUtils {
                                   FocusScope.of(context).unfocus();
                                   if (newPassword.text.isEmpty ||
                                       confirmPassword.text.isEmpty) {
-                                         DialogueUtils.popUpMessageDialogue(
+                                    DialogueUtils.popUpMessageDialogue(
                                       context: context,
-                                      message: "Password fields must not be empty",
+                                      message:
+                                          "Password fields must not be empty",
                                       popUpType: PopUpType.error,
                                     );
                                     setState(() {
@@ -1345,7 +1348,7 @@ class DialogueUtils {
                                     });
                                   } else if (newPassword.text !=
                                       confirmPassword.text) {
-                                         DialogueUtils.popUpMessageDialogue(
+                                    DialogueUtils.popUpMessageDialogue(
                                       context: context,
                                       message: "Password is not match",
                                       popUpType: PopUpType.error,
@@ -1357,9 +1360,11 @@ class DialogueUtils {
                                     await authProvider.changePassword(
                                       confirmPassword.text,
                                       onErrorState: (val) {
-                                         DialogueUtils.popUpMessageDialogue(
+                                        DialogueUtils.popUpMessageDialogue(
                                           context: context,
-                                          message: val.response?.exception?.message ?? "",
+                                          message: val.response?.exception
+                                                  ?.message ??
+                                              "",
                                           popUpType: PopUpType.error,
                                         );
                                         setState(() {
@@ -1437,4 +1442,3 @@ class DialogueUtils {
             ));
   }
 }
-

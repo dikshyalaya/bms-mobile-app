@@ -12,7 +12,6 @@ import 'package:dio/dio.dart';
 //   }
 // }
 
-
 class ChangePasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
   @override
   dynamic parseJson(Response<dynamic> response) => {"response": response.data};
@@ -22,6 +21,7 @@ class ChangePasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
     return changePasswordUrl;
   }
 }
+
 class SendOtpByEmailRepo extends BaseApiRepository<Map<String, dynamic>> {
   @override
   dynamic parseJson(Response<dynamic> response) => {"response": response.data};
@@ -31,6 +31,7 @@ class SendOtpByEmailRepo extends BaseApiRepository<Map<String, dynamic>> {
     return sendOtpByEmail;
   }
 }
+
 class ResetPasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
   @override
   dynamic parseJson(Response<dynamic> response) => {"response": response.data};
@@ -38,5 +39,15 @@ class ResetPasswordRepo extends BaseApiRepository<Map<String, dynamic>> {
   @override
   String path(Map<String, String>? params, String? pathVariable) {
     return resetPassword;
+  }
+}
+
+class SignupRepo extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+    return signUpUrl;
   }
 }
