@@ -8,7 +8,6 @@ import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/account_houses_repo.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/shift_for_approval_repo.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ManagerApprovalProvider extends ChangeNotifier {
@@ -122,8 +121,8 @@ class ManagerApprovalProvider extends ChangeNotifier {
           networkState: networkState,
           onLoadedState: (loadedState) {
             onFutureNotifyListeners(() {
-              DialogueUtils.successMessageDialogue(
-                  context: context, successMessage: "Saved Successfully.");
+              DialogueUtils.popUpMessageDialogue(
+                  context: context, message: "Saved Successfully.");
               for (var data in selectedShift) {
                 shiftForApprovalResponseModel?.data
                     ?.removeWhere((element) => element.id == data);
@@ -176,6 +175,12 @@ class ManagerApprovalProvider extends ChangeNotifier {
           networkState: networkState,
           onLoadedState: (loadedState) {
             onFutureNotifyListeners(() {
+              var data = shiftForApprovalResponseModel?.data
+                  ?.where((element) => element.id == shiftId);
+              data?.first.overTimeComment = "$comment";
+              data?.first.hasDisputed = "yes";
+
+              notifyListeners();
               Navigator.pop(context);
             });
           },

@@ -2,14 +2,15 @@
 
 import 'dart:convert';
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
+import 'package:beacon_flutter/constants/enums.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/features/admin_dashboard/src/admin_dashboard_screen.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_repo.dart';
 import 'package:beacon_flutter/features/auth/widget/change_password_page.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -170,11 +171,19 @@ class AuthProvider extends ChangeNotifier {
           }
         }
       } else {
-        shoErrorToast(data['message']);
+        DialogueUtils.popUpMessageDialogue(
+          context: context,
+          message: data['message'],
+          popUpType: PopUpType.error,
+        );
       }
     } else {
       final data = json.decode(response.body);
-      shoErrorToast(data['message']);
+      DialogueUtils.popUpMessageDialogue(
+        context: context,
+        message: data['message'],
+        popUpType: PopUpType.error,
+      );
     }
   }
 

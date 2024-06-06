@@ -1,4 +1,3 @@
-
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/shift_for_approval_response_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
@@ -23,8 +22,10 @@ class BottomModalSheetUtils {
     );
 
     if (val == "save") {
-      await DialogueUtils.successMessageDialogue(
-          context: context, successMessage: "Clock-In Saved Successfully.");
+      await DialogueUtils.popUpMessageDialogue(
+          // ignore: use_build_context_synchronously
+          context: context,
+          message: "Clock-In Saved Successfully.");
     }
   }
 

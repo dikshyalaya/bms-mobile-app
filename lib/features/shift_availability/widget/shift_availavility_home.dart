@@ -2,7 +2,7 @@ import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
-import 'package:beacon_flutter/features/shift_availability/domain/AvailableShiftProvider.dart';
+import 'package:beacon_flutter/features/shift_availability/domain/available_shift_provider.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/shift_availabilty_card.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/toggle_bar.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
@@ -130,19 +130,19 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                                                 .postShiftAvailability(
                                                                     shiftIds,
                                                                     () {
-                                                              DialogueUtils.successMessageDialogue(
+                                                              DialogueUtils.popUpMessageDialogue(
                                                                   context:
                                                                       context,
-                                                                  successMessage:
+                                                                  message:
                                                                       "Availability Saved Successfully.");
                                                             });
                                                             setState(() {});
                                                             DialogueUtils
-                                                                .successMessageDialogue(
+                                                                .popUpMessageDialogue(
                                                                     // ignore: use_build_context_synchronously
                                                                     context:
                                                                         context,
-                                                                    successMessage:
+                                                                    message:
                                                                         "Availability Saved Successfully.");
                                                           }
                                                         },

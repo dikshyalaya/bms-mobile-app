@@ -215,11 +215,12 @@ class _LookingForShiftHomeScreenState extends State<LookingForShiftHomeScreen> {
                                               if (lookForShiftIds.isNotEmpty) {
                                                 _lookingForShiftProvider
                                                     .postAvailableForShift(
+                                                        context,
                                                         lookForShiftIds, () {
                                                   DialogueUtils
-                                                      .successMessageDialogue(
+                                                      .popUpMessageDialogue(
                                                           context: context,
-                                                          successMessage:
+                                                          message:
                                                               "Availability Saved Successfully.");
                                                 });
                                               }

@@ -13,7 +13,7 @@ import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_car
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
-import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
+import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_provider.dart';
 import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
@@ -22,71 +22,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:beacon_flutter/constants/enums.dart';
 
 class DialogueUtils {
   DialogueUtils._();
-  static Future<void> showErrorDialogue({
-    required BuildContext context,
-    required String message,
-  }) async {
-    bool? isTablet = getBool("isTablet");
-    return await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              content: Container(
-                height: 80,
-                width: 288,
-                padding: const EdgeInsets.only(left: 22, right: 17),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        message,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: const Color(0xffD40000),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 77,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsetsDirectional.zero),
-                              elevation: MaterialStateProperty.all(4),
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff3B85FF)),
-                              shape: MaterialStateProperty.all(
-                                  const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))))),
-                          child: Text(
-                            "Ok",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                    fontSize: 13,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400),
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-            ));
-  }
 
   static Future<bool> confirmMessageDialogue(
       {required BuildContext context}) async {
@@ -754,8 +693,11 @@ class DialogueUtils {
                                   setState(() {
                                     if ((startTime?.contains("PM") ?? false) &&
                                         (val.contains("PM"))) {
-                                      shoErrorToast(
-                                          "Start time and end time must be valid");
+                                           DialogueUtils.popUpMessageDialogue(
+                                        context: context,
+                                        message: "Start time and end time must be valid",
+                                        popUpType: PopUpType.error,
+                                      );
                                       endTime = null;
                                     } else {
                                       endTime = val;
@@ -819,6 +761,7 @@ class DialogueUtils {
                                                                 .id;
                                                         await availableShiftsProvider
                                                             .createShift(
+                                                              context,
                                                                 scheduledDate!,
                                                                 startTime!,
                                                                 endTime!,
@@ -827,20 +770,21 @@ class DialogueUtils {
                                                                     0,
                                                                 (bool
                                                                     isCreated) {
-                                                          if (isCreated) {
-                                                            
-                                                          }
-                                                        }
-                                                        );
-                                                        onSaveSchedule
-                                                                .call();
+                                                          if (isCreated) {}
+                                                        });
+                                                        onSaveSchedule.call();
                                                         setState(() {
                                                           isPosting = false;
                                                         });
-                                                      }
-                                                       else {
-                                                        shoErrorToast(
-                                                            "Must select all the required field");
+                                                      } else {
+                                                         DialogueUtils
+                                                            .popUpMessageDialogue(
+                                                          context: context,
+                                                          message:
+                                                              "Must select all the required field",
+                                                          popUpType:
+                                                              PopUpType.error,
+                                                        );
                                                       }
                                                     },
                                               child: const Text(
@@ -861,163 +805,6 @@ class DialogueUtils {
               ),
             ));
   }
-
-  // static Future<void> onPressedMyScheduleDialogue(
-  //     {required BuildContext context,
-  //     required VoidCallback onSaveSchedule}) async {
-  //   String? shiftGivenByManager;
-  //   String? startTime;
-  //   String? endTime;
-  //   return await showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       insetPadding: EdgeInsets.zero,
-  //       backgroundColor: Colors.transparent,
-  //       content: StatefulBuilder(
-  //         builder: (context, setState) => Container(
-  //           height: 358,
-  //           width: DimensionUtils.isTab(context)
-  //               ? _width()
-  //               : MediaQuery.of(context).size.width,
-  //           decoration: BoxDecoration(
-  //               color: Colors.white, borderRadius: BorderRadius.circular(20)),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 decoration: const BoxDecoration(
-  //                     color: Color(0xffD7ECFF),
-  //                     boxShadow: [
-  //                       BoxShadow(
-  //                           color: Colors.grey,
-  //                           blurRadius: 15.0,
-  //                           offset: Offset(0.0, 0.75))
-  //                     ],
-  //                     borderRadius: BorderRadius.only(
-  //                         topLeft: Radius.circular(15),
-  //                         topRight: Radius.circular(15))),
-  //                 height: 41,
-  //                 width: double.infinity,
-  //                 alignment: Alignment.center,
-  //                 child: const Text(
-  //                   "Add a Shift",
-  //                   style: TextStyle(
-  //                       color: Colors.black,
-  //                       fontSize: 15,
-  //                       fontWeight: FontWeight.bold),
-  //                 ),
-  //               ),
-  //               const SizedBox(
-  //                 height: 14.37,
-  //               ),
-  //               Padding(
-  //                   padding:
-  //                       const EdgeInsetsDirectional.symmetric(horizontal: 16),
-  //                   child: Column(
-  //                     children: [
-  //                       Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                         children: [
-  //                           const Text(
-  //                             "Was this shift given to you by manager?",
-  //                             style: TextStyle(
-  //                                 fontWeight: FontWeight.bold,
-  //                                 fontSize: 13,
-  //                                 color: Colors.black),
-  //                           ),
-  //                           const SizedBox(
-  //                             width: 8,
-  //                           ),
-  //                           IfElseBuilder(
-  //                               condition: DimensionUtils.isTab(context),
-  //                               ifBuilder: (context) => BMSDropDownForm(
-  //                                     options: const ["Yes", "No"],
-  //                                     onChooseOptions: (String val) {
-  //                                       setState(() {
-  //                                         shiftGivenByManager = val;
-  //                                       });
-  //                                     },
-  //                                     hint: shiftGivenByManager,
-  //                                   ),
-  //                               elseBulider: (context) {
-  //                                 return Expanded(
-  //                                     child: BMSDropDownForm(
-  //                                   options: const ["Yes", "No"],
-  //                                   onChooseOptions: (String val) {
-  //                                     setState(() {
-  //                                       shiftGivenByManager = val;
-  //                                     });
-  //                                   },
-  //                                   hint: shiftGivenByManager,
-  //                                 ));
-  //                               })
-  //                         ],
-  //                       ),
-  //                       const SizedBox(
-  //                         height: 7.25,
-  //                       ),
-  //                       rowBuilder("House", const ["Select", "No"]),
-  //                       const SizedBox(
-  //                         height: 7.25,
-  //                       ),
-  //                       rowBuilder("Schedule Date", const ["Select", "No"]),
-  //                       const SizedBox(
-  //                         height: 7.25,
-  //                       ),
-  //                       rowBuilder("Start Time", timeOptions, hint: startTime,
-  //                           onChooseOption: (String val) {
-  //                         setState(() {
-  //                           startTime = val;
-  //                         });
-  //                       }),
-  //                       const SizedBox(
-  //                         height: 7.25,
-  //                       ),
-  //                       rowBuilder("End Time", timeOptions, hint: endTime,
-  //                           onChooseOption: (String val) {
-  //                         setState(() {
-  //                           endTime = val;
-  //                         });
-  //                       }),
-  //                       const SizedBox(
-  //                         height: 16.25,
-  //                       ),
-  //                       Align(
-  //                         alignment: Alignment.centerRight,
-  //                         child: SizedBox(
-  //                           height: 38.33,
-  //                           width: 108.05,
-  //                           child: ElevatedButton(
-  //                             style: ButtonStyle(
-  //                                 backgroundColor: MaterialStateProperty.all(
-  //                                     const Color(0xff3B85FF)),
-  //                                 shape: MaterialStateProperty.all(
-  //                                     const RoundedRectangleBorder(
-  //                                         borderRadius: BorderRadius.all(
-  //                                             Radius.circular(20))))),
-  //                             onPressed: () {
-  //                               onSaveSchedule.call();
-  //                             },
-  //                             child: const Text(
-  //                               "Save",
-  //                               style: TextStyle(
-  //                                   color: Colors.white,
-  //                                   fontSize: 15,
-  //                                   fontWeight: FontWeight.bold),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       )
-  //                     ],
-  //                   ))
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   ///Manager Approval Filter Dialogue
   static Future<void> managerApprovalFilterDialogue(
@@ -1294,8 +1081,11 @@ class DialogueUtils {
 
   static double _width() => 560;
 
-  static Future<void> successMessageDialogue(
-      {required BuildContext context, required String successMessage}) async {
+  static Future<void> popUpMessageDialogue({
+    required BuildContext context,
+    required String message,
+    PopUpType popUpType = PopUpType.success,
+  }) async {
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -1322,12 +1112,25 @@ class DialogueUtils {
                         width: 40,
                         child: Card(
                           margin: EdgeInsets.zero,
-                          color: const Color(0xff079D28),
+                          // color: const Color(0xff079D28),
+                          color: popUpType == PopUpType.success
+                              ? const Color(0xff079D28)
+                              : popUpType == PopUpType.error
+                                  ? const Color(0xFFED2B28)
+                                  : popUpType == PopUpType.warning
+                                      ? const Color(0xFFF0D132)
+                                      : const Color(0xFF3563EF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),
-                          child: const Icon(
-                            Icons.check,
+                          child: Icon(
+                            popUpType == PopUpType.success
+                                ? Icons.check
+                                : popUpType == PopUpType.error
+                                    ? Icons.error
+                                    : popUpType == PopUpType.warning
+                                        ? Icons.warning
+                                        : Icons.info,
                             color: Colors.white,
                           ),
                         ),
@@ -1337,7 +1140,7 @@ class DialogueUtils {
                       ),
                       Expanded(
                         child: Text(
-                          successMessage,
+                          message,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -1532,14 +1335,21 @@ class DialogueUtils {
                                   FocusScope.of(context).unfocus();
                                   if (newPassword.text.isEmpty ||
                                       confirmPassword.text.isEmpty) {
-                                    shoErrorToast(
-                                        "Password fields must not be empty");
+                                         DialogueUtils.popUpMessageDialogue(
+                                      context: context,
+                                      message: "Password fields must not be empty",
+                                      popUpType: PopUpType.error,
+                                    );
                                     setState(() {
                                       isLoading = false;
                                     });
                                   } else if (newPassword.text !=
                                       confirmPassword.text) {
-                                    shoErrorToast("Password is not match");
+                                         DialogueUtils.popUpMessageDialogue(
+                                      context: context,
+                                      message: "Password is not match",
+                                      popUpType: PopUpType.error,
+                                    );
                                     setState(() {
                                       isLoading = false;
                                     });
@@ -1547,9 +1357,11 @@ class DialogueUtils {
                                     await authProvider.changePassword(
                                       confirmPassword.text,
                                       onErrorState: (val) {
-                                        shoErrorToast(
-                                            val.response?.exception?.message ??
-                                                "");
+                                         DialogueUtils.popUpMessageDialogue(
+                                          context: context,
+                                          message: val.response?.exception?.message ?? "",
+                                          popUpType: PopUpType.error,
+                                        );
                                         setState(() {
                                           isLoading = false;
                                         });
@@ -1557,9 +1369,9 @@ class DialogueUtils {
                                       onLoadedState: (val) {
                                         Navigator.pop(context);
                                         Navigator.pop(context);
-                                        successMessageDialogue(
+                                        popUpMessageDialogue(
                                           context: context,
-                                          successMessage:
+                                          message:
                                               "Password changed successfully.",
                                         );
                                       },
@@ -1625,3 +1437,4 @@ class DialogueUtils {
             ));
   }
 }
+

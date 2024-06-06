@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
+import 'package:beacon_flutter/constants/enums.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +15,7 @@ class PasswordResetDialog extends StatefulWidget {
   const PasswordResetDialog({Key? key}) : super(key: key);
 
   @override
-  _PasswordResetDialogState createState() => _PasswordResetDialogState();
+  State<PasswordResetDialog> createState() => _PasswordResetDialogState();
 }
 
 class _PasswordResetDialogState extends State<PasswordResetDialog> {
@@ -181,8 +182,11 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                     if (newPassword.text.isEmpty ||
                                         confirmPassword.text.isEmpty ||
                                         otpValue.text.isEmpty) {
-                                      shoErrorToast(
-                                          'Please enter all field to continue');
+                                           DialogueUtils.popUpMessageDialogue(
+                                        context: context,
+                                        message: "Please enter all field to continue",
+                                        popUpType: PopUpType.error,
+                                      );
                                     } else {
                                       authProvider.resetPassword(
                                         otpValue.text,
@@ -190,7 +194,11 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                         confirmPassword.text,
                                         onErrorState: (errorState) {
                                           log("has error");
-                                          shoErrorToast(errorState.message);
+                                           DialogueUtils.popUpMessageDialogue(
+                                            context: context,
+                                            message: errorState.message,
+                                            popUpType: PopUpType.error,
+                                          );
                                           setState(() {
                                             isLoading = false;
                                           });
@@ -206,7 +214,7 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                           setState(() {
                                             isLoading = false;
                                             Navigator.pop(context);
-                                            successMessageDialogue(
+                                            popUpMessageDialogue(
                                                 context: context,
                                                 successMessage:
                                                     "Password reset successfully.",
@@ -298,8 +306,11 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                 FocusScope.of(context).unfocus();
                                 if (email.text.isEmpty ||
                                     !isEmailValid(email.text)) {
-                                  shoErrorToast(
-                                      'Please enter a valid email to continue');
+                                       DialogueUtils.popUpMessageDialogue(
+                                    context: context,
+                                    message: "Please enter a valid email to continue",
+                                    popUpType: PopUpType.error,
+                                  );
                                 } else {
                                   authProvider.sendOtpByEmail(
                                     email.text,
@@ -308,7 +319,11 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                         isSendingOtp = false;
                                       });
                                       log("has error");
-                                      shoErrorToast(errorState.message);
+                                       DialogueUtils.popUpMessageDialogue(
+                                        context: context,
+                                        message: errorState.message,
+                                        popUpType: PopUpType.error,
+                                      );
                                     },
                                     onLoadingState: (loadingState) {
                                       log("IS Loading");
@@ -322,8 +337,11 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                                         isResetPasswordScreen = true;
                                         isSendingOtp = false;
                                       });
-                                      shoErrorToast(
-                                          "Password reset code sent to email successfully");
+                                       DialogueUtils.popUpMessageDialogue(
+                                        context: context,
+                                        message: "Password reset code sent to email successfully",
+                                        popUpType: PopUpType.error,
+                                      );
                                     },
                                   );
                                 }
@@ -369,7 +387,7 @@ bool isEmailValid(String email) {
   return emailRegex.hasMatch(email);
 }
 
-Future<void> successMessageDialogue(
+Future<void> popUpMessageDialogue(
     {required BuildContext context,
     required String successMessage,
     required bool isTablet}) async {

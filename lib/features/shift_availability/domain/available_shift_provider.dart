@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
-import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/available_shifts_for_dc_model.dart';
 import 'package:beacon_flutter/features/shift_availability/domain/available_shift_repo.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -80,8 +79,6 @@ class AvailableShiftProvider extends ChangeNotifier {
 
   Future<void> postShiftAvailability(
       List<int> availableShifts, VoidCallback onCompleteCallBack) async {
-    final PostShiftAvailabilityRepo postShiftAvailabilityRepo =
-        PostShiftAvailabilityRepo();
     setDataPosting(true);
     for (int shiftId in shiftIds) {
       _availableShiftsForDcModel?.data

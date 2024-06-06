@@ -1,89 +1,96 @@
 // To parse this JSON data, do
 //
-//     final managerPermission = managerPermissionFromJson(jsonString);
+//     final managerPermissionModel = managerPermissionModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ManagerPermissionModel managerPermissionModelFromJson(String str) => ManagerPermissionModel.fromJson(json.decode(str));
+ManagerPermissionModel managerPermissionModelFromJson(String str) =>
+    ManagerPermissionModel.fromJson(json.decode(str));
 
-String managerPermissionToJson(ManagerPermissionModel data) => json.encode(data.toJson());
+String managerPermissionModelToJson(ManagerPermissionModel data) =>
+    json.encode(data.toJson());
 
 class ManagerPermissionModel {
-  bool error;
-  String message;
-  Data data;
-  int currentPage;
+  bool? success;
+  String? message;
+  Data? data;
+  int? currentPage;
   dynamic nextPage;
-  dynamic previouPage;
-  int pageSize;
+  dynamic previousPage;
+  int? pageSize;
 
   ManagerPermissionModel({
-    required this.error,
-    required this.message,
-    required this.data,
-    required this.currentPage,
-    required this.nextPage,
-    required this.previouPage,
-    required this.pageSize,
+    this.success,
+    this.message,
+    this.data,
+    this.currentPage,
+    this.nextPage,
+    this.previousPage,
+    this.pageSize,
   });
 
-  factory ManagerPermissionModel.fromJson(Map<String, dynamic> json) => ManagerPermissionModel(
-    error: json["error"],
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-    currentPage: json["currentPage"],
-    nextPage: json["nextPage"],
-    previouPage: json["previouPage"],
-    pageSize: json["pageSize"],
-  );
+  factory ManagerPermissionModel.fromJson(Map<String, dynamic> json) =>
+      ManagerPermissionModel(
+        success: json["success"],
+        message: json["message"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        currentPage: json["currentPage"],
+        nextPage: json["nextPage"],
+        previousPage: json["previousPage"],
+        pageSize: json["pageSize"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "error": error,
-    "message": message,
-    "data": data.toJson(),
-    "currentPage": currentPage,
-    "nextPage": nextPage,
-    "previouPage": previouPage,
-    "pageSize": pageSize,
-  };
+        "success": success,
+        "message": message,
+        "data": data?.toJson(),
+        "currentPage": currentPage,
+        "nextPage": nextPage,
+        "previousPage": previousPage,
+        "pageSize": pageSize,
+      };
 }
 
 class Data {
-  int allowManagerApproval;
-  int viewApprovalHistory;
-  int allowViewSchedule;
-  int allowViewBill;
-  int allowApproveBill;
-  int allowManageShifts;
-  int allowManageHouseEmployees;
+  int? allowManagerApproval;
+  int? allowManageShifts;
+  int? allowManageHouseEmployees;
+  int? allowManageHouseShifts;
+  int? viewApprovalHistory;
+  int? allowViewBill;
+  int? allowApproveBill;
+  int? allowViewSchedule;
 
   Data({
-    required this.allowManagerApproval,
-    required this.viewApprovalHistory,
-    required this.allowViewSchedule,
-    required this.allowViewBill,
-    required this.allowApproveBill,
-    required this.allowManageShifts,
-    required this.allowManageHouseEmployees,
+    this.allowManagerApproval,
+    this.allowManageShifts,
+    this.allowManageHouseEmployees,
+    this.allowManageHouseShifts,
+    this.viewApprovalHistory,
+    this.allowViewBill,
+    this.allowApproveBill,
+    this.allowViewSchedule,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    allowManagerApproval: json["allowManagerApproval"],
-    viewApprovalHistory: json["viewApprovalHistory"],
-    allowViewSchedule: json["allowViewSchedule"],
-    allowViewBill: json["allowViewBill"],
-    allowApproveBill: json["allowApproveBill"],
-    allowManageShifts: json["allowManageShifts"],
-    allowManageHouseEmployees: json["allowManageHouseEmployees"],
-  );
+        allowManagerApproval: json["allowManagerApproval"],
+        allowManageShifts: json["allowManageShifts"],
+        allowManageHouseEmployees: json["allowManageHouseEmployees"],
+        allowManageHouseShifts: json["allowManageHouseShifts"],
+        viewApprovalHistory: json["viewApprovalHistory"],
+        allowViewBill: json["allowViewBill"],
+        allowApproveBill: json["allowApproveBill"],
+        allowViewSchedule: json["allowViewSchedule"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "allowManagerApproval": allowManagerApproval,
-    "viewApprovalHistory": viewApprovalHistory,
-    "allowViewSchedule": allowViewSchedule,
-    "allowViewBill": allowViewBill,
-    "allowApproveBill": allowApproveBill,
-    "allowManageShifts": allowManageShifts,
-    "allowManageHouseEmployees": allowManageHouseEmployees,
-  };
+        "allowManagerApproval": allowManagerApproval,
+        "allowManageShifts": allowManageShifts,
+        "allowManageHouseEmployees": allowManageHouseEmployees,
+        "allowManageHouseShifts": allowManageHouseShifts,
+        "viewApprovalHistory": viewApprovalHistory,
+        "allowViewBill": allowViewBill,
+        "allowApproveBill": allowApproveBill,
+        "allowViewSchedule": allowViewSchedule,
+      };
 }

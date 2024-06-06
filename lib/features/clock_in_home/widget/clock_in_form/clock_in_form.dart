@@ -2,17 +2,18 @@
 
 import 'dart:developer';
 
+import 'package:beacon_flutter/constants/enums.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/clock_in_details.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/clock_in_header.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/function/clock_in_functions.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/function/input_validator.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_form/split_widget/too_early_widget.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_provider.dart';
 import 'package:beacon_flutter/location_denied_alert_diaouge_box.dart';
 import 'package:beacon_flutter/main.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -138,7 +139,7 @@ class _ClockInFormState extends State<ClockInForm> {
         endTime: endTimeController.text,
         mealTime: mealTimeController.text,
         noMealReason: noMealReasonController.text);
-           final hasPermission = await handleLocationPermission("You must enable lacation to use the app");
+           final hasPermission = await handleLocationPermission(context,"You must enable lacation to use the app");
     if (!hasPermission) {
       showLocationDeniedDialog(context,"Enable Location","You must enable loaction to clock-in");
        setState(() {
@@ -182,7 +183,11 @@ class _ClockInFormState extends State<ClockInForm> {
       setState(() {
         isSaving = false;
       });
-      shoErrorToast("Enter valid input");
+       DialogueUtils.popUpMessageDialogue(
+          context: context,
+          message: "Enter valid input",
+          popUpType: PopUpType.error,
+        );
     }
       }
    

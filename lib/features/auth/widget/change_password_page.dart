@@ -2,12 +2,12 @@ import 'package:beacon_flutter/common/widgets/beacon_app_bar.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
+import 'package:beacon_flutter/constants/enums.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
-// import 'package:beacon_flutter/features/auth/widget/login_screen.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -132,14 +132,22 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                     FocusScope.of(context).unfocus();
                                     if (newPassword.text.isEmpty ||
                                         confirmPassword.text.isEmpty) {
-                                      shoErrorToast(
-                                          "Password fields must not be empty");
+                                        DialogueUtils.popUpMessageDialogue(
+                                        context: context,
+                                        message: "Password fields must not be empty",
+                                        popUpType: PopUpType.error,
+                                      );   
+                                
                                       setState(() {
                                         isLoading = false;
                                       });
                                     } else if (newPassword.text !=
                                         confirmPassword.text) {
-                                      shoErrorToast("Password is not match");
+                                      DialogueUtils.popUpMessageDialogue(
+                                        context: context,
+                                        message: "Password is not match",
+                                        popUpType: PopUpType.error,
+                                      );
                                       setState(() {
                                         isLoading = false;
                                       });
@@ -147,9 +155,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                       await authProvider.changePassword(
                                         confirmPassword.text,
                                         onErrorState: (val) {
-                                          shoErrorToast(val.response?.exception
-                                                  ?.message ??
-                                              "");
+                                           DialogueUtils.popUpMessageDialogue(
+                                            context: context,
+                                            message: val.response?.exception
+                                                    ?.message ??
+                                                "",
+                                            popUpType: PopUpType.error,
+                                          );
+                                         
                                           setState(() {
                                             isLoading = false;
                                           });
@@ -164,7 +177,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                                       const DashBoardScreen()),
                                               (route) => false,
                                             );
-                                          } else if(widget.userTypeId == 4) {
+                                          } else if (widget.userTypeId == 4) {
                                             Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
@@ -172,13 +185,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                                       const ManagerDashBoardScreen()),
                                               (route) => false,
                                             );
-                                          }else{
-                                            
-                                          }
+                                          } else {}
 
-                                          // successMessageDialogue(
+                                          // popUpMessageDialogue(
                                           //   context: context,
-                                          //   successMessage:
+                                          //   message:
                                           //       "Password changed successfully.",
                                           // );
                                         },

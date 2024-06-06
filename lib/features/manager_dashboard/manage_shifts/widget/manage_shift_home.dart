@@ -100,9 +100,9 @@ class _ManageShiftHomeScreenState extends State<ManageShiftHomeScreen> {
                 width: 163.47,
                 child: ElevatedButton(
                   onPressed: () {
-                    DialogueUtils.successMessageDialogue(
+                    DialogueUtils.popUpMessageDialogue(
                         context: context,
-                        successMessage: "Approval Saved Successfully.");
+                        message: "Approval Saved Successfully.");
                   },
                   style: ButtonStyle(
                       padding:

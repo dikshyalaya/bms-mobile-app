@@ -3,12 +3,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:beacon_flutter/constants/enums.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/clock_in_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/data/no_meal_reason_response_model.dart';
 import 'package:beacon_flutter/features/clock_in_home/domain/clock_in_repo.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -149,7 +150,11 @@ class CLockInProvider extends ChangeNotifier {
             isLoaing.call(false);
           },
           onErrorState: (errorState) {
-            shoErrorToast("Something went wrong, Please try again later.");
+             DialogueUtils.popUpMessageDialogue(
+              context: context,
+              message: "Something went wrong, Please try again later.",
+              popUpType: PopUpType.error,
+            );
             isLoaing.call(false);
 
             setDataPosting(false);

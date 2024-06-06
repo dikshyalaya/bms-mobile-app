@@ -3,12 +3,12 @@ import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
-import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/available_shifts_for_dc_model.dart';
 import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_repo.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:beacon_flutter/constants/enums.dart';
 
 class MyScheduleProvider extends ChangeNotifier {
   final int dcId;
@@ -80,7 +80,8 @@ class MyScheduleProvider extends ChangeNotifier {
     return BMSResponse(body: availableShiftsForDcModel);
   }
 
-  void cancelShift(int shiftId, Function onFinished) async {
+  void cancelShift(
+      BuildContext context, int shiftId, Function onFinished) async {
     setDataPosting(true);
 
     final CancelShiftRepo cancelShiftRepo = CancelShiftRepo(shiftId);
@@ -88,11 +89,20 @@ class MyScheduleProvider extends ChangeNotifier {
       onApiCallback<dynamic>(
         networkState: networkState,
         onLoadedState: (loadedState) {
-          Fluttertoast.showToast(msg: "Successfully cancelled the shift");
+          DialogueUtils.popUpMessageDialogue(
+            // ignore: use_build_context_synchronously
+            context: context,
+            message: "Shift Cancelled Successfully.",
+            popUpType: PopUpType.error,
+          );
           onFinished.call();
         },
         onErrorState: (errorState) {
-          shoErrorToast(errorState.message);
+           DialogueUtils.popUpMessageDialogue(
+            context: context,
+            message: errorState.message,
+            popUpType: PopUpType.error,
+          );
         },
         onLoadingState: (loadingState) {},
       );
@@ -131,7 +141,7 @@ class MyScheduleProvider extends ChangeNotifier {
     return BMSResponse(body: houseWorkedinLastThreeWeeksModel);
   }
 
-  Future<void> createShift(String scheduledDate, String startTime,
+  Future<void> createShift(BuildContext context,String scheduledDate, String startTime,
       String endTime, int houseId, Function(bool) isCreated) async {
     CreateShiftRepo createShiftRepo = CreateShiftRepo();
     setDataPosting(true);
@@ -161,7 +171,11 @@ class MyScheduleProvider extends ChangeNotifier {
               setDataPosting(false);
             },
             onErrorState: (errorState) {
-              shoErrorToast(errorState.message);
+               DialogueUtils.popUpMessageDialogue(
+                context: context,
+                message: errorState.message,
+                popUpType: PopUpType.error,
+              );
 
               setDataPosting(false);
             },

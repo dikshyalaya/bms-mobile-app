@@ -7,6 +7,7 @@ import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:beacon_flutter/constants/enums.dart';
 
 class CustomLoginButton extends StatefulWidget {
   const CustomLoginButton({
@@ -37,9 +38,11 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
       final errorMessage = widget.userName.text.isEmpty
           ? "Username is Required."
           : "Password is Required.";
-      DialogueUtils.showErrorDialogue(
+      DialogueUtils.popUpMessageDialogue(
+        // ignore: use_build_context_synchronously
         context: context,
         message: errorMessage,
+        popUpType: PopUpType.error,
       );
       return;
     }
@@ -53,6 +56,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
       var fcm = await generateFCMToken();
       DateTime startTime = DateTime.now();
       await authProvider.login(
+        // ignore: use_build_context_synchronously
         context,
         widget.userName.text,
         widget.password.text,
@@ -146,7 +150,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
       //   },
       // );
     } catch (e) {
-      print("Error occurred: $e");
+      log("Error occurred: $e");
       setState(() {
         _isLoading = false;
       });

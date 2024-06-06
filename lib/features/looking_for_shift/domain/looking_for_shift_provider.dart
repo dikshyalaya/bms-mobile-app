@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:beacon_flutter/constants/enums.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/look_for_shift_response_model.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_repo.dart';
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/cupertino.dart';
 
 class LookingForShiftProvider extends ChangeNotifier {
@@ -116,7 +117,7 @@ class LookingForShiftProvider extends ChangeNotifier {
     return BMSResponse(body: _schedulePeriodResponseModel);
   }
 
-  void postAvailableForShift(
+  void postAvailableForShift(BuildContext context,
       List<int> availableShifts, VoidCallback onCompleteCallBack) async {
     setDataPosting(true);
     await _postAvailableForShiftReo.post(
@@ -129,7 +130,11 @@ class LookingForShiftProvider extends ChangeNotifier {
             },
             onErrorState: (errorState) {
               setDataPosting(false);
-              shoErrorToast(errorState.message);
+               DialogueUtils.popUpMessageDialogue(
+                context: context,
+                message: errorState.message,
+                popUpType: PopUpType.error,
+              );
             },
             onLoadingState: (loadingState) {},
           );

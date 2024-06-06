@@ -6,7 +6,6 @@ import 'package:beacon_flutter/features/login/split_widgets/login_form_widget.da
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -73,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-void shoErrorToast(String message) {
-  Fluttertoast.showToast(
-      msg: message, backgroundColor: Colors.red, textColor: Colors.white);
-}
+// void shoErrorToast(String message) {
+//   Fluttertoast.showToast(
+//       msg: message, backgroundColor: Colors.red, textColor: Colors.white);
+// }
