@@ -6,6 +6,7 @@ import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_pe
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../common/widgets/beacon_app_bar.dart';
 
@@ -19,6 +20,8 @@ class ManagerDashBoardScreen extends StatefulWidget {
 class _ManagerDashBoardScreenState extends State<ManagerDashBoardScreen> {
   @override
   Widget build(BuildContext context) {
+    final managerPermissionProvider =
+        Provider.of<ManagePermissionProvider>(context, listen: true);
     return ScaffoldBackGroundWrapper(
       appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 68),
@@ -45,14 +48,27 @@ class _ManagerDashBoardScreenState extends State<ManagerDashBoardScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Selector<ManagePermissionProvider, bool?>(
-                selector: (context, provider) => provider.isManagerPermitted,
-                builder: (context, isManagerPermitted, child) => IfBuilder(
-                    condition: isManagerPermitted ?? false,
-                    builder: (context) {
-                      return const Expanded(child: ManagerDashBoardGrid());
-                    }),
-              )
+              managerPermissionProvider.isLoading
+                  ? const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : const Expanded(
+                      child: ManagerDashBoardGrid(),
+                    ),
+
+              // Selector<ManagePermissionProvider, bool?>(
+              //   selector: (context, provider) => provider.isManagerPermitted,
+              //   builder: (context, isManagerPermitted, child) => IfBuilder(
+              //     condition: isManagerPermitted ?? false,
+              //     builder: (context) {
+              //       return const Expanded(child: ManagerDashBoardGrid());
+              //     },
+              //   ),
+              // )
 
               // DashBoardNavigatorCard(),
             ],

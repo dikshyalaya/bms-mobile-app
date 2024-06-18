@@ -12,6 +12,7 @@ import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/widgets/beacon_app_bar.dart';
 
@@ -20,6 +21,8 @@ class DashBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final systemSettingsProvider =
+        Provider.of<SystemSettingProvider>(context, listen: true);
     bool value = isTablet(context);
     return Scaffold(
       appBar: PreferredSize(
@@ -56,111 +59,114 @@ class DashBoardScreen extends StatelessWidget {
                   crossAxisCount: 3,
                   children: List.generate(
                       CardProvider().gridCardProviders.length, (index) {
-                    final systemSettingsProvider =
-                        Provider.of<SystemSettingProvider>(context,
-                            listen: false);
-                    return InkWell(
-                        onTap: () {
-                          switch (index) {
-                            case 0:
-                              if (systemSettingsProvider.systemSettingsModel
-                                      ?.siteSetting.clockIn.enable ??
-                                  false) {
-                                onSystemSettingsDialogue(context);
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ClockInHomeScreen()));
-                              }
-                              break;
-                            case 1:
-                              if (systemSettingsProvider.systemSettingsModel
-                                      ?.siteSetting.mySchedule.enable ??
-                                  false) {
-                                onSystemSettingsDialogue(context);
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MyScheduleHomeScreen()));
-                              }
-                              break;
-                            case 2:
-                              if (systemSettingsProvider.systemSettingsModel
-                                      ?.siteSetting.shiftAvailability.enable ??
-                                  false) {
-                                onSystemSettingsDialogue(context);
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ShiftAvailabilityHome()));
-                              }
-                              break;
-                            case 3:
-                              if (systemSettingsProvider.systemSettingsModel
-                                      ?.siteSetting.priorClockIn.enable ??
-                                  false) {
-                                onSystemSettingsDialogue(context);
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PriorClockInHomeScreen()));
-                              }
-                              break;
-                            case 4:
-                              if (systemSettingsProvider.systemSettingsModel
-                                      ?.siteSetting.lookingForShift.enable ??
-                                  false) {
-                                onSystemSettingsDialogue(context);
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LookingForShiftHomeScreen()));
-                              }
-                              break;
-                          }
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              height: value ? 100.h : 90.h,
-                              width: value ? 100.w : 90.w,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15.r)),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20.w, vertical: 20.h),
-                                child: Image.asset(CardProvider()
-                                    .gridCardProviders[index]
-                                    .asset),
+                    return Skeletonizer(
+                      enabled: systemSettingsProvider.isLoading,
+                      child: InkWell(
+                          onTap: () {
+                            switch (index) {
+                              case 0:
+                                if (systemSettingsProvider.systemSettingsModel
+                                        ?.siteSetting.clockIn.enable ??
+                                    false) {
+                                  onSystemSettingsDialogue(context);
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ClockInHomeScreen()));
+                                }
+                                break;
+                              case 1:
+                                if (systemSettingsProvider.systemSettingsModel
+                                        ?.siteSetting.mySchedule.enable ??
+                                    false) {
+                                  onSystemSettingsDialogue(context);
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MyScheduleHomeScreen()));
+                                }
+                                break;
+                              case 2:
+                                if (systemSettingsProvider
+                                        .systemSettingsModel
+                                        ?.siteSetting
+                                        .shiftAvailability
+                                        .enable ??
+                                    false) {
+                                  onSystemSettingsDialogue(context);
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ShiftAvailabilityHome()));
+                                }
+                                break;
+                              case 3:
+                                if (systemSettingsProvider.systemSettingsModel
+                                        ?.siteSetting.priorClockIn.enable ??
+                                    false) {
+                                  onSystemSettingsDialogue(context);
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PriorClockInHomeScreen()));
+                                }
+                                break;
+                              case 4:
+                                if (systemSettingsProvider.systemSettingsModel
+                                        ?.siteSetting.lookingForShift.enable ??
+                                    false) {
+                                  onSystemSettingsDialogue(context);
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LookingForShiftHomeScreen()));
+                                }
+                                break;
+                            }
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                height: value ? 100.h : 90.h,
+                                width: value ? 100.w : 90.w,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15.r)),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.w, vertical: 20.h),
+                                  child: Image.asset(CardProvider()
+                                      .gridCardProviders[index]
+                                      .asset),
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              CardProvider().gridCardProviders[index].title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      fontSize: value ? 8.sp : 10.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                            ),
-                          ],
-                        ));
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                CardProvider().gridCardProviders[index].title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        fontSize: value ? 8.sp : 10.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                              ),
+                            ],
+                          )),
+                    );
                   }),
                 ),
               ),

@@ -7,31 +7,32 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/network/network_state.dart';
 
-class SystemSettingProvider extends ChangeNotifier{
+class SystemSettingProvider extends ChangeNotifier {
   final SystemSettingsRepo _settingsRepo = SystemSettingsRepo();
   SystemSettingsModel? systemSettingsModel;
+  bool isLoading = false;
 
   Future<BMSResponse<SystemSettingsModel>> getSystemSettings() async {
+    isLoading = true;
     await _settingsRepo.fetch(
       apiCallback: (networkState) {
         onApiCallback<dynamic>(
           networkState: networkState,
           onLoadedState: (loadedState) {
-            final Map<String,dynamic> map = loadedState.response?.body;
+            final Map<String, dynamic> map = loadedState.response?.body;
             systemSettingsModel =
                 systemSettingsFromJson(jsonEncode(map['response']));
           },
           onErrorState: (errorState) {
-            systemSettingsModel=null;
-
+            systemSettingsModel = null;
           },
-          onLoadingState: (loadingState) {
-          },
+          onLoadingState: (loadingState) {},
         );
       },
     );
+    isLoading = false;
+    notifyListeners();
 
     return BMSResponse(body: systemSettingsModel);
   }
-
 }
