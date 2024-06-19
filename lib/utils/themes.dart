@@ -17,4 +17,7 @@ final defaultLightTheme = ThemeData(
       fontWeight: FontWeight.w800,
     ),
   ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: Colors.white,
+  ),
 );
