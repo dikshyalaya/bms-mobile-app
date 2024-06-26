@@ -5,6 +5,7 @@ import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
+import 'package:beacon_flutter/features/dashboard/domain/incomplete_activities_provider.dart';
 import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
@@ -15,6 +16,7 @@ import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_da
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
 import 'package:beacon_flutter/features/shift_availability/domain/AvailableShiftProvider.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
+import 'package:beacon_flutter/splash_screen.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -162,6 +164,9 @@ class MyApp extends StatelessWidget {
             create: (_) => ManagePermissionProvider()..getManagerPermission()),
         ChangeNotifierProvider<SystemSettingProvider>(
             create: (_) => SystemSettingProvider()..getSystemSettings()),
+        ChangeNotifierProvider<IncompleteActivitiesProvider>(
+            create: (_) =>
+                IncompleteActivitiesProvider()..getIncompleteActivities()),
         ChangeNotifierProxyProvider<AuthProvider, LookingForShiftProvider>(
             update: (_, authProvider, clockInProvide) {
               return LookingForShiftProvider(
@@ -188,6 +193,8 @@ class MyApp extends StatelessWidget {
                 title: 'Beacon',
                 debugShowCheckedModeBanner: false,
                 theme: defaultLightTheme,
+                // home: const ImagePage(),
+                // home: const SplashScreen()
                 home: isLoggedIn
                     ? IfElseBuilder(
                         condition: authProvider.bmsUserModel?.userTypeId == 1,

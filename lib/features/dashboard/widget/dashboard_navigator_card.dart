@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 class DashBoardNavigatorCard extends StatelessWidget {
   bool isFromPopUp;
-  DashBoardNavigatorCard({Key? key, this.isFromPopUp = false})
+  Function()? onNavigate;
+  DashBoardNavigatorCard({Key? key, this.isFromPopUp = false, this.onNavigate})
       : super(key: key);
 
   @override
@@ -25,18 +26,19 @@ class DashBoardNavigatorCard extends StatelessWidget {
               Provider.of<IncompleteActivitiesProvider>(context, listen: false)
                   .incompleteActivitiesModel;
 
-          List<dynamic> navigatorCards = [
+          List<CardModel> navigatorCards = [
             if ((incompleteActivities?.data?.pendingClockIns.count ?? 0) > 0)
               CardModel(
                   title:
                       "You have ${incompleteActivities?.data?.pendingClockIns.count} Pending Clock-In(s)",
-                  bgColor: const Color(0xffFFB986)),
+                  bgColor: const Color(0xFFFF8E3E)),
             if ((incompleteActivities?.data?.pendingInvites.count ?? 0) > 0)
               CardModel(
                   title:
                       "You have  ${incompleteActivities?.data?.pendingInvites.count} Pending  Invitation(s)",
-                  bgColor: const Color(0xff51AAFD)),
+                  bgColor: const Color(0xFF2E9AFF)),
           ];
+
           return ServerResponseBuilder(
             builder: (context) => IfBuilder(
                 condition:
@@ -51,39 +53,31 @@ class DashBoardNavigatorCard extends StatelessWidget {
                     ),
                     width: MediaQuery.of(context).size.width,
                     padding:
-                        const EdgeInsetsDirectional.symmetric(vertical: 30),
+                        const EdgeInsetsDirectional.symmetric(vertical: 20),
                     decoration: BoxDecoration(
-                        color: isFromPopUp
-                            ? Colors.white
-                            : Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(12),
-                            topRight: const Radius.circular(12),
-                            bottomLeft: isFromPopUp
-                                ? const Radius.circular(12)
-                                : Radius.zero,
-                            bottomRight: isFromPopUp
-                                ? const Radius.circular(12)
-                                : Radius.zero),
-                        boxShadow: isFromPopUp
-                            ? const []
-                            : const [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(-3, -3),
-                                    blurRadius: 4),
-                              ]),
+                      color: const Color(0xFF85AEFF),
+                      borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(12),
+                          topRight: const Radius.circular(12),
+                          bottomLeft: isFromPopUp
+                              ? const Radius.circular(12)
+                              : Radius.zero,
+                          bottomRight: isFromPopUp
+                              ? const Radius.circular(12)
+                              : Radius.zero),
+                    ),
                     child: ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => BottomCard(
-                        cardProvider: cardProvider,
-                        isFromPopUp: isFromPopUp,
-                        index: index,
-                        cardModel: navigatorCards[index],
-                      ),
+                      itemBuilder: (context, index) {
+                        return BottomCard(
+                          cardProvider: cardProvider,
+                          index: index,
+                          cardModel: navigatorCards[index],
+                        );
+                      },
                       separatorBuilder: (context, index) => const SizedBox(
-                        height: 22,
+                        height: 13,
                       ),
                       itemCount: navigatorCards.length,
                     ),

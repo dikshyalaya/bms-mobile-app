@@ -7,6 +7,7 @@ import 'package:beacon_flutter/common/widgets/builder/server_response_builder.da
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
+import 'package:beacon_flutter/features/dashboard/widget/incomplete_activities_popup.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
@@ -1575,26 +1576,28 @@ class DialogueUtils {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Stack(
-                  children: [
-                    BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                      child: Container(
-                        width: DimensionUtils.isTab(context)
-                            ? _width()
-                            : MediaQuery.of(context).size.width,
-                        // padding: const EdgeInsets.symmetric(vertical: 23), // Adjust if needed
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: DashBoardNavigatorCard(
-                          isFromPopUp: true,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: const IncompleteActivitiesPopUp(),
+                // child: Stack(
+                //   children: [
+                //     BackdropFilter(
+                //       filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                //       child: Container(
+                //         width: DimensionUtils.isTab(context)
+                //             ? _width()
+                //             : MediaQuery.of(context).size.width,
+                //         // padding: const EdgeInsets.symmetric(vertical: 23), // Adjust if needed
+                //         decoration: BoxDecoration(
+                //           color: Colors.transparent,
+                //           borderRadius: BorderRadius.circular(20),
+                //         ),
+                //         child: DashBoardNavigatorCard(
+                //           onNavigate: onNavigate,
+                //           isFromPopUp: true,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ),
             ));
   }

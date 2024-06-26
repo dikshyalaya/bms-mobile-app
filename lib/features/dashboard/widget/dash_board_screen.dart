@@ -1,6 +1,7 @@
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
+import 'package:beacon_flutter/features/dashboard/domain/incomplete_activities_provider.dart';
 import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
@@ -52,12 +53,15 @@ class DashBoardScreen extends StatelessWidget {
                     top: value ? 70.h : 20.h, left: 15.w, right: 15.w),
                 child: GridView.count(
                   mainAxisSpacing: value ? 50 : 20,
-                  crossAxisSpacing: value ? 110 : 10,
+                  crossAxisSpacing: value ? 110 : 0,
                   crossAxisCount: 3,
                   children: List.generate(
                       CardProvider().gridCardProviders.length, (index) {
                     final systemSettingsProvider =
                         Provider.of<SystemSettingProvider>(context,
+                            listen: false);
+                    final incompleteActivitiesProvider =
+                        Provider.of<IncompleteActivitiesProvider>(context,
                             listen: false);
                     return InkWell(
                         onTap: () {
@@ -68,11 +72,10 @@ class DashBoardScreen extends StatelessWidget {
                                   false) {
                                 onSystemSettingsDialogue(context);
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ClockInHomeScreen()));
+                                routeNavigation(
+                                  context,
+                                  const ClockInHomeScreen(),
+                                );
                               }
                               break;
                             case 1:
@@ -81,11 +84,10 @@ class DashBoardScreen extends StatelessWidget {
                                   false) {
                                 onSystemSettingsDialogue(context);
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MyScheduleHomeScreen()));
+                                routeNavigation(
+                                  context,
+                                  const MyScheduleHomeScreen(),
+                                );
                               }
                               break;
                             case 2:
@@ -94,11 +96,10 @@ class DashBoardScreen extends StatelessWidget {
                                   false) {
                                 onSystemSettingsDialogue(context);
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ShiftAvailabilityHome()));
+                                routeNavigation(
+                                  context,
+                                  const ShiftAvailabilityHome(),
+                                );
                               }
                               break;
                             case 3:
@@ -107,24 +108,43 @@ class DashBoardScreen extends StatelessWidget {
                                   false) {
                                 onSystemSettingsDialogue(context);
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PriorClockInHomeScreen()));
+                                routeNavigation(
+                                  context,
+                                  const PriorClockInHomeScreen(),
+                                );
                               }
                               break;
                             case 4:
+                              final totalPendingActivities =
+                                  (incompleteActivitiesProvider
+                                              .incompleteActivitiesModel
+                                              ?.data
+                                              ?.pendingClockIns
+                                              .count ??
+                                          0) +
+                                      (incompleteActivitiesProvider
+                                              .incompleteActivitiesModel
+                                              ?.data
+                                              ?.pendingInvites
+                                              .count ??
+                                          0);
+
                               if (systemSettingsProvider.systemSettingsModel
                                       ?.siteSetting.lookingForShift.enable ??
                                   false) {
-                                onSystemSettingsDialogue(context);
-                              } else {
-                                Navigator.push(
+                                if (totalPendingActivities > 0) {
+                                  onSystemSettingsDialogue(context);
+                                } else {
+                                  routeNavigation(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LookingForShiftHomeScreen()));
+                                    const LookingForShiftHomeScreen(),
+                                  );
+                                }
+                              } else {
+                                routeNavigation(
+                                  context,
+                                  const LookingForShiftHomeScreen(),
+                                );
                               }
                               break;
                           }
@@ -155,9 +175,10 @@ class DashBoardScreen extends StatelessWidget {
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                      fontSize: value ? 8.sp : 10.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                    fontSize: value ? 8.sp : 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                             ),
                           ],
                         ));
@@ -166,16 +187,29 @@ class DashBoardScreen extends StatelessWidget {
               ),
               // child: DashBoardGrid(),
             ),
-            DashBoardNavigatorCard(),
+            DashBoardNavigatorCard(
+              isFromPopUp: false,
+            ),
           ],
         ),
       ),
     );
   }
 
-  void onSystemSettingsDialogue(BuildContext context) {
+  void onSystemSettingsDialogue(
+    BuildContext context,
+  ) {
     DialogueUtils.onSystemSettingsDialogue(
       context: context,
+    );
+  }
+
+  routeNavigation(BuildContext context, Widget page) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
     );
   }
 }
