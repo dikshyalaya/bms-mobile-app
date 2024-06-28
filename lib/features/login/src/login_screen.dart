@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // checkDevice();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkDevice();
+      setState(() {});
     });
   }
 
@@ -71,4 +72,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
