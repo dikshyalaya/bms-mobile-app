@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/features/auth/data/bms_user_model.dart';
@@ -14,6 +15,7 @@ import 'package:http/http.dart' as http;
 
 class AuthProvider extends ChangeNotifier {
   BmsUserModel? _bmsUserModel;
+  bool? isUserLoading;
 
   BmsUserModel? get bmsUserModel => _bmsUserModel;
   String get userFullName =>
@@ -239,22 +241,37 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<BmsUserModel> getUserDetail() async {
-    await BMSHiveModel.init();
-    final response = await BMSHiveModel.hive.get(BMSHiveModel.USER_PROFILE);
-    if (response != null) {
-      _bmsUserModel = BmsUserModel.fromJson(jsonDecode(response));
-    }
-    notifyListeners();
+    isUserLoading = true;
+    try {
+      await BMSHiveModel.init();
+      final response = await BMSHiveModel.hive.get(BMSHiveModel.USER_PROFILE);
+      if (response != null) {
+        _bmsUserModel = BmsUserModel.fromJson(jsonDecode(response));
+      }
+      notifyListeners();
 
-    return _bmsUserModel ??
-        BmsUserModel(
-            email: "",
-            empLastName: "",
-            empFirstName: "",
-            empId: 0,
-            userTypeId: 0,
-            isActive: false,
-            isPasswordUpdateRequired: false);
+      return _bmsUserModel ??
+          BmsUserModel(
+              email: "",
+              empLastName: "",
+              empFirstName: "",
+              empId: 0,
+              userTypeId: 0,
+              isActive: false,
+              isPasswordUpdateRequired: false);
+    } catch (e) {
+      return BmsUserModel(
+          email: "",
+          empLastName: "",
+          empFirstName: "",
+          empId: 0,
+          userTypeId: 0,
+          isActive: false,
+          isPasswordUpdateRequired: false);
+      log("Error in getting user detail: $e");
+    } finally {
+      isUserLoading = false;
+    }
   }
 
   void logOut() async {

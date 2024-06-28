@@ -194,26 +194,38 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 theme: defaultLightTheme,
                 // home: const ImagePage(),
-                // home: const SplashScreen()
-                home: isLoggedIn
-                    ? IfElseBuilder(
-                        condition: authProvider.bmsUserModel?.userTypeId == 1,
-                        ifBuilder: (context) => const DashBoardScreen(),
-                        elseBulider: (context) {
-                          return IfElseBuilder(
-                              condition:
-                                  authProvider.bmsUserModel?.userTypeId == 4,
-                              ifBuilder: (context) =>
-                                  const ManagerDashBoardScreen(),
-                              elseBulider: (context) {
-                                return EmptyDashBoard(
-                                  key: key,
-                                );
-                              });
-                        })
-                    : LoginScreen(
-                        key: key,
-                      ),
+                home: Consumer<AuthProvider>(
+                    builder: (context, authProvider, child) {
+                  return isLoggedIn
+                      ? authProvider.isUserLoading == true
+                          ? const CircularProgressIndicator()
+                          : authProvider.bmsUserModel?.userTypeId == 1
+                              ? const DashBoardScreen()
+                              : authProvider.bmsUserModel?.userTypeId == 4
+                                  ? const ManagerDashBoardScreen()
+                                  : const EmptyDashBoard()
+                      : const LoginScreen();
+                }),
+                // home: isLoggedIn? const DashBoardScreen() : LoginScreen(),
+                // ? IfElseBuilder(
+                //     condition: authProvider.bmsUserModel?.userTypeId == 1,
+                //     ifBuilder: (context) => const DashBoardScreen(),
+                //     elseBulider: (context) {
+                //       return IfElseBuilder(
+                //           condition:
+                //               authProvider.bmsUserModel?.userTypeId == 4,
+                //           ifBuilder: (context) =>
+                //               const ManagerDashBoardScreen(),
+                //           elseBulider: (context) {
+                //             // return const CircularProgressIndicator();
+                //             return EmptyDashBoard(
+                //               key: key,
+                //             );
+                //           });
+                //     })
+                // : LoginScreen(
+                //     key: key,
+                //   ),
               );
             });
       }),
