@@ -108,9 +108,10 @@ class ErrorInterceptor extends Interceptor {
   Future<void> onError(
       DioException err, ErrorInterceptorHandler handler) async {
     // debugPrintStack(label: err.response.toString(), maxFrames: 50);
-    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    final List<ConnectivityResult> result =
+        await Connectivity().checkConnectivity();
 
-    if (result == ConnectivityResult.none) {
+    if (result.contains(ConnectivityResult.none)) {
       return handler.next(NoInternetConnectionException(err.requestOptions));
     }
 
