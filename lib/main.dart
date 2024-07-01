@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
@@ -29,6 +30,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 Future<bool> handleLocationPermission(String errorMessage) async {
   bool serviceEnabled;
@@ -73,7 +75,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       message,
       isAppInBackground: true);
 
-  log("Handling a background message: ${message.messageId}");
+  print("Handling a background message: ${message.messageId}");
+  // Call your API
+  await callYourApi(message.data);
 }
 
 void listenFCMForeground() async {
@@ -93,8 +97,28 @@ void listenFCMForeground() async {
               importance: Importance.max),
         ),
       );
+      // Call your API
+      callYourApi(message.data);
     }
   });
+}
+
+Future<void> callYourApi(Map<String, dynamic> data) async {
+  // Implement your API call logic here
+  // Example:
+   var random = Random();
+
+  // Generate a random integer between 0 and 99 (inclusive)
+  int randomNumber = random.nextInt(100);
+  final response = await http.get(
+    Uri.parse(
+        'https://api-beacon.dikshyalaya.com/api/RTPushNotification/NotificationDeliveryCheck/$randomNumber'),
+  );
+  if (response.statusCode == 200) {
+    print('API call successful');
+  } else {
+    print('API call failed with status: ${response.statusCode}');
+  }
 }
 
 void main() async {
@@ -134,8 +158,10 @@ void main() async {
       sound: true,
     );
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      log('A new onMessageOpenedApp event was published!');
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print('A new onMessageOpenedApp event was published!');
+      // Call your API
+      await callYourApi(message.data);
     });
 
     // Register the foreground handler

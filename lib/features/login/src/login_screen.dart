@@ -16,13 +16,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late bool isTabletDevice; // Initialize with a default value
+  late bool isTabletDevice = false; // Initialize with a default value
   @override
   void initState() {
     super.initState();
     // checkDevice();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkDevice();
+      setState(() {
+        
+      });
     });
   }
 
