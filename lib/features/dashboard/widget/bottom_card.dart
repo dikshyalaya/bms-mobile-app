@@ -46,7 +46,7 @@ class BottomCard extends StatelessWidget {
                       shadows: [
                         const Shadow(
                             color: Colors.black,
-                            offset: const Offset(0, 1),
+                            offset:  Offset(0, 1),
                             blurRadius: 7)
                       ],
                     ),

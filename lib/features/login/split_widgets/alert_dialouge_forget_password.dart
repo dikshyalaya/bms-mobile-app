@@ -14,7 +14,7 @@ class PasswordResetDialog extends StatefulWidget {
   const PasswordResetDialog({Key? key}) : super(key: key);
 
   @override
-  _PasswordResetDialogState createState() => _PasswordResetDialogState();
+  State<PasswordResetDialog> createState() => _PasswordResetDialogState();
 }
 
 class _PasswordResetDialogState extends State<PasswordResetDialog> {

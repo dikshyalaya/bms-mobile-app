@@ -3,7 +3,6 @@ import 'package:beacon_flutter/features/login/split_widgets/custom_login_button.
 import 'package:beacon_flutter/features/login/split_widgets/forget_password_text_widget.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginFormWidget extends StatelessWidget {

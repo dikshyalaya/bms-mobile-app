@@ -1,11 +1,11 @@
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
-import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
-import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
+import 'package:beacon_flutter/features/my_schedule/data/available_shift_for_dc_model.dart';
+import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_provider.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_card.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 
-import 'package:beacon_flutter/features/my_schedule/widget/My_schedule_header_card.dart';
+import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_header_card.dart';
 import 'package:provider/provider.dart';
 
 class MySchedulecard extends StatelessWidget {

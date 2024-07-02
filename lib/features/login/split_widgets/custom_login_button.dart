@@ -53,6 +53,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
       var fcm = await generateFCMToken();
       DateTime startTime = DateTime.now();
       await authProvider.login(
+        // ignore: use_build_context_synchronously
         context,
         widget.userName.text,
         widget.password.text,
@@ -146,7 +147,7 @@ class _CustomLoginButtonState extends State<CustomLoginButton> {
       //   },
       // );
     } catch (e) {
-      print("Error occurred: $e");
+      log("Error occurred: $e");
       setState(() {
         _isLoading = false;
       });

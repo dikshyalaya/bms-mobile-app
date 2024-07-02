@@ -1,22 +1,23 @@
-import 'dart:ui';
-
 import 'package:beacon_flutter/common/extension/extension.dart';
+import 'package:beacon_flutter/common/urls.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/custom_elevated_button.dart';
+import 'package:beacon_flutter/common/widgets/custom_network_image.dart';
 import 'package:beacon_flutter/common/widgets/progress_dialogue.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
+import 'package:beacon_flutter/features/dashboard/domain/user_profile_provider.dart';
 import 'package:beacon_flutter/features/dashboard/widget/incomplete_activities_popup.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/bms_drop_down.dart';
-import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_card.dart';
 import 'package:beacon_flutter/features/looking_for_shift/data/schedule_period_response_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
-import 'package:beacon_flutter/features/my_schedule/domain/MyScheduleProvider.dart';
+import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_provider.dart';
 import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
+import 'package:beacon_flutter/service/file_picker_service.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
@@ -306,8 +307,12 @@ class DialogueUtils {
   }
 
   static Future<void> onProfileIconClickDialogue(
-      {required BuildContext context, required String userName}) async {
+      {required BuildContext context,
+      required String userName,
+      required String accessToken}) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<UserProfileProvider>(context, listen: false);
     return await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -326,10 +331,85 @@ class DialogueUtils {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset(
-                      "profile".pngImage(),
-                      height: 86,
-                      width: 86,
+                    Stack(
+                      children: [
+                        CustomNetworkImage(
+                          imageUrl:
+                              "${baseUrl}user/GetProfilePhoto/${authProvider.bmsUserModel?.userId}?${DateTime.now().millisecondsSinceEpoch}",
+                          accessToken: accessToken,
+                          errorWidget: Image.asset(
+                            "profile".pngImage(),
+                          ),
+                          height: 86,
+                          width: 86,
+                        ),
+                        // Image.asset(
+                        //   "profile".pngImage(),
+                        //   height: 86,
+                        //   width: 86,
+                        // ),
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              imagePickerDialogue(
+                                context: context,
+                                onCameraClick: () async {
+                                  await FilePickerService.captureImage()
+                                      .then((value) async {
+                                    if (value != null) {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const ProgressDialog(
+                                              message: 'Updating',
+                                            );
+                                          });
+                                      await profileProvider
+                                          .updateProfilePic(value);
+                                      Navigator.pop(context);
+                                    }
+                                  });
+                                },
+                                onGalleryClick: () async {
+                                  await FilePickerService.pickImage()
+                                      .then((value) async {
+                                    if (value != null) {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const ProgressDialog(
+                                              message: 'Updating',
+                                            );
+                                          });
+                                      await profileProvider
+                                          .updateProfilePic(value);
+                                      Navigator.pop(context);
+                                    }
+                                  });
+                                },
+                              );
+                              // FilePickerService().pickImage();
+                              // .then((value) {
+                              //   if (value != null) {
+                              //     ProgressDialogue.showProgressDialogue(
+                              //         context: context);
+                              //     authProvider.uploadProfileImage(value).then(
+                              //         (value) => ProgressDialogue.hideProgressDialogue(
+                              //             context: context));
+                              //   }
+                              // });
+                            },
+                            child: Container(
+                              color: Colors.white,
+                              child: const Icon(Icons.add_a_photo),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
@@ -993,6 +1073,77 @@ class DialogueUtils {
   //     ),
   //   );
   // }
+
+  //Image picker Camera or Photo Dialogue
+  static Future<void> imagePickerDialogue(
+      {required BuildContext context,
+      required VoidCallback onCameraClick,
+      required VoidCallback onGalleryClick}) async {
+    return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              backgroundColor: Colors.white,
+              content: Container(
+                height: 150,
+                width: DimensionUtils.isTab(context)
+                    ? _width()
+                    : MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        onCameraClick.call();
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(Icons.camera_alt),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Camera",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        onGalleryClick.call();
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(Icons.photo),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Gallery",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+  }
 
   ///Manager Approval Filter Dialogue
   static Future<void> managerApprovalFilterDialogue(

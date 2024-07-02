@@ -3,7 +3,7 @@ import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
 import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/clock_in_home/widget/clock_in_home_screen.dart';
-import 'package:beacon_flutter/features/shift_availability/domain/AvailableShiftProvider.dart';
+import 'package:beacon_flutter/features/shift_availability/domain/available_shift_provider.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/shift_availabilty_card.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/toggle_bar.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';

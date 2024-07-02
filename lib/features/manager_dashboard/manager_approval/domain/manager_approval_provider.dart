@@ -8,7 +8,6 @@ import 'package:beacon_flutter/features/manager_dashboard/manager_approval/data/
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/account_houses_repo.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/shift_for_approval_repo.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ManagerApprovalProvider extends ChangeNotifier {

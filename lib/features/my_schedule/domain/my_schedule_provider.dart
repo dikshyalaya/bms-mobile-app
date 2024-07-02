@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
 import 'package:beacon_flutter/features/login/src/login_screen.dart';
-import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/available_shift_for_dc_model.dart';
 import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_repo.dart';
 import 'package:flutter/cupertino.dart';

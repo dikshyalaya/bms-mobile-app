@@ -1,4 +1,4 @@
-import 'package:beacon_flutter/features/my_schedule/data/AvailableShiftsForDCModel.dart';
+import 'package:beacon_flutter/features/my_schedule/data/available_shift_for_dc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

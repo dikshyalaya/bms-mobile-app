@@ -25,6 +25,8 @@ const getHouseWorkedInLastThreeWeeks =
 const myScheduleList = "ShiftManagement/GetMySchedules";
 const sendOtpByEmail = "Account/RequestResetPassword";
 const resetPassword = "Account/SetPasswordWithOTP";
+const userProfilePic = "user/UpdateProfilePic";
+const userProfile = "user/MyProfile";
 
 //Manager Dashboard Urls
 const accountHouses = "Manager/ShiftManagement/LoadAccounts";

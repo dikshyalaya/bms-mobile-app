@@ -10,6 +10,7 @@ BmsUserModel bmsUserModelFromJson(String str) =>
 String bmsUserModelToJson(BmsUserModel data) => json.encode(data.toJson());
 
 class BmsUserModel {
+  int userId;
   String email;
   String empLastName;
   String empFirstName;
@@ -19,6 +20,7 @@ class BmsUserModel {
   bool isPasswordUpdateRequired;
 
   BmsUserModel({
+    required this.userId,
     required this.email,
     required this.empLastName,
     required this.empFirstName,
@@ -29,6 +31,7 @@ class BmsUserModel {
   });
 
   factory BmsUserModel.fromJson(Map<String, dynamic> json) => BmsUserModel(
+        userId: json["userId"],
         email: json["email"],
         empLastName: json["empLastName"],
         empFirstName: json["empFirstName"],
@@ -39,6 +42,7 @@ class BmsUserModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "userId": userId,
         "email": email,
         "empLastName": empLastName,
         "empFirstName": empFirstName,

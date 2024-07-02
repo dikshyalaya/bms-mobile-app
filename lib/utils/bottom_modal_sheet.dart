@@ -24,6 +24,7 @@ class BottomModalSheetUtils {
 
     if (val == "save") {
       await DialogueUtils.successMessageDialogue(
+          // ignore: use_build_context_synchronously
           context: context, successMessage: "Clock-In Saved Successfully.");
     }
   }

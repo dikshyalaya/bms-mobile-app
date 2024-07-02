@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:beacon_flutter/common/extension/extension.dart';
+import 'package:beacon_flutter/common/local_db/hive_model.dart';
+import 'package:beacon_flutter/common/urls.dart';
 import 'package:beacon_flutter/common/widgets/builder/ifbuilder.dart';
+import 'package:beacon_flutter/common/widgets/custom_network_image.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,7 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    final accessToken = BMSHiveModel.hive.get(BMSHiveModel.ACCESS_TOKEN);
     return PreferredSize(
       preferredSize: Size(MediaQuery.of(context).size.width, 5),
       child: AppBar(
@@ -37,7 +41,7 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         centerTitle: true,
         title: InkWell(
-          onTap: (){
+          onTap: () {
             log("Is Tite");
           },
           child: Align(
@@ -74,20 +78,24 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget {
                 end: 17, top: leadingIcon != null ? 0 : 17),
             child: GestureDetector(
               onTap: () async {
-                //  final changePassword=
                 await DialogueUtils.onProfileIconClickDialogue(
-                    context: context,
-                    userName:
-                        "${auth.bmsUserModel?.empFirstName} ${auth.bmsUserModel?.empLastName}");
+                  context: context,
+                  userName:
+                      "${auth.bmsUserModel?.empFirstName} ${auth.bmsUserModel?.empLastName}",
+                  accessToken: accessToken,
+                );
 
-                         log("is pressed");
-                // launchUrl(Uri.parse(
-                //     'sms:9846776715${Platform.isAndroid ? '?' : '&'}body=Message from Me'));
+                log("is pressed");
               },
-              child: Image.asset(
-                "profile".pngImage(),
-                height: 34,
-                width: 34,
+              child: CustomNetworkImage(
+                imageUrl:
+                    "${baseUrl}user/GetProfilePhoto/${auth.bmsUserModel?.userId}?${DateTime.now().millisecondsSinceEpoch}",
+                accessToken: accessToken,
+                errorWidget: Image.asset(
+                  "profile".pngImage(),
+                  height: 34,
+                  width: 34,
+                ),
               ),
             ),
           )

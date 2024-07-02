@@ -105,6 +105,7 @@ class AuthProvider extends ChangeNotifier {
       final data = json.decode(response.body);
       if (data['success'] == true) {
         final accessToken = data["accessToken"];
+        final userId = data['data']['userId'];
         final email = data['data']['email'];
         final isActive = data['data']['isActive'];
         final userTypeId = data['data']['userTypeId'];
@@ -116,6 +117,7 @@ class AuthProvider extends ChangeNotifier {
         savedLoginInfo(
           accessToken,
           BmsUserModel(
+            userId: userId,
             email: email,
             isActive: isActive,
             userTypeId: userTypeId,
@@ -252,6 +254,7 @@ class AuthProvider extends ChangeNotifier {
 
       return _bmsUserModel ??
           BmsUserModel(
+              userId: 0,
               email: "",
               empLastName: "",
               empFirstName: "",
@@ -260,7 +263,9 @@ class AuthProvider extends ChangeNotifier {
               isActive: false,
               isPasswordUpdateRequired: false);
     } catch (e) {
+      log("Error in getting user detail: $e");
       return BmsUserModel(
+          userId: 0,
           email: "",
           empLastName: "",
           empFirstName: "",
@@ -268,7 +273,6 @@ class AuthProvider extends ChangeNotifier {
           userTypeId: 0,
           isActive: false,
           isPasswordUpdateRequired: false);
-      log("Error in getting user detail: $e");
     } finally {
       isUserLoading = false;
     }
