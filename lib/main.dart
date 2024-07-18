@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';

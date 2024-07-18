@@ -59,7 +59,7 @@ dependencies:
   image_picker: ^1.1.2
   cached_network_image: ^3.3.1
   pull_to_refresh: ^2.0.0
-  # flutter_native_splash: ^2.4.0
+  flutter_native_splash: ^2.4.0
 #  flutter_launcher_icons: ^0.13.1
 
 # flutter_native_splash:
@@ -67,6 +67,24 @@ dependencies:
 #   image: assets/images/launch.png
 #   android: true
   # ios: true
+
+flutter_native_splash:
+  color: "#003792"
+  image: assets/images/launch.png
+  # branding: assets/branding-development.png
+  # color_dark: "#121212"
+  # image_dark: assets/logo-development.png
+  # branding_dark: assets/branding-development.png
+
+  android_12:
+    image: assets/images/launch.png
+    # icon_background_color: "#ffffff"
+    # image_dark: assets/logo-development.png
+    # icon_background_color_dark: "#121212"
+  android: true
+  ios: false
+  web: false
+
 
 
 #flutter_launcher_icons:
