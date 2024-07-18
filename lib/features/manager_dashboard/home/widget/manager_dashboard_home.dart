@@ -3,6 +3,7 @@ import 'package:beacon_flutter/common/widgets/scaffold_background_wrapper.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_grid.dart';
+import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,18 @@ class _ManagerDashBoardScreenState extends State<ManagerDashBoardScreen> {
       appBar: BeaconAppBar(
         title:
             "${authProvider.bmsUserModel?.empFirstName} ${authProvider.bmsUserModel?.empLastName}",
+        action: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const NotificationPage()));
+            },
+            child: const Icon(
+              Icons.notifications,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,

@@ -7,10 +7,12 @@ import 'package:beacon_flutter/features/dashboard/widget/dashboard_navigator_car
 import 'package:beacon_flutter/features/get_device_size/get_device_size.dart';
 import 'package:beacon_flutter/features/looking_for_shift/widget/looking_for_shift_home_screen.dart';
 import 'package:beacon_flutter/features/my_schedule/widget/my_schedule_home.dart';
+import 'package:beacon_flutter/features/notifications/widget/notification_page.dart';
 import 'package:beacon_flutter/features/prior_clock_in/widget/prior_clock_home_screen.dart';
 import 'package:beacon_flutter/features/shift_availability/widget/shift_availavility_home.dart';
 import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +32,18 @@ class DashBoardScreen extends StatelessWidget {
             builder: (context, bmsUserModel, child) => BeaconAppBar(
               title:
                   "${bmsUserModel?.empFirstName} ${bmsUserModel?.empLastName}",
+              action: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const NotificationPage()));
+                  },
+                  child: const Icon(
+                    Icons.notifications,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           )),
       // backgroundColor: const Color.fromARGB(0, 232, 10, 10),
