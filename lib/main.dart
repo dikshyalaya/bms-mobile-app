@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
 import 'package:beacon_flutter/empty_dash_board.dart';
@@ -28,6 +29,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 Future<bool> handleLocationPermission(String errorMessage) async {
   bool serviceEnabled;
@@ -72,11 +74,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       message,
       isAppInBackground: true);
 
-  log("Handling a background message: ${message.messageId}");
+  print("Handling a background message: ${message.messageId}");
+  await callYourApi(message.data);
 }
 
 void listenFCMForeground() async {
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
@@ -92,8 +95,22 @@ void listenFCMForeground() async {
               importance: Importance.max),
         ),
       );
+      await callYourApi(message.data);
     }
   });
+}
+
+Future<void> callYourApi(Map<String, dynamic> data) async {
+  // Implement your API call logic here
+  final response = await http.get(
+    Uri.parse(
+        'https://api-beacon.dikshyalaya.com/api/RTPushNotification/UpdatePushNotificationStatus/${data["Id"]}'),
+  );
+  if (response.statusCode == 200) {
+    print('API call successful');
+  } else {
+    print('API call failed with status: ${response.statusCode}');
+  }
 }
 
 void main() async {
@@ -133,8 +150,9 @@ void main() async {
       sound: true,
     );
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      log('A new onMessageOpenedApp event was published!');
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print('A new onMessageOpenedApp event was published!');
+      await callYourApi(message.data);
     });
 
     // Register the foreground handler
