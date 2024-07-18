@@ -11,23 +11,23 @@ class NotificationProvider extends ChangeNotifier {
   NotificationProvider();
 
   bool isNotificationFetching = false;
+  bool isLoadingMore = false;
+  int? page = 1;
 
   NotificationsModel? _notificationsModel;
 
   NotificationsModel? get notificationsModel => _notificationsModel;
-
-  set setNotificationModels(NotificationsModel? value) {
-    _notificationsModel = value;
-  }
 
   void setLoading(bool val) {
     isNotificationFetching = val;
     futureNotifyListeners();
   }
 
-  Future<BMSResponse<NotificationsModel>> getNotifications() async {
-    final NotificationsRepo notificationsRepo = NotificationsRepo(1);
-    setLoading(true);
+  Future<BMSResponse<NotificationsModel>> getNotifications(
+      {bool isLoadMore = false}) async {
+    final NotificationsRepo notificationsRepo = NotificationsRepo(page ?? 1);
+    isLoadMore ? isLoadingMore = true : setLoading(true);
+    notifyListeners();
     await notificationsRepo.fetch(
         params: {},
         apiCallback: (networkState) {
@@ -38,8 +38,14 @@ class NotificationProvider extends ChangeNotifier {
               onFutureNotifyListeners(() {
                 final Map<String, dynamic> map = loadedState.response?.body;
                 log("Notifications: $map");
-                setNotificationModels =
+                final notificationsData =
                     notificationsModelFromJson(jsonEncode(map['response']));
+                page = notificationsData.nextPage;
+                isLoadMore
+                    ? _notificationsModel?.data
+                        ?.addAll(notificationsData.data ?? [])
+                    : _notificationsModel = notificationsData;
+                // _notificationsModel =  notificationsData;
               });
             },
             onErrorState: (errorState) {
@@ -51,7 +57,7 @@ class NotificationProvider extends ChangeNotifier {
             onLoadingState: (loadingState) {},
           );
         });
-    setLoading(false);
+    isLoadMore ? isLoadingMore = false : setLoading(false);
     return BMSResponse(body: notificationsModel);
   }
 }

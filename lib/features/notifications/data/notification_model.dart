@@ -57,6 +57,7 @@ class NotificationsModel {
 
 class Datum {
   int? id;
+  String? type;
   int? senderId;
   int? receipentId;
   String? title;
@@ -68,6 +69,7 @@ class Datum {
 
   Datum({
     this.id,
+    this.type,
     this.senderId,
     this.receipentId,
     this.title,
@@ -80,6 +82,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
+        type: json["type"],
         senderId: json["senderId"],
         receipentId: json["receipentId"],
         title: json["title"],
@@ -94,6 +97,7 @@ class Datum {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "type": type,
         "senderId": senderId,
         "receipentId": receipentId,
         "title": title,

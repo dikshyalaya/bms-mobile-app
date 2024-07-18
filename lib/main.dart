@@ -11,6 +11,7 @@ import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shi
 import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
+import 'package:beacon_flutter/features/notifications/domain/notification_provider.dart';
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
 import 'package:beacon_flutter/features/shift_availability/domain/available_shift_provider.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
@@ -196,6 +197,8 @@ class MyApp extends StatelessWidget {
             create: (_) => AvailableShiftProvider(0)),
         ChangeNotifierProvider<UserProfileProvider>(
             create: (_) => UserProfileProvider()),
+        ChangeNotifierProvider<NotificationProvider>(
+            create: (_) => NotificationProvider()),
       ],
       child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {

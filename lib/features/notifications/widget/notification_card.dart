@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:beacon_flutter/features/notifications/data/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -58,33 +60,63 @@ class NotificationCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                customButton(
-                  name: "Accept",
-                  color: const Color(0xFF00872E),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 6),
-                customButton(
-                  name: "Reject",
-                  color: const Color(0xFFD90C0C),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
+        (notification.type ?? '').toLowerCase().contains('invitation')
+            ? confirmButtons(
+                buttonOneName: 'Accept',
+                buttonOneColor: Colors.green,
+                buttonOneOnPressed: () {
+                  log("Accept Invitation");
+                },
+                buttonTwoName: 'Decline',
+                buttonTwoColor: Colors.red,
+                buttonTwoOnPressed: () {},
+              )
+            : (notification.type ?? '').toLowerCase().contains('confirmation')
+                ? confirmButtons(
+                    buttonOneName: 'Yes',
+                    buttonOneColor: Colors.green,
+                    buttonOneOnPressed: () {},
+                    buttonTwoName: 'No',
+                    buttonTwoColor: Colors.red,
+                    buttonTwoOnPressed: () {},
+                  )
+                : const SizedBox(),
         const Padding(
           padding: EdgeInsets.only(bottom: 0.0),
           child: Divider(),
         ),
       ],
+    );
+  }
+
+  confirmButtons(
+      {String? buttonOneName,
+      Function()? buttonOneOnPressed,
+      Color? buttonOneColor,
+      String? buttonTwoName,
+      Function()? buttonTwoOnPressed,
+      Color? buttonTwoColor}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            customButton(
+              name: buttonOneName,
+              color: buttonOneColor,
+              onPressed: buttonOneOnPressed,
+            ),
+            const SizedBox(width: 6),
+            customButton(
+              name: buttonTwoName,
+              color: buttonTwoColor,
+              onPressed: buttonTwoOnPressed,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
