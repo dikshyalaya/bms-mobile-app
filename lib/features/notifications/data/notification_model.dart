@@ -13,7 +13,7 @@ String notificationsModelToJson(NotificationsModel data) =>
 class NotificationsModel {
   bool? success;
   String? message;
-  List<Datum>? data;
+  List<NotificationData>? data;
   int? currentPage;
   int? nextPage;
   dynamic previouPage;
@@ -35,7 +35,7 @@ class NotificationsModel {
         message: json["message"],
         data: json["data"] == null
             ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+            : List<NotificationData>.from(json["data"]!.map((x) => NotificationData.fromJson(x))),
         currentPage: json["currentPage"],
         nextPage: json["nextPage"],
         previouPage: json["previouPage"],
@@ -55,7 +55,7 @@ class NotificationsModel {
       };
 }
 
-class Datum {
+class NotificationData {
   int? id;
   int? senderId;
   int? receipentId;
@@ -66,7 +66,7 @@ class Datum {
   DateTime? createdDate;
   dynamic seenDate;
 
-  Datum({
+  NotificationData({
     this.id,
     this.senderId,
     this.receipentId,
@@ -78,7 +78,7 @@ class Datum {
     this.seenDate,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory NotificationData.fromJson(Map<String, dynamic> json) => NotificationData(
         id: json["id"],
         senderId: json["senderId"],
         receipentId: json["receipentId"],
