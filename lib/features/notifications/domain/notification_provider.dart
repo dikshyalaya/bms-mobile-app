@@ -25,6 +25,9 @@ class NotificationProvider extends ChangeNotifier {
 
   Future<BMSResponse<NotificationsModel>> getNotifications(
       {bool isLoadMore = false}) async {
+    if (isLoadMore == false) {
+      page = 1;
+    }
     final NotificationsRepo notificationsRepo = NotificationsRepo(page ?? 1);
     isLoadMore ? isLoadingMore = true : setLoading(true);
     notifyListeners();
@@ -59,5 +62,29 @@ class NotificationProvider extends ChangeNotifier {
         });
     isLoadMore ? isLoadingMore = false : setLoading(false);
     return BMSResponse(body: notificationsModel);
+  }
+
+  Future<void> markAsRead(int id) async {
+    final NotificationMarkAsSeenRepo notificationMarkAsSeenRepo =
+        NotificationMarkAsSeenRepo(id);
+    await notificationMarkAsSeenRepo.fetch(
+        params: {},
+        apiCallback: (networkState) {
+          onApiCallback<dynamic>(
+            networkState: networkState,
+            // networkState: networkState,
+            onLoadedState: (loadedState) {
+              onFutureNotifyListeners(() {
+                _notificationsModel?.data
+                    ?.where((element) => element.id == id)
+                    .first
+                    .status = 0;
+                notifyListeners();
+              });
+            },
+            onErrorState: (errorState) {},
+            onLoadingState: (loadingState) {},
+          );
+        });
   }
 }

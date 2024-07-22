@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomNetworkImage extends StatelessWidget {
@@ -19,28 +20,35 @@ class CustomNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 34,
-      width: width ?? 34,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-      ),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Image.network(
-        imageUrl ?? '',
-        // headers: {"Authorization": "Bearer $accessToken"},
-        fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) {
-            return child;
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        errorBuilder: (context, error, stackTrace) {
-          return errorWidget ?? const Icon(Icons.error);
-        },
-      ),
-    );
+        height: height ?? 34,
+        width: width ?? 34,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: CachedNetworkImage(
+          imageUrl: imageUrl ?? '',
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const CircularProgressIndicator(),
+          errorWidget: (context, url, error) =>
+              errorWidget ?? const Icon(Icons.error),
+        )
+        // child: Image.network(
+        //   imageUrl ?? '',
+        //   // headers: {"Authorization": "Bearer $accessToken"},
+        //   fit: BoxFit.cover,
+        //   loadingBuilder: (context, child, loadingProgress) {
+        //     if (loadingProgress == null) {
+        //       return child;
+        //     }
+        //     return const Center(
+        //       child: CircularProgressIndicator(),
+        //     );
+        //   },
+        //   errorBuilder: (context, error, stackTrace) {
+        //     return errorWidget ?? const Icon(Icons.error);
+        //   },
+        // ),
+        );
   }
 }

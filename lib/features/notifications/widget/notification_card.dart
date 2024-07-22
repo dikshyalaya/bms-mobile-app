@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:beacon_flutter/features/notifications/data/notification_model.dart';
+import 'package:beacon_flutter/features/notifications/domain/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class NotificationCard extends StatelessWidget {
   final Datum notification;
@@ -13,79 +15,85 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-          child: Text(
-            "${DateFormat('dd/MM/yyyy').format(notification.createdDate ?? DateTime.now())} - ${DateFormat('hh:mm a').format(notification.createdDate ?? DateTime.now())}",
-            style: const TextStyle(
-              color: Color(0xFF00872E),
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
+    return InkWell(
+      onTap: () {
+        Provider.of<NotificationProvider>(context, listen: false)
+            .markAsRead(notification.id ?? 0);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: Text(
+              "${DateFormat('dd/MM/yyyy').format(notification.createdDate ?? DateTime.now())} - ${DateFormat('hh:mm a').format(notification.createdDate ?? DateTime.now())}",
+              style: const TextStyle(
+                color: Color(0xFF00872E),
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 2),
-          child: Text(
-            "${notification.title}",
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 2),
+            child: Text(
+              "${notification.title} ${notification.status}",
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          width: double.infinity,
-          decoration: const BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              border: Border(
-                bottom: BorderSide(
-                  color: Color(0xFFE8E8E8),
-                  width: 1,
-                ),
-                top: BorderSide(
-                  color: Color(0xFFE8E8E8),
-                  width: 1,
-                ),
-              )),
-          child: Text(
-            "${notification.body}",
-            style: const TextStyle(
-              fontSize: 10,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+                color: Color(0xFFF8F8F8),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE8E8E8),
+                    width: 1,
+                  ),
+                  top: BorderSide(
+                    color: Color(0xFFE8E8E8),
+                    width: 1,
+                  ),
+                )),
+            child: Text(
+              "${notification.body}",
+              style: const TextStyle(
+                fontSize: 10,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 8),
-        (notification.type ?? '').toLowerCase().contains('invitation')
-            ? confirmButtons(
-                buttonOneName: 'Accept',
-                buttonOneColor: Colors.green,
-                buttonOneOnPressed: () {
-                  log("Accept Invitation");
-                },
-                buttonTwoName: 'Decline',
-                buttonTwoColor: Colors.red,
-                buttonTwoOnPressed: () {},
-              )
-            : (notification.type ?? '').toLowerCase().contains('confirmation')
-                ? confirmButtons(
-                    buttonOneName: 'Yes',
-                    buttonOneColor: Colors.green,
-                    buttonOneOnPressed: () {},
-                    buttonTwoName: 'No',
-                    buttonTwoColor: Colors.red,
-                    buttonTwoOnPressed: () {},
-                  )
-                : const SizedBox(),
-        const Padding(
-          padding: EdgeInsets.only(bottom: 0.0),
-          child: Divider(),
-        ),
-      ],
+          const SizedBox(height: 8),
+          (notification.type ?? '').toLowerCase().contains('invitation')
+              ? confirmButtons(
+                  buttonOneName: 'Accept',
+                  buttonOneColor: Colors.green,
+                  buttonOneOnPressed: () {
+                    log("Accept Invitation");
+                  },
+                  buttonTwoName: 'Decline',
+                  buttonTwoColor: Colors.red,
+                  buttonTwoOnPressed: () {},
+                )
+              : (notification.type ?? '').toLowerCase().contains('confirmation')
+                  ? confirmButtons(
+                      buttonOneName: 'Yes',
+                      buttonOneColor: Colors.green,
+                      buttonOneOnPressed: () {},
+                      buttonTwoName: 'No',
+                      buttonTwoColor: Colors.red,
+                      buttonTwoOnPressed: () {},
+                    )
+                  : const SizedBox(),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 0.0),
+            child: Divider(),
+          ),
+        ],
+      ),
     );
   }
 

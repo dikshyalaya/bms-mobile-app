@@ -21,7 +21,9 @@ class _NotificationPageState extends State<NotificationPage> {
   void initState() {
     final notifications =
         Provider.of<NotificationProvider>(context, listen: false);
-    notifications.getNotifications();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      notifications.getNotifications();
+    });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -74,42 +76,47 @@ class _NotificationPageState extends State<NotificationPage> {
                           color: Colors.white),
                     ),
                   )
-                : Column(
-                    children: [
-                      Expanded(
-                        child: Card(
-                          margin: bodyOnlyPadding(context),
-                          color: Colors.white,
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            itemCount: (notificationProvider
-                                        .notificationsModel?.data ??
-                                    [])
-                                .length,
-                            itemBuilder: (context, index) {
-                              final currentNotification = notificationProvider
-                                  .notificationsModel?.data?[index];
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 0),
-                                child: NotificationCard(
-                                  notification: currentNotification!,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: notificationProvider.isLoadingMore,
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(
+                : RefreshIndicator(
+                    onRefresh: () {
+                      return notificationProvider.getNotifications();
+                    },
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Card(
+                            margin: bodyOnlyPadding(context),
                             color: Colors.white,
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              itemCount: (notificationProvider
+                                          .notificationsModel?.data ??
+                                      [])
+                                  .length,
+                              itemBuilder: (context, index) {
+                                final currentNotification = notificationProvider
+                                    .notificationsModel?.data?[index];
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  child: NotificationCard(
+                                    notification: currentNotification!,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        Visibility(
+                          visible: notificationProvider.isLoadingMore,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
       ),
     );

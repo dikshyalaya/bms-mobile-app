@@ -683,6 +683,7 @@ class DialogueUtils {
 
     return await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
@@ -730,45 +731,45 @@ class DialogueUtils {
                               horizontal: 16),
                           child: Column(
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Was this shift given to you by manager?",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                        color: Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  IfElseBuilder(
-                                      condition: DimensionUtils.isTab(context),
-                                      ifBuilder: (context) => BMSDropDownForm(
-                                            options: const ["Yes", "No"],
-                                            onChooseOptions: (String val) {
-                                              setState(() {
-                                                shiftGivenByManager = val;
-                                              });
-                                            },
-                                            hint: shiftGivenByManager,
-                                          ),
-                                      elseBulider: (context) {
-                                        return Expanded(
-                                            child: BMSDropDownForm(
-                                          options: const ["Yes", "No"],
-                                          onChooseOptions: (String val) {
-                                            setState(() {
-                                              shiftGivenByManager = val;
-                                            });
-                                          },
-                                          hint: shiftGivenByManager,
-                                        ));
-                                      })
-                                ],
-                              ),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     const Text(
+                              //       "Was this shift given to you by manager?",
+                              //       style: TextStyle(
+                              //           fontWeight: FontWeight.bold,
+                              //           fontSize: 13,
+                              //           color: Colors.black),
+                              //     ),
+                              //     const SizedBox(
+                              //       width: 8,
+                              //     ),
+                              //     IfElseBuilder(
+                              //         condition: DimensionUtils.isTab(context),
+                              //         ifBuilder: (context) => BMSDropDownForm(
+                              //               options: const ["Yes", "No"],
+                              //               onChooseOptions: (String val) {
+                              //                 setState(() {
+                              //                   shiftGivenByManager = val;
+                              //                 });
+                              //               },
+                              //               hint: shiftGivenByManager,
+                              //             ),
+                              //         elseBulider: (context) {
+                              //           return Expanded(
+                              //               child: BMSDropDownForm(
+                              //             options: const ["Yes", "No"],
+                              //             onChooseOptions: (String val) {
+                              //               setState(() {
+                              //                 shiftGivenByManager = val;
+                              //               });
+                              //             },
+                              //             hint: shiftGivenByManager,
+                              //           ));
+                              //         })
+                              //   ],
+                              // ),
                               const SizedBox(
                                 height: 7.25,
                               ),
@@ -823,90 +824,131 @@ class DialogueUtils {
                                 ignoring: startTime == null,
                               ),
                               const SizedBox(
-                                height: 16.25,
+                                height: 25,
                               ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: SizedBox(
-                                    height: 38.33,
-                                    width: 108.05,
-                                    child: IfElseBuilder(
-                                        condition: isPosting,
-                                        ifBuilder: (context) => const Center(
-                                            child: CircularProgressIndicator()),
-                                        elseBulider: (context) {
-                                          return ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    shiftGivenByManager == 'No'
-                                                        ? const Color(
-                                                            0xFF9C9C9C)
-                                                        : const Color(
-                                                            0xff3B85FF),
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                      height: 38.33,
+                                      width: 108.05,
+                                      child: IfElseBuilder(
+                                          condition: isPosting,
+                                          ifBuilder: (context) => const Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                          elseBulider: (context) {
+                                            return ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Color(0xFFD4D4D4),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(20),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              onPressed: shiftGivenByManager ==
-                                                      'No'
-                                                  ? null
-                                                  : () async {
-                                                      selectedHouseNumber ??=
-                                                          listHouse[0];
-                                                      if (selectedHouseNumber !=
-                                                              null &&
-                                                          startTime != null &&
-                                                          endTime != null &&
-                                                          scheduledDate !=
-                                                              null) {
-                                                        setState(() {
-                                                          isPosting = true;
-                                                        });
-                                                        final houseId =
-                                                            houseWorkedInLastThreeWeeksModel
-                                                                ?.data
-                                                                ?.firstWhere(
-                                                                    (element) =>
-                                                                        element
-                                                                            .accountNumber ==
-                                                                        selectedHouseNumber)
-                                                                .id;
-                                                        await availableShiftsProvider
-                                                            .createShift(
-                                                                scheduledDate!,
-                                                                startTime!,
-                                                                endTime!,
-                                                                int.tryParse(
-                                                                        houseId!) ??
-                                                                    0,
-                                                                (bool
-                                                                    isCreated) {
-                                                          if (isCreated) {
-                                                            onSaveSchedule
-                                                                .call();
-                                                          }
-                                                        });
-                                                        setState(() {
-                                                          isPosting = false;
-                                                        });
-                                                      } else {
-                                                        shoErrorToast(
-                                                            "Must select all the required field");
-                                                      }
-                                                    },
-                                              child: const Text(
-                                                "Save",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ));
-                                        })),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                      color: Color(0xFF6C6C6C),
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ));
+                                          })),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                      height: 38.33,
+                                      width: 108.05,
+                                      child: IfElseBuilder(
+                                          condition: isPosting,
+                                          ifBuilder: (context) => const Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                          elseBulider: (context) {
+                                            return ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      shiftGivenByManager ==
+                                                              'No'
+                                                          ? const Color(
+                                                              0xFF9C9C9C)
+                                                          : const Color(
+                                                              0xff3B85FF),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(20),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onPressed:
+                                                    shiftGivenByManager == 'No'
+                                                        ? null
+                                                        : () async {
+                                                            selectedHouseNumber ??=
+                                                                listHouse[0];
+                                                            if (selectedHouseNumber !=
+                                                                    null &&
+                                                                startTime !=
+                                                                    null &&
+                                                                endTime !=
+                                                                    null &&
+                                                                scheduledDate !=
+                                                                    null) {
+                                                              setState(() {
+                                                                isPosting =
+                                                                    true;
+                                                              });
+                                                              final houseId = houseWorkedInLastThreeWeeksModel
+                                                                  ?.data
+                                                                  ?.firstWhere((element) =>
+                                                                      element
+                                                                          .accountNumber ==
+                                                                      selectedHouseNumber)
+                                                                  .id;
+                                                              await availableShiftsProvider.createShift(
+                                                                  scheduledDate!,
+                                                                  startTime!,
+                                                                  endTime!,
+                                                                  int.tryParse(
+                                                                          houseId!) ??
+                                                                      0,
+                                                                  (bool
+                                                                      isCreated) {
+                                                                if (isCreated) {
+                                                                  onSaveSchedule
+                                                                      .call();
+                                                                }
+                                                              });
+                                                              setState(() {
+                                                                isPosting =
+                                                                    false;
+                                                              });
+                                                            } else {
+                                                              shoErrorToast(
+                                                                  "Must select all the required field");
+                                                            }
+                                                          },
+                                                child: const Text(
+                                                  "Save",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ));
+                                          })),
+                                ],
                               )
                             ],
                           ))
