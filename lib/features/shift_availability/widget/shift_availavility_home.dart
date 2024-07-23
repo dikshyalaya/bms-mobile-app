@@ -21,8 +21,11 @@ class ShiftAvailabilityHome extends StatefulWidget {
 class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
   @override
   void initState() {
-    Provider.of<AvailableShiftProvider>(context, listen: false)
-        .getAvailableShiftsForDcModel();
+    final availableShiftProvider =
+        Provider.of<AvailableShiftProvider>(context, listen: false);
+    availableShiftProvider.selectedShifts.clear();
+    availableShiftProvider.getAvailableShiftsForDcModel();
+
     super.initState();
   }
 
@@ -33,7 +36,7 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
     return ScaffoldBackGroundWrapper(
       appBar: const BeaconAppBar(
         title: "Shift Availability",
-        leadingIcon:  AppBarLeadingIcon(),
+        leadingIcon: AppBarLeadingIcon(),
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -86,10 +89,21 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                               scheduleCardModel:
                                                   availableShiftsForDcModel
                                                       .data![index],
-                                              onCardAvailable: (isChecked, id) {
+                                              onCardAvailable:
+                                                  (isAvailable, id) {
+                                                final available =
+                                                    isAvailable == 1
+                                                        ? true
+                                                        : false;
+                                                final isAdd = isAvailable == -1
+                                                    ? false
+                                                    : true;
                                                 availableShiftProvider
                                                     .addRemoveShiftId(
-                                                        isChecked, id);
+                                                  isAdd,
+                                                  id,
+                                                  available,
+                                                );
                                               },
                                             ),
                                         separatorBuilder: (context, index) =>
@@ -107,8 +121,9 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                       height: 40,
                                       width: 163.47,
                                       child: Selector<AvailableShiftProvider,
-                                              List<int>>(
-                                          builder: (context, shiftIds, child) =>
+                                              List<Map<String, dynamic>>>(
+                                          builder: (context, selectedShifts,
+                                                  child) =>
                                               IfElseBuilder(
                                                   condition: Provider.of<
                                                               AvailableShiftProvider>(
@@ -123,14 +138,14 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                                   elseBulider: (context) {
                                                     return ElevatedButton(
                                                         onPressed: () async {
-                                                          if (shiftIds
+                                                          if (selectedShifts
                                                               .isNotEmpty) {
                                                             // setState(() {
                                                             //   isPosting = true;
                                                             // });
                                                             await availableShiftProvider
                                                                 .postShiftAvailability(
-                                                                    shiftIds,
+                                                                    selectedShifts,
                                                                     () {
                                                               DialogueUtils.successMessageDialogue(
                                                                   context:
@@ -156,8 +171,8 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                                             elevation:
                                                                 MaterialStateProperty
                                                                     .all(4),
-                                                            backgroundColor:
-                                                                MaterialStateProperty.all(shiftIds
+                                                            backgroundColor: MaterialStateProperty.all(
+                                                                selectedShifts
                                                                         .isEmpty
                                                                     ? Colors
                                                                         .grey
@@ -183,7 +198,7 @@ class _ShiftAvailabilityHomeState extends State<ShiftAvailabilityHome> {
                                                         ));
                                                   }),
                                           selector: (context, provider) =>
-                                              provider.shiftIds)),
+                                              provider.selectedShifts)),
                                 ),
                               )
                             ],

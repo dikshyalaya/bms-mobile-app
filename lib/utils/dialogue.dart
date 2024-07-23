@@ -1189,7 +1189,8 @@ class DialogueUtils {
 
   ///Manager Approval Filter Dialogue
   static Future<void> managerApprovalFilterDialogue(
-      {required BuildContext context,
+      {bool goHome = false,
+      required BuildContext context,
       required VoidCallback onSaveSchedule}) async {
     return await showDialog(
       context: context,
@@ -1203,146 +1204,172 @@ class DialogueUtils {
               ManagerApprovalProvider managerApprovalProvider =
                   Provider.of<ManagerApprovalProvider>(context, listen: false);
               managerApprovalProvider.getAccountHouses();
-              return Consumer(
-                builder: (context, value, child) => Container(
-                  margin: const EdgeInsets.all(14),
-                  // height: 300,
-                  constraints: const BoxConstraints(
-                    minHeight: 100,
-                    maxHeight: 250,
-                  ),
-                  child: Selector<ManagerApprovalProvider, bool>(
-                    selector: (context, provider) =>
-                        provider.isAccountHousesLoading,
-                    builder: (context, isDataFetching, child) {
-                      final accountHousesData =
-                          Provider.of<ManagerApprovalProvider>(context,
-                                  listen: true)
-                              .accountHousesResponseModel;
-                      return ServerResponseBuilder(
-                        builder: (context) {
-                          return ListView.builder(
-                            itemCount: managerApprovalProvider
-                                    .accountHousesResponseModel?.data?.length ??
-                                0,
-                            itemBuilder: (context, index) {
-                              final currentData =
-                                  accountHousesData?.data?[index];
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    height: 46,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      '${currentData?.accountNumber}',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                  ListView.builder(
-                                      itemCount:
-                                          currentData?.houses?.length ?? 0,
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        final currentHouseData =
-                                            currentData?.houses?[index];
-                                        return Container(
-                                          height: 46,
-                                          margin:
-                                              const EdgeInsets.only(top: 0.3),
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFEAEAEA),
-                                            borderRadius: index ==
-                                                    (currentData?.houses
-                                                                ?.length ??
-                                                            0) -
-                                                        1
-                                                ? const BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10),
-                                                  )
-                                                : null,
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Consumer(
+                    builder: (context, value, child) => Container(
+                      margin: const EdgeInsets.all(14),
+                      // height: 300,
+                      constraints: const BoxConstraints(
+                        minHeight: 100,
+                        maxHeight: 250,
+                      ),
+                      child: Selector<ManagerApprovalProvider, bool>(
+                        selector: (context, provider) =>
+                            provider.isAccountHousesLoading,
+                        builder: (context, isDataFetching, child) {
+                          final accountHousesData =
+                              Provider.of<ManagerApprovalProvider>(context,
+                                      listen: true)
+                                  .accountHousesResponseModel;
+                          return ServerResponseBuilder(
+                            builder: (context) {
+                              return ListView.builder(
+                                itemCount: managerApprovalProvider
+                                        .accountHousesResponseModel
+                                        ?.data
+                                        ?.length ??
+                                    0,
+                                itemBuilder: (context, index) {
+                                  final currentData =
+                                      accountHousesData?.data?[index];
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 5),
+                                        height: 46,
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
                                           ),
-                                          child: ListTile(
-                                            leading: Container(
-                                              height: 32,
-                                              width: 32,
-                                              alignment: Alignment.center,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.white,
-                                                shape: BoxShape.circle,
-                                              ),
-                                              // child: Image.asset('edit'.iconImage()),
-                                              child: const Icon(
-                                                Icons.home,
-                                                color: Color(0xFF325CA1),
-                                              ),
-                                            ),
-                                            title: Text(
-                                              '${currentHouseData?.accountNumber}',
-                                              style: const TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                            trailing: Container(
-                                              height: 32,
-                                              width: 32,
-                                              alignment: Alignment.center,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.white,
-                                                shape: BoxShape.circle,
-                                              ),
-                                              // child: Image.asset('edit'.iconImage()),
-                                              child: const Icon(
-                                                Icons.arrow_forward_ios_rounded,
-                                                color: Color(0xFF325CA1),
-                                              ),
-                                            ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              managerApprovalProvider
-                                                  .getListShiftForApproval(
-                                                      houseId: (currentHouseData
-                                                                  ?.id ??
-                                                              0)
-                                                          .toString());
-                                              managerApprovalProvider
-                                                  .selectedShifts
-                                                  .clear();
-                                            },
+                                        ),
+                                        child: Text(
+                                          '${currentData?.accountNumber}',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                        );
-                                      }),
-                                ],
+                                        ),
+                                      ),
+                                      ListView.builder(
+                                          itemCount:
+                                              currentData?.houses?.length ?? 0,
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            final currentHouseData =
+                                                currentData?.houses?[index];
+                                            return Container(
+                                              height: 46,
+                                              margin: const EdgeInsets.only(
+                                                  top: 0.3),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFEAEAEA),
+                                                borderRadius: index ==
+                                                        (currentData?.houses
+                                                                    ?.length ??
+                                                                0) -
+                                                            1
+                                                    ? const BorderRadius.only(
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      )
+                                                    : null,
+                                              ),
+                                              child: ListTile(
+                                                leading: Container(
+                                                  height: 32,
+                                                  width: 32,
+                                                  alignment: Alignment.center,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  // child: Image.asset('edit'.iconImage()),
+                                                  child: const Icon(
+                                                    Icons.home,
+                                                    color: Color(0xFF325CA1),
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  '${currentHouseData?.accountNumber}',
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                trailing: Container(
+                                                  height: 32,
+                                                  width: 32,
+                                                  alignment: Alignment.center,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  // child: Image.asset('edit'.iconImage()),
+                                                  child: const Icon(
+                                                    Icons
+                                                        .arrow_forward_ios_rounded,
+                                                    color: Color(0xFF325CA1),
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  managerApprovalProvider
+                                                      .getListShiftForApproval(
+                                                          houseId:
+                                                              (currentHouseData
+                                                                          ?.id ??
+                                                                      0)
+                                                                  .toString());
+                                                  managerApprovalProvider
+                                                      .selectedShifts
+                                                      .clear();
+                                                },
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  );
+                                },
                               );
                             },
+                            isDataFetching: isDataFetching,
+                            isNullData: accountHousesData?.data == null,
                           );
                         },
-                        isDataFetching: isDataFetching,
-                        isNullData: accountHousesData?.data == null,
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
+                  // const SizedBox(height: 5),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (goHome) {
+                        Navigator.pop(context);
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

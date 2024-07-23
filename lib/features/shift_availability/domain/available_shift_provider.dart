@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beacon_flutter/core/network/network_extension.dart';
 import 'package:beacon_flutter/core/network/network_state.dart';
@@ -14,16 +15,17 @@ class AvailableShiftProvider extends ChangeNotifier {
   bool isDataFetching = false;
   bool isDataPosting = false;
   int selectedIndex = -1;
-  List<int> shiftIds = [];
+  List<Map<String, dynamic>> selectedShifts = [];
 
-  void addRemoveShiftId(bool add, int id) {
+  void addRemoveShiftId(bool add, int id, bool isAvailable) {
+    log("IsAdd: $add, Id: $id, isAvailable: $isAvailable");
     if (add) {
-      if (shiftIds.contains(id) == false) {
-        shiftIds.add(id);
-      }
+      selectedShifts.add({'shiftId': id, 'isAvailable': isAvailable});
     } else {
-      shiftIds.remove(id);
+      selectedShifts.removeWhere((element) => element['shiftId'] == id);
     }
+    log('selectedShifts: $selectedShifts');
+
     notifyListeners();
   }
 
@@ -77,33 +79,33 @@ class AvailableShiftProvider extends ChangeNotifier {
     return BMSResponse(body: availableShiftsForDcModel);
   }
 
-  Future<void> postShiftAvailability(
-      List<int> availableShifts, VoidCallback onCompleteCallBack) async {
-    // final PostShiftAvailabilityRepo postShiftAvailabilityRepo =
-    //     PostShiftAvailabilityRepo();
+  Future<void> postShiftAvailability(List<Map<String, dynamic>> availableShifts,
+      VoidCallback onCompleteCallBack) async {
+    final PostShiftAvailabilityRepo postShiftAvailabilityRepo =
+        PostShiftAvailabilityRepo();
     setDataPosting(true);
-    for (int shiftId in shiftIds) {
-      _availableShiftsForDcModel?.data
-          ?.removeWhere((element) => element.id == shiftId);
-    }
-    shiftIds.clear();
+    // for (int shiftId in shiftIds) {
+    //   _availableShiftsForDcModel?.data
+    //       ?.removeWhere((element) => element.id == shiftId);
+    // }
+    // shiftIds.clear();
     notifyListeners();
-    // await postShiftAvailabilityRepo.post(
-    //     apiCallback: (networkState) {
-    //       onApiCallback<dynamic>(
-    //         networkState: networkState,
-    //         onLoadedState: (loadedState) {
-    //           setDataPosting(false);
-    //           onCompleteCallBack.call();
-    //         },
-    //         onErrorState: (errorState) {
-    //           setDataPosting(false);
-    //           shoErrorToast(errorState.message);
-    //         },
-    //         onLoadingState: (loadingState) {},
-    //       );
-    //     },
-    //     body: availableShifts);
+    await postShiftAvailabilityRepo.post(
+      apiCallback: (networkState) {
+        onApiCallback<dynamic>(
+          networkState: networkState,
+          onLoadedState: (loadedState) {
+            setDataPosting(false);
+            onCompleteCallBack.call();
+          },
+          onErrorState: (errorState) {
+            setDataPosting(false);
+          },
+          onLoadingState: (loadingState) {},
+        );
+      },
+      body: availableShifts,
+    );
     setDataPosting(false);
   }
 }

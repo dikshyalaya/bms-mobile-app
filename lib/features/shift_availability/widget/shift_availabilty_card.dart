@@ -6,7 +6,7 @@ import 'shift_availability_card_header.dart';
 
 class ShiftAvailabilityCard extends StatefulWidget {
   final ScheduleCardModel scheduleCardModel;
-  final Function(bool, int) onCardAvailable;
+  final Function(int, int) onCardAvailable;
   const ShiftAvailabilityCard(
       {Key? key,
       required this.scheduleCardModel,
@@ -91,12 +91,13 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
                         value: 1,
                         groupValue: value,
                         activeColor: Colors.blue,
+                        toggleable: true,
                         // fillColor: MaterialStateProperty.all(Colors.blue),
                         onChanged: (int? val) {
                           setState(() {
-                            value = val ?? 0;
-                            widget.onCardAvailable.call(
-                                val == 1, widget.scheduleCardModel.id ?? -0);
+                            value = val ?? -1;
+                            widget.onCardAvailable
+                                .call(value, widget.scheduleCardModel.id ?? -0);
                           });
                         }),
                     const Text(
@@ -108,12 +109,13 @@ class _ShiftAvailabilityCardState extends State<ShiftAvailabilityCard> {
                         value: 2,
                         groupValue: value,
                         activeColor: Colors.blue,
+                        toggleable: true,
                         // fillColor: MaterialStateProperty.all(Colors.blue),
                         onChanged: (int? val) {
                           setState(() {
-                            value = val ?? 0;
-                            widget.onCardAvailable.call(
-                                val == 2, widget.scheduleCardModel.id ?? -0);
+                            value = val ?? -1;
+                            widget.onCardAvailable
+                                .call(value, widget.scheduleCardModel.id ?? -0);
                           });
                         }),
                     const Text(

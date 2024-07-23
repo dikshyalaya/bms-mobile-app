@@ -31,6 +31,7 @@ class _ManagerApprovalHomeScreenState extends State<ManagerApprovalHomeScreen> {
   showFilterPopUp() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DialogueUtils.managerApprovalFilterDialogue(
+        goHome: true,
         context: context,
         onSaveSchedule: () {
           Navigator.pop(context);
