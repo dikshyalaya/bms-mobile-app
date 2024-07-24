@@ -15,6 +15,7 @@ import 'package:beacon_flutter/features/notifications/domain/notification_provid
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
 import 'package:beacon_flutter/features/shift_availability/domain/available_shift_provider.dart';
 import 'package:beacon_flutter/service/local_notification_service.dart';
+import 'package:beacon_flutter/splash_screen.dart';
 import 'package:beacon_flutter/utils/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -208,43 +209,44 @@ class MyApp extends StatelessWidget {
             minTextAdapt: true,
             builder: (context, child) {
               return MaterialApp(
-                title: 'Beacon',
-                debugShowCheckedModeBanner: false,
-                theme: defaultLightTheme,
-                // home: const ImagePage(),
-                home: Consumer<AuthProvider>(
-                    builder: (context, authProvider, child) {
-                  return isLoggedIn
-                      ? authProvider.isUserLoading == true
-                          ? const CircularProgressIndicator()
-                          : authProvider.bmsUserModel?.userTypeId == 1
-                              ? const DashBoardScreen()
-                              : authProvider.bmsUserModel?.userTypeId == 4
-                                  ? const ManagerDashBoardScreen()
-                                  : const EmptyDashBoard()
-                      : const LoginScreen();
-                }),
-                // home: isLoggedIn? const DashBoardScreen() : LoginScreen(),
-                // ? IfElseBuilder(
-                //     condition: authProvider.bmsUserModel?.userTypeId == 1,
-                //     ifBuilder: (context) => const DashBoardScreen(),
-                //     elseBulider: (context) {
-                //       return IfElseBuilder(
-                //           condition:
-                //               authProvider.bmsUserModel?.userTypeId == 4,
-                //           ifBuilder: (context) =>
-                //               const ManagerDashBoardScreen(),
-                //           elseBulider: (context) {
-                //             // return const CircularProgressIndicator();
-                //             return EmptyDashBoard(
-                //               key: key,
-                //             );
-                //           });
-                //     })
-                // : LoginScreen(
-                //     key: key,
-                //   ),
-              );
+                  title: 'Beacon',
+                  debugShowCheckedModeBanner: false,
+                  theme: defaultLightTheme,
+                  // home: const ImagePage(),
+                  // home: Consumer<AuthProvider>(
+                  //     builder: (context, authProvider, child) {
+                  //   return isLoggedIn
+                  //       ? authProvider.isUserLoading == true
+                  //           ? const CircularProgressIndicator()
+                  //           : authProvider.bmsUserModel?.userTypeId == 1
+                  //               ? const DashBoardScreen()
+                  //               : authProvider.bmsUserModel?.userTypeId == 4
+                  //                   ? const ManagerDashBoardScreen()
+                  //                   : const EmptyDashBoard()
+                  //       : const LoginScreen();
+                  // }),
+                  home: const SplashScreen()
+                  // home: isLoggedIn? const DashBoardScreen() : LoginScreen(),
+                  // ? IfElseBuilder(
+                  //     condition: authProvider.bmsUserModel?.userTypeId == 1,
+                  //     ifBuilder: (context) => const DashBoardScreen(),
+                  //     elseBulider: (context) {
+                  //       return IfElseBuilder(
+                  //           condition:
+                  //               authProvider.bmsUserModel?.userTypeId == 4,
+                  //           ifBuilder: (context) =>
+                  //               const ManagerDashBoardScreen(),
+                  //           elseBulider: (context) {
+                  //             // return const CircularProgressIndicator();
+                  //             return EmptyDashBoard(
+                  //               key: key,
+                  //             );
+                  //           });
+                  //     })
+                  // : LoginScreen(
+                  //     key: key,
+                  //   ),
+                  );
             });
       }),
     );
