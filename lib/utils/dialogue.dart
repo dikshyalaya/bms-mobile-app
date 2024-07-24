@@ -1,5 +1,6 @@
 import 'package:beacon_flutter/common/extension/extension.dart';
 import 'package:beacon_flutter/common/urls.dart';
+import 'package:beacon_flutter/common/widgets/beacon_dropdown.dart';
 import 'package:beacon_flutter/common/widgets/beacon_text_form.dart';
 import 'package:beacon_flutter/common/widgets/builder/if_else_builder.dart';
 import 'package:beacon_flutter/common/widgets/builder/server_response_builder.dart';
@@ -1370,6 +1371,209 @@ class DialogueUtils {
                     ),
                   ),
                 ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  ///Manage SHift Filter Dialogue
+  static Future<void> manageShiftFilterDialogue(
+      {bool goHome = false,
+      required BuildContext context,
+      required VoidCallback onSaveSchedule}) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: const Color(0xFFBCBCBC),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 15),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      children: [
+                        const SizedBox(height: 5),
+                        BeaconDropdown<String>(
+                          hint: "Shift Status",
+                          items: const ["All", "Open", "Closed"],
+                          itemAsString: (item) => item,
+                          onChanged: (val) {},
+                        ),
+                        const SizedBox(height: 5),
+                        BeaconDropdown<String>(
+                          hint: "Schedule Week",
+                          items: const [
+                            "6/1/2021 - 6/7/2021",
+                            "6/8/2021 - 6/14/2021"
+                          ],
+                          itemAsString: (item) => item,
+                          onChanged: (val) {},
+                        ),
+                        const SizedBox(height: 5),
+                        BeaconDropdown<String>(
+                          hint: "House",
+                          items: const ["BMS", "BMS1", "BMS2"],
+                          itemAsString: (item) => item,
+                          onChanged: (val) {},
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (goHome) {
+                              // Navigator.pop(context);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff1870FF),
+                          ),
+                          onPressed: () {
+                            if (goHome) {
+                              // Navigator.pop(context);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Search',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  ///Manage SHift Filter Dialogue
+  static Future<void> editShiftDialogue({
+    required BuildContext context,
+  }) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: const Color(0xFFBCBCBC),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 15),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 3),
+                    const Text(
+                      "Edit Shift Information",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        const Text(
+                            "Schedule Week :        6/1/2021 - 6/7/2021"),
+                        const SizedBox(height: 5),
+                        const Text("Schedule Date :        6/1/2021"),
+                        const SizedBox(height: 5),
+                        const Text("Schedule Time :        6:00 AM - 2:00 PM"),
+                        const SizedBox(height: 5),
+                        BeaconDropdown<String>(
+                          hint: "Requested Type",
+                          items: const [
+                            "Male",
+                            "Female",
+                            "Maintenance",
+                            "Driver"
+                          ],
+                          itemAsString: (item) => item,
+                          onChanged: (val) {},
+                        ),
+                        const SizedBox(height: 5),
+                        BeaconDropdown<String>(
+                          hint: "Requested DSP",
+                          items: const [
+                            "Test User",
+                            "Test User1",
+                            "Test User2"
+                          ],
+                          itemAsString: (item) => item,
+                          onChanged: (val) {},
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff1870FF),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Update',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               );
             },
           ),

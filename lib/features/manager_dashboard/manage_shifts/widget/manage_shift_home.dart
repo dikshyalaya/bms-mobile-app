@@ -15,7 +15,20 @@ class ManageShiftHomeScreen extends StatefulWidget {
 class _ManageShiftHomeScreenState extends State<ManageShiftHomeScreen> {
   @override
   void initState() {
+    showFilterPopUp();
     super.initState();
+  }
+
+  showFilterPopUp() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DialogueUtils.manageShiftFilterDialogue(
+        goHome: true,
+        context: context,
+        onSaveSchedule: () {
+          Navigator.pop(context);
+        },
+      );
+    });
   }
 
   @override
@@ -26,7 +39,15 @@ class _ManageShiftHomeScreenState extends State<ManageShiftHomeScreen> {
         title: "Manage Shifts",
         action: [
           GestureDetector(
-            onTap: () async {},
+            onTap: () async {
+              DialogueUtils.manageShiftFilterDialogue(
+                goHome: false,
+                context: context,
+                onSaveSchedule: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
             child: SizedBox(
               height: 34,
               width: 34,

@@ -1,3 +1,4 @@
+import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 
 class ManageShiftHeaderCard extends StatelessWidget {
@@ -37,6 +38,9 @@ class ManageShiftHeaderCard extends StatelessWidget {
           ),
           const Spacer(),
           InkWell(
+            onTap: () {
+              DialogueUtils.editShiftDialogue(context: context);
+            },
             child: Container(
               height: 32,
               width: 32,
