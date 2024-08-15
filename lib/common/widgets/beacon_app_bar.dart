@@ -63,12 +63,10 @@ class BeaconAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         actions: [
           if (action?.isNotEmpty ?? false) ...[
-            ...action!
-                .map((e) => Padding(
-                    padding: EdgeInsetsDirectional.only(
-                        top: leadingIcon != null ? 0 : 17),
-                    child: e))
-                .toList(),
+            ...action!.map((e) => Padding(
+                padding: EdgeInsetsDirectional.only(
+                    top: leadingIcon != null ? 0 : 17),
+                child: e)),
             const SizedBox(
               width: 10,
             )

@@ -1,16 +1,15 @@
+import 'dart:developer';
+
 import 'package:beacon_flutter/common/local_db/hive_model.dart';
-import 'package:beacon_flutter/empty_dash_board.dart';
 import 'package:beacon_flutter/features/auth/domain/auth_provider.dart';
 import 'package:beacon_flutter/features/auth/domain/navigation_handler.dart';
 import 'package:beacon_flutter/features/dashboard/domain/incomplete_activities_provider.dart';
 import 'package:beacon_flutter/features/dashboard/domain/system_setting_provider.dart';
 import 'package:beacon_flutter/features/dashboard/domain/user_profile_provider.dart';
-import 'package:beacon_flutter/features/dashboard/widget/dash_board_screen.dart';
-import 'package:beacon_flutter/features/login/src/login_screen.dart';
 import 'package:beacon_flutter/features/looking_for_shift/domain/looking_for_shift_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/home/domain/manager_permission_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/domain/manage_shift_provider.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
-import 'package:beacon_flutter/features/manager_dashboard/home/widget/manager_dashboard_home.dart';
 import 'package:beacon_flutter/features/notifications/domain/notification_provider.dart';
 import 'package:beacon_flutter/features/shared_preference/service_locator.dart';
 import 'package:beacon_flutter/features/shift_availability/domain/available_shift_provider.dart';
@@ -73,7 +72,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       message,
       isAppInBackground: true);
 
-  print("Handling a background message: ${message.messageId}");
+  log("Handling a background message: ${message.messageId}");
   await callYourApi(message.data);
 }
 
@@ -106,9 +105,9 @@ Future<void> callYourApi(Map<String, dynamic> data) async {
         'https://api-beacon.dikshyalaya.com/api/RTPushNotification/UpdatePushNotificationStatus/${data["Id"]}'),
   );
   if (response.statusCode == 200) {
-    print('API call successful');
+    log('API call successful');
   } else {
-    print('API call failed with status: ${response.statusCode}');
+    log('API call failed with status: ${response.statusCode}');
   }
 }
 
@@ -150,7 +149,7 @@ void main() async {
     );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print('A new onMessageOpenedApp event was published!');
+      log('A new onMessageOpenedApp event was published!');
       await callYourApi(message.data);
     });
 
@@ -200,6 +199,8 @@ class MyApp extends StatelessWidget {
             create: (_) => UserProfileProvider()),
         ChangeNotifierProvider<NotificationProvider>(
             create: (_) => NotificationProvider()),
+        ChangeNotifierProvider<ManageShiftProvider>(
+            create: (_) => ManageShiftProvider()),
       ],
       child: Consumer<NavigationHandler>(
           builder: (BuildContext context, provider, Widget? child) {

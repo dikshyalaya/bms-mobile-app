@@ -1,8 +1,11 @@
+import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/data/manager_active_shift_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/widget/manage_shift_header_card.dart';
 import 'package:flutter/material.dart';
 
 class ManageShiftCard extends StatefulWidget {
-  const ManageShiftCard({Key? key}) : super(key: key);
+  final Datum managerActiveShift;
+  const ManageShiftCard({Key? key, required this.managerActiveShift})
+      : super(key: key);
 
   @override
   State<ManageShiftCard> createState() => _ManageShiftCardState();
@@ -18,15 +21,15 @@ class _ManageShiftCardState extends State<ManageShiftCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ManageShiftHeaderCard(),
+          ManageShiftHeaderCard(type: widget.managerActiveShift.type),
           const SizedBox(
             height: 11,
           ),
-          const Padding(
-            padding: EdgeInsetsDirectional.symmetric(horizontal: 19),
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 19),
             child: Row(
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -66,40 +69,40 @@ class _ManageShiftCardState extends State<ManageShiftCard> {
                     ),
                   ],
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nakeem Berry",
-                      style: TextStyle(
+                      "${widget.managerActiveShift.invitedName}",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "2/10/2024",
-                      style: TextStyle(
+                      "${widget.managerActiveShift.scheduleDate}",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "08:00 AM - 04:00 PM",
-                      style: TextStyle(
+                      "${widget.managerActiveShift.startTime} - ${widget.managerActiveShift.endTime}",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      "Open",
-                      style: TextStyle(
+                      "${widget.managerActiveShift.shiftStatus}",
+                      style: const TextStyle(
                         color: Color(0xff1B1B1B),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,

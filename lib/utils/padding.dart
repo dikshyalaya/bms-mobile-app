@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
 bodyOnlyPadding(BuildContext context) {
-  return const EdgeInsets.all(10);
+  final size = MediaQuery.of(context).size;
+  return EdgeInsets.all(size.width * 0.02 );
 }

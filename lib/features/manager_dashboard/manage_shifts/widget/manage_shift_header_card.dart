@@ -2,7 +2,8 @@ import 'package:beacon_flutter/utils/dialogue.dart';
 import 'package:flutter/material.dart';
 
 class ManageShiftHeaderCard extends StatelessWidget {
-  const ManageShiftHeaderCard({Key? key}) : super(key: key);
+  final String? type;
+  const ManageShiftHeaderCard({Key? key, this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,9 @@ class ManageShiftHeaderCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          const Text(
-            "ANY",
-            style: TextStyle(
+          Text(
+            type ?? "ANY",
+            style: const TextStyle(
               color: Color(0xff1B1B1B),
               fontSize: 15,
               fontWeight: FontWeight.w500,

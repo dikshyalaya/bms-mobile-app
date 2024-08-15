@@ -1,8 +1,8 @@
 const baseUrl =
 //"http://100.25.49.138/BeaconMobile/api/";
-    // "https://api-beacon.dikshyalaya.com/api/";
+    "https://api-beacon.dikshyalaya.com/api/";
 // "api-beacon-live.dikshyalaya.com";
-    "https://fb8c-160-202-37-112.ngrok-free.app/api/";
+// "https://fb8c-160-202-37-112.ngrok-free.app/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";
 
@@ -34,6 +34,11 @@ const accountHouses = "Manager/ShiftManagement/LoadAccounts";
 const listShiftsForApproval = "Manager/ShiftManagement/ListShiftsForApproval";
 const approveShifts = "Manager/ShiftManagement/ApproveShifts";
 const raiseDispute = "Manager/ShiftManagement/RaiseDispute";
+const schedulePeriodByShiftStatus =
+    "Manager/ShiftManagement/GetSchedulePeriodByShiftStatus";
+const activeHouseForManager =
+    "Manager/ShiftManagement/GetActiveHouseForManager";
+const managerActiveShifts = "Manager/ShiftManagement/GetManagerActiveShifts";
 
 //Notifications
 const notificationHistory = 'RTPushNotification/NotificationHistory';
