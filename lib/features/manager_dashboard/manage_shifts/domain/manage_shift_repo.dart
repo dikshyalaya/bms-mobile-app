@@ -13,6 +13,27 @@ class ManagerSchedulePeriodRepo
   }
 }
 
+class AddShiftForManagerShiftListRepo
+    extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+    return addShiftForManagerShiftList;
+  }
+}
+class GetRequestedDspRepo
+    extends BaseApiRepository<Map<String, dynamic>> {
+  @override
+  dynamic parseJson(Response<dynamic> response) => {"response": response.data};
+
+  @override
+  String path(Map<String, String>? params, String? pathVariable) {
+    return getRequestedDsp;
+  }
+}
+
 class ActiveHouseForManagerRepo
     extends BaseApiRepository<Map<String, dynamic>> {
   @override

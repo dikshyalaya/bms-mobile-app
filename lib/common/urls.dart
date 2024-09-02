@@ -36,6 +36,10 @@ const approveShifts = "Manager/ShiftManagement/ApproveShifts";
 const raiseDispute = "Manager/ShiftManagement/RaiseDispute";
 const schedulePeriodByShiftStatus =
     "Manager/ShiftManagement/GetSchedulePeriodByShiftStatus";
+    const addShiftForManagerShiftList =
+    "Manager/ShiftManagement/GetHouseShifts";
+    const getRequestedDsp =
+    "Manager/ShiftManagement/GetDSPByType";
 const activeHouseForManager =
     "Manager/ShiftManagement/GetActiveHouseForManager";
 const managerActiveShifts = "Manager/ShiftManagement/GetManagerActiveShifts";

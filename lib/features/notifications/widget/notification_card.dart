@@ -66,28 +66,28 @@ class NotificationCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 8),
-          (notification.type ?? '').toLowerCase().contains('invitation')
-              ? confirmButtons(
-                  buttonOneName: 'Accept',
-                  buttonOneColor: Colors.green,
-                  buttonOneOnPressed: () {
-                    log("Accept Invitation");
-                  },
-                  buttonTwoName: 'Decline',
-                  buttonTwoColor: Colors.red,
-                  buttonTwoOnPressed: () {},
-                )
-              : (notification.type ?? '').toLowerCase().contains('confirmation')
-                  ? confirmButtons(
-                      buttonOneName: 'Yes',
-                      buttonOneColor: Colors.green,
-                      buttonOneOnPressed: () {},
-                      buttonTwoName: 'No',
-                      buttonTwoColor: Colors.red,
-                      buttonTwoOnPressed: () {},
-                    )
-                  : const SizedBox(),
+          // const SizedBox(height: 8),
+          // (notification.type ?? '').toLowerCase().contains('invitation')
+          //     ? confirmButtons(
+          //         buttonOneName: 'Accept',
+          //         buttonOneColor: Colors.green,
+          //         buttonOneOnPressed: () {
+          //           log("Accept Invitation");
+          //         },
+          //         buttonTwoName: 'Decline',
+          //         buttonTwoColor: Colors.red,
+          //         buttonTwoOnPressed: () {},
+          //       )
+          //     : (notification.type ?? '').toLowerCase().contains('confirmation')
+          //         ? confirmButtons(
+          //             buttonOneName: 'Yes',
+          //             buttonOneColor: Colors.green,
+          //             buttonOneOnPressed: () {},
+          //             buttonTwoName: 'No',
+          //             buttonTwoColor: Colors.red,
+          //             buttonTwoOnPressed: () {},
+          //           )
+          //         : const SizedBox(),
           const Padding(
             padding: EdgeInsets.only(bottom: 0.0),
             child: Divider(),

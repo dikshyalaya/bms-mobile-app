@@ -21,6 +21,7 @@ import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/data/act
 import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/data/schedule_period_model.dart'
     as schedule;
 import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/domain/manage_shift_provider.dart';
+import 'package:beacon_flutter/features/manager_dashboard/manage_shifts/model/manage_shift_shift_model.dart';
 import 'package:beacon_flutter/features/manager_dashboard/manager_approval/domain/manager_approval_provider.dart';
 import 'package:beacon_flutter/features/my_schedule/data/house_workedin_last_three_weeks_model.dart';
 import 'package:beacon_flutter/features/my_schedule/domain/my_schedule_provider.dart';
@@ -28,6 +29,8 @@ import 'package:beacon_flutter/features/notifications/widget/notification_page.d
 import 'package:beacon_flutter/features/shared_preference/share_preference.dart';
 import 'package:beacon_flutter/service/file_picker_service.dart';
 import 'package:beacon_flutter/utils/dimension_utils.dart';
+import 'package:beacon_flutter/utils/searchable_dropdown.dart';
+import 'package:beacon_flutter/utils/searchable_dropdown2.dart';
 import 'package:beacon_flutter/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,12 +75,12 @@ class DialogueUtils {
                             Navigator.pop(context);
                           },
                           style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
+                              padding: WidgetStateProperty.all(
                                   EdgeInsetsDirectional.zero),
-                              elevation: MaterialStateProperty.all(4),
-                              backgroundColor: MaterialStateProperty.all(
+                              elevation: WidgetStateProperty.all(4),
+                              backgroundColor: WidgetStateProperty.all(
                                   const Color(0xff3B85FF)),
-                              shape: MaterialStateProperty.all(
+                              shape: WidgetStateProperty.all(
                                   const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))))),
@@ -140,12 +143,12 @@ class DialogueUtils {
                                   Navigator.pop(context, false);
                                 },
                                 style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
+                                    padding: WidgetStateProperty.all(
                                         EdgeInsetsDirectional.zero),
-                                    elevation: MaterialStateProperty.all(4),
-                                    backgroundColor: MaterialStateProperty.all(
+                                    elevation: WidgetStateProperty.all(4),
+                                    backgroundColor: WidgetStateProperty.all(
                                         const Color(0xff3B85FF)),
-                                    shape: MaterialStateProperty.all(
+                                    shape: WidgetStateProperty.all(
                                         const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20))))),
@@ -173,12 +176,12 @@ class DialogueUtils {
                                   Navigator.pop(context, true);
                                 },
                                 style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
+                                    padding: WidgetStateProperty.all(
                                         EdgeInsetsDirectional.zero),
-                                    elevation: MaterialStateProperty.all(4),
-                                    backgroundColor: MaterialStateProperty.all(
+                                    elevation: WidgetStateProperty.all(4),
+                                    backgroundColor: WidgetStateProperty.all(
                                         const Color(0xff3B85FF)),
-                                    shape: MaterialStateProperty.all(
+                                    shape: WidgetStateProperty.all(
                                         const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20))))),
@@ -250,12 +253,12 @@ class DialogueUtils {
                               Navigator.pop(context);
                             },
                             style: ButtonStyle(
-                                padding: MaterialStateProperty.all(
+                                padding: WidgetStateProperty.all(
                                     EdgeInsetsDirectional.zero),
-                                elevation: MaterialStateProperty.all(4),
-                                backgroundColor: MaterialStateProperty.all(
+                                elevation: WidgetStateProperty.all(4),
+                                backgroundColor: WidgetStateProperty.all(
                                     const Color(0xff3B85FF)),
-                                shape: MaterialStateProperty.all(
+                                shape: WidgetStateProperty.all(
                                     const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))))),
@@ -1449,19 +1452,33 @@ class DialogueUtils {
                               },
                             ),
                             const SizedBox(height: 5),
-                            BeaconDropdown<house.Datum>(
-                              hint: "House",
-                              items: manageShiftProvider
-                                      .activeHouseForManagerModel?.data ??
-                                  [],
-                              selectedItem: manageShiftProvider.selectedHouse,
-                              itemAsString: (item) => item.accountNumber ?? '',
-                              onChanged: (val) {
-                                setState(() {
-                                  manageShiftProvider.selectedHouse = val;
-                                });
-                              },
-                            ),
+                            manageShiftProvider.isLoadingActiveHouse
+                                ? const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Row(
+                                      children: [
+                                        CircularProgressIndicator(),
+                                        SizedBox(width: 10),
+                                        Text("Loading houses..."),
+                                      ],
+                                    ),
+                                  )
+                                : BeaconDropdown<house.Datum>(
+                                    hint: "House",
+                                    items: manageShiftProvider
+                                            .activeHouseForManagerModel?.data ??
+                                        [],
+                                    selectedItem:
+                                        manageShiftProvider.selectedHouse,
+                                    itemAsString: (item) =>
+                                        item.accountNumber ?? '',
+                                    onChanged: (val) {
+                                      setState(() {
+                                        manageShiftProvider.selectedHouse = val;
+                                      });
+                                    },
+                                  ),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -1514,25 +1531,39 @@ class DialogueUtils {
     );
   }
 
-  ///Add Shift Bottomsheet
+  // ///Add Shift Bottomsheet
   static Future<void> addShiftBottomSheet({
     required BuildContext context,
-  }) {
+  }) async {
+    final shiftProvider = context.read<ManageShiftProvider>();
+
+    // Fetch all shifts before showing the bottom sheet
+    await shiftProvider.getShiftForAllShift();
+    // await shiftProvider.getRequestedDsp();
+
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
       builder: (context) {
         return Consumer<ManageShiftProvider>(
-            builder: (context, shiftProvider, _) {
-          shiftProvider.getdateOptions();
-          return StatefulBuilder(builder: (context, setState) {
-            return Container(
-              constraints: const BoxConstraints(
-                minHeight: 300,
-                maxHeight: 700,
-              ),
-              height: 700,
-              color: Colors.transparent,
-              child: Container(
+          builder: (context, shiftProvider, _) {
+            // Move this call out of the build method
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (shiftProvider.dateOptions.isEmpty) {
+                shiftProvider
+                    .getdateOptions(); // Only call if dateOptions is empty
+              }
+            });
+
+            return StatefulBuilder(builder: (context, setState) {
+              return Container(
+                padding: const EdgeInsets.all(15.0),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -1540,44 +1571,75 @@ class DialogueUtils {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10),
-                      const Text(
-                        "Add Shift",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Add Shift",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 10),
-                      BeaconDropdown<String>(
-                        hint: "Select Date",
-                        items: shiftProvider.dateOptions,
-                        itemAsString: (item) => item,
-                        selectedItem: shiftProvider.selectedDate,
-                        onChanged: (val) {
+                    ),
+                    const SizedBox(height: 10),
+                    BeaconDropdown<String>(
+                      hint: "Select Date",
+                      items: shiftProvider.dateOptions,
+                      itemAsString: (item) => item,
+                      selectedItem: shiftProvider.selectedDate,
+                      onChanged: (val) {
+                        setState(() {
+                          shiftProvider.selectedDate = val;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    BeaconDropdown<dynamic>(
+                      hint: "Select Shift",
+                      items: [
+                        ...shiftProvider.allShiftForAddShiftModel?.data ??
+                            [], // Existing shift options
+                        "Add Custom Shift", // Custom string option
+                      ],
+                      itemAsString: (item) {
+                        if (item is String) {
+                          return item; // If the item is a String, return it directly
+                        } else if (item is DatumForAllShift) {
+                          return "${item.shiftStartTime} - ${item.shiftEndTime}"; // Format the DatumForAllShift item
+                        }
+                        return "";
+                      },
+                      selectedItem: shiftProvider.selectedShiftTime,
+                      onChanged: (val) {
+                        if (val is DatumForAllShift) {
+                          log("Selected Shift ID: ${val.shiftId}");
                           setState(() {
-                            shiftProvider.selectedDate = val;
+                            shiftProvider.selectedShiftTime = val;
+                            shiftProvider.startTime = null;
+                            shiftProvider.endTime = null;
                           });
-                          // shiftProvider.selectedDate = val;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      BeaconDropdown<String>(
-                        hint: "Select Shift",
-                        items: shiftProvider.shiftTime,
-                        itemAsString: (item) => item,
-                        selectedItem: shiftProvider.selectedShiftTime,
-                        onChanged: (val) {
+                        } else if (val is String && val == "Add Custom Shift") {
+                          log("Custom Shift Selected");
                           setState(() {
                             shiftProvider.selectedShiftTime = val;
                           });
-                        },
-                      ),
-                      const SizedBox(height: 10),
+                        }
+                      },
+                    ),
+                    // BeaconDropdown<dynamic>(
+                    //   hint: "Select Shift",
+                    //   items: shiftProvider.allShiftForAddShiftModel?.data??[],
+                    //   itemAsString: (item) => "${item.shiftStartTime} - ${item.shiftEndTime}",
+                    //   selectedItem: shiftProvider.selectedShiftTime,
+                    //   onChanged: (val) {
+                    //     setState(() {
+                    //       shiftProvider.selectedShiftTime = val;
+                    //     });
+                    //   },
+                    // ),
+                    const SizedBox(height: 10),
+                    if (shiftProvider.selectedShiftTime == "Add Custom Shift")
                       Row(
                         children: [
                           Expanded(
@@ -1596,16 +1658,31 @@ class DialogueUtils {
                               title: "End Time",
                               onTimeSelected: (time) {
                                 setState(() {
-                                  shiftProvider.startTime = time.toString();
+                                  shiftProvider.endTime = time.toString();
                                 });
                               },
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BeaconDropdown<String>(
+                            hint: "Requested Type",
+                            items: shiftProvider.requestedType,
+                            itemAsString: (item) => item,
+                            selectedItem: shiftProvider.selectedRequestedType,
+                            onChanged: (val) {
+                              setState(() {
+                                shiftProvider.selectedRequestedType = val;
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        if (shiftProvider.getShiftDays().isNotEmpty)
                           Expanded(
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -1616,19 +1693,19 @@ class DialogueUtils {
                                 border:
                                     Border.all(color: const Color(0xffA9A9A9)),
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Day:",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal,
                                     ),
                                   ),
-                                  SizedBox(width: 4),
+                                  const SizedBox(width: 4),
                                   Text(
-                                    "Thu - Fri",
-                                    style: TextStyle(
+                                    shiftProvider.getShiftDays(),
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -1637,195 +1714,203 @@ class DialogueUtils {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: BeaconDropdown<String>(
-                              hint: "Requested Type",
-                              items: shiftProvider.requestedType,
-                              itemAsString: (item) => item,
-                              selectedItem: shiftProvider.selectedRequestedType,
-                              onChanged: (val) {
-                                setState(() {
-                                  shiftProvider.selectedRequestedType = val;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      BeaconDropdown<String>(
-                        hint: "Requested DSP",
-                        items: shiftProvider.requestedDSP,
-                        itemAsString: (item) => item,
-                        selectedItem: shiftProvider.selectedRequestedDSP,
-                        onChanged: (val) {
-                          setState(() {
-                            shiftProvider.selectedRequestedDSP = val;
-                          });
+                        // Expanded(
+                        //   child: Container(
+                        //     padding: const EdgeInsets.symmetric(
+                        //         vertical: 12, horizontal: 10),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       border:
+                        //           Border.all(color: const Color(0xffA9A9A9)),
+                        //     ),
+                        //     child: const Row(
+                        //       children: [
+                        //         Text(
+                        //           "Day:",
+                        //           style: TextStyle(
+                        //             fontSize: 16,
+                        //             fontWeight: FontWeight.normal,
+                        //           ),
+                        //         ),
+                        //         SizedBox(width: 4),
+                        //         Text(
+                        //           "Thu - Fri",
+                        //           style: TextStyle(
+                        //             fontSize: 16,
+                        //             fontWeight: FontWeight.normal,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    InkWell(
+                        onTap: () {
+                          showSearchDialog(context);
                         },
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          // color: Colors.amber,
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black45, width: 1.sp),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10.w),
+                                child: Text(
+                                  'Requested DSP',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              )),
+                        )),
+                    // SearchableDropdown<dynamic>(
+                    //   hintText: "Requested DSP",
+                    //   items: shiftProvider.allRequestedDspModel?.data ?? [],
+                    //   itemAsString: (item) => item.empDetail,
+                    //   selectedItem: shiftProvider.selectedRequestedDSP,
+                    //   onChanged: (val) {
+                    //     setState(() {
+                    //       shiftProvider.selectedRequestedDSP = val;
+                    //     });
+                    //   },
+                    // ),
+
+                    // InkWell(
+                    //   onTap: () async {
+                    //     // Show a loading indicator while the data is being fetched
+                    //     showDialog(
+                    //       context: context,
+                    //       barrierDismissible: false,
+                    //       builder: (context) => const Center(
+                    //         child: CircularProgressIndicator(),
+                    //       ),
+                    //     );
+
+                    //     // Fetch the requested DSP data
+                    //     await shiftProvider.getRequestedDsp();
+
+                    //     // Close the loading indicator
+                    //     Navigator.of(context).pop();
+
+                    //     // Show the dropdown once data is loaded
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return AlertDialog(
+                    //           content: BeaconDropdown<dynamic>(
+                    //             hint: "Requested DSP",
+                    //             items:
+                    //                 shiftProvider.allRequestedDspModel?.data ??
+                    //                     [],
+                    //             itemAsString: (item) => item.empDetail,
+                    //             selectedItem:
+                    //                 shiftProvider.selectedRequestedDSP,
+                    //             onChanged: (val) {
+                    //               setState(() {
+                    //                 shiftProvider.selectedRequestedDSP = val;
+                    //               });
+                    //               Navigator.of(context)
+                    //                   .pop(); // Close the dropdown dialog
+                    //             },
+                    //           ),
+                    //         );
+                    //       },
+                    //     );
+                    //   },
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         vertical: 12, horizontal: 10),
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       border: Border.all(color: const Color(0xffA9A9A9)),
+                    //     ),
+                    //     child: Row(
+                    //       children: [
+                    //         Text(
+                    //           shiftProvider.selectedRequestedDSP ??
+                    //               "Requested DSP",
+                    //           style: const TextStyle(
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.normal,
+                    //           ),
+                    //         ),
+                    //         const Spacer(),
+                    //         const Icon(Icons.arrow_drop_down),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+
+                    // InkWell(
+                    //   onTap: () async{
+                    //     await shiftProvider.getRequestedDsp();
+
+                    //   },
+                    //   child: BeaconDropdown<dynamic>(
+                    //     hint: "Requested DSP",
+                    //     items: shiftProvider.allRequestedDspModel?.data ?? [],
+                    //     itemAsString: (item) => item.empDetail,
+                    //     selectedItem: shiftProvider.selectedRequestedDSP,
+                    //     onChanged: (val) {
+                    //       setState(() {
+                    //         shiftProvider.selectedRequestedDSP = val;
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff4AD77E)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Save & Add New',
+                            style: TextStyle(
+                              color: Colors.white,
                             ),
                           ),
-                          const SizedBox(
-                            width: 10,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff1870FF),
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff1870FF),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'Search',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Save & Invite',
+                            style: TextStyle(
+                              color: Colors.white,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            );
-          });
-        });
+              );
+            });
+          },
+        );
       },
     );
-    // return showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (context) {
-    //     return Dialog(
-    //       backgroundColor: const Color(0xFFBCBCBC),
-    //       insetPadding: const EdgeInsets.symmetric(horizontal: 15),
-    //       child: StatefulBuilder(
-    //         builder: (context, setState) {
-    //           return Consumer<ManageShiftProvider>(
-    //             builder: (context, manageShiftProvider, __) {
-    //               return Padding(
-    //                 padding: const EdgeInsets.all(15.0),
-    //                 child: Column(
-    //                   mainAxisSize: MainAxisSize.min,
-    //                   children: [
-    //                     Column(
-    //                       children: [
-    //                         const SizedBox(height: 5),
-    //                         BeaconDropdown<String>(
-    //                           hint: "Shift Type",
-    //                           items: manageShiftProvider.shiftStatus,
-    //                           itemAsString: (item) => item,
-    //                           selectedItem:
-    //                               manageShiftProvider.selectedShiftType,
-    //                           onChanged: (val) async {
-    //                             manageShiftProvider.selectedShiftPeriod = null;
-    //                             manageShiftProvider.selectedHouse = null;
-    //                             manageShiftProvider.schedulePeriodModel = null;
-    //                             manageShiftProvider.activeHouseForManagerModel =
-    //                                 null;
-    //                             manageShiftProvider.selectedShiftType =
-    //                                 val ?? "All";
-    //                             await manageShiftProvider.getSchedulePeriod();
-    //                           },
-    //                         ),
-    //                         const SizedBox(height: 5),
-    //                         BeaconDropdown<schedule.Datum>(
-    //                           hint: "Schedule Week",
-    //                           selectedItem:
-    //                               manageShiftProvider.selectedShiftPeriod,
-    //                           items: manageShiftProvider
-    //                                   .schedulePeriodModel?.data ??
-    //                               [],
-    //                           itemAsString: (item) => item.schedulePeriod ?? '',
-    //                           onChanged: (val) {
-    //                             setState(() async {
-    //                               manageShiftProvider.selectedHouse = null;
-    //                               manageShiftProvider
-    //                                   .activeHouseForManagerModel = null;
-    //                               manageShiftProvider.selectedShiftPeriod = val;
-    //                               await manageShiftProvider
-    //                                   .getActiveHouseForManager();
-    //                             });
-    //                           },
-    //                         ),
-    //                         const SizedBox(height: 5),
-    //                         BeaconDropdown<house.Datum>(
-    //                           hint: "House",
-    //                           items: manageShiftProvider
-    //                                   .activeHouseForManagerModel?.data ??
-    //                               [],
-    //                           selectedItem: manageShiftProvider.selectedHouse,
-    //                           itemAsString: (item) => item.accountNumber ?? '',
-    //                           onChanged: (val) {
-    //                             setState(() {
-    //                               manageShiftProvider.selectedHouse = val;
-    //                             });
-    //                           },
-    //                         ),
-    //                       ],
-    //                     ),
-    //                     const SizedBox(height: 5),
-    //                     Row(
-    //                       mainAxisAlignment: MainAxisAlignment.end,
-    //                       children: [
-    //                         ElevatedButton(
-    //                           onPressed: () {
-    //                             if (goHome) {
-    //                               // Navigator.pop(context);
-    //                             }
-    //                             Navigator.pop(context);
-    //                           },
-    //                           child: const Text(
-    //                             'Cancel',
-    //                             style: TextStyle(
-    //                               color: Colors.black,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                         const SizedBox(
-    //                           width: 10,
-    //                         ),
-    //                         ElevatedButton(
-    //                           style: ElevatedButton.styleFrom(
-    //                             backgroundColor: const Color(0xff1870FF),
-    //                           ),
-    //                           onPressed: () {
-    //                             manageShiftProvider.getManagerActiveShifts();
-    //                             Navigator.pop(context);
-    //                           },
-    //                           child: const Text(
-    //                             'Search',
-    //                             style: TextStyle(
-    //                               color: Colors.white,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ],
-    //                 ),
-    //               );
-    //             },
-    //           );
-    //         },
-    //       ),
-    //     );
-    //   },
-    // );
   }
 
   ///Manage SHift Filter Dialogue
@@ -2022,9 +2107,9 @@ class DialogueUtils {
                       width: 163,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
+                              backgroundColor: WidgetStateProperty.all(
                                   const Color(0xff3B85FF)),
-                              shape: MaterialStateProperty.all(
+                              shape: WidgetStateProperty.all(
                                   const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))))),
@@ -2110,12 +2195,12 @@ class DialogueUtils {
                             Navigator.pop(context);
                           },
                           style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
+                              padding: WidgetStateProperty.all(
                                   EdgeInsetsDirectional.zero),
-                              elevation: MaterialStateProperty.all(4),
-                              backgroundColor: MaterialStateProperty.all(
+                              elevation: WidgetStateProperty.all(4),
+                              backgroundColor: WidgetStateProperty.all(
                                   const Color(0xff3B85FF)),
-                              shape: MaterialStateProperty.all(
+                              shape: WidgetStateProperty.all(
                                   const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))))),

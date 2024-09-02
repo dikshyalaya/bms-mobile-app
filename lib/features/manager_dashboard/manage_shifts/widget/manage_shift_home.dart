@@ -83,9 +83,20 @@ class _ManageShiftHomeScreenState extends State<ManageShiftHomeScreen> {
           const SizedBox(width: 6),
           GestureDetector(
             onTap: () async {
-              DialogueUtils.addShiftBottomSheet(
-                context: context,
-              );
+              final provider =
+                  Provider.of<ManageShiftProvider>(context, listen: false);
+
+              if (provider.selectedShiftPeriod != null &&
+                  provider.selectedHouse != null &&
+                  provider.schedulePeriodModel != null &&
+                  provider.managerActiveShiftModel != null &&
+                  provider.activeHouseForManagerModel != null) {
+                DialogueUtils.addShiftBottomSheet(
+                  context: context,
+                );
+              } else {
+                showFilterPopUp(goHome: true);
+              }
             },
             child: SizedBox(
               height: 34,
@@ -190,13 +201,13 @@ class _ManageShiftHomeScreenState extends State<ManageShiftHomeScreen> {
                                               "Approval Saved Successfully.");
                                     },
                                     style: ButtonStyle(
-                                        padding: MaterialStateProperty.all(
+                                        padding: WidgetStateProperty.all(
                                             EdgeInsetsDirectional.zero),
-                                        elevation: MaterialStateProperty.all(4),
+                                        elevation: WidgetStateProperty.all(4),
                                         backgroundColor:
-                                            MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
                                                 const Color(0xff1870FF)),
-                                        shape: MaterialStateProperty.all(
+                                        shape: WidgetStateProperty.all(
                                             const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20))))),
