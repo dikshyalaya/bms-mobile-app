@@ -102,7 +102,7 @@ Future<void> callYourApi(Map<String, dynamic> data) async {
   // Implement your API call logic here
   final response = await http.get(
     Uri.parse(
-        'https://api-beacon.dikshyalaya.com/api/RTPushNotification/UpdatePushNotificationStatus/${data["Id"]}'),
+        'https://api-beacon-live.dikshyalaya.com/api/RTPushNotification/UpdatePushNotificationStatus/${data["Id"]}'),
   );
   if (response.statusCode == 200) {
     log('API call successful');

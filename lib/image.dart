@@ -11,7 +11,7 @@ class ImagePage extends StatelessWidget {
         ),
         body: Center(
           child: Image.network(
-            'https://api-beacon.dikshyalaya.com/api/User/GetProfilePic',
+            'https://api-beacon-live.dikshyalaya.com/api/User/GetProfilePic',
             height: 300,
             width: 300,
             headers: const {

@@ -1,7 +1,7 @@
 const baseUrl =
 //"http://100.25.49.138/BeaconMobile/api/";
-    "https://api-beacon.dikshyalaya.com/api/";
-// "api-beacon-live.dikshyalaya.com";
+   // "https://api-beacon.dikshyalaya.com/api/";
+ "https://api-beacon-live.dikshyalaya.com/api/";
 // "https://fb8c-160-202-37-112.ngrok-free.app/api/";
 const logInUrl = "Authentication/Login";
 const changePasswordUrl = "Authentication/ChangePassword";

@@ -80,7 +80,7 @@ class AuthProvider extends ChangeNotifier {
     // Position position = await Geolocator.getCurrentPosition(
     //     desiredAccuracy: LocationAccuracy.high);
     final url = Uri.parse(
-        "https://api-beacon.dikshyalaya.com/api/Authentication/login");
+        "https://api-beacon-live.dikshyalaya.com/api/Authentication/login");
     var body = {
       "password": password,
       "loginName": name,
